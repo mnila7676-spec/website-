@@ -1,0 +1,45 @@
+:root {
+  /* Palette — warm premium, calm */
+  --cream: #f7f2eb;
+  --cream-2: #fbf8f3;
+  --ivory: #fffdf9;
+  --sand: #efe6da;
+  --sand-2: #e8dccd;
+  --line: #e7dfd4;
+  --line-2: #d9cfc2;
+  --ink: #1d1a17;
+  --ink-2: #2e2925;
+  --ink-3: #4a423b;
+  --taupe: #7d7168;
+  --taupe-2: #a3978c;
+  --copper: #b8734a;
+  --copper-2: #9d5c36;
+  --copper-3: #d59a6f;
+  --copper-soft: #f2e2d3;
+  --copper-grad: linear-gradient(135deg, #d29a70 0%, #b8734a 45%, #8f5330 100%);
+  --burgundy: #6b1f3f;
+  --burgundy-2: #4f1530;
+  --burgundy-grad: linear-gradient(135deg, #7a2748 0%, #5b1a37 60%, #3f1127 100%);
+  --gold: #c9a55e;
+  --gold-soft: #f3e7c9;
+  --silver: #b9b4ad;
+  --bronze: #b98a6a;
+  --success: #3f7d5a;
+  --danger: #b2413d;
+  --white: #ffffff;
+
+  --font-display: 'Cormorant Garamond', 'Times New Roman', serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --shadow-sm: 0 1px 2px rgba(29,26,23,.05), 0 2px 8px rgba(29,26,23,.04);
+  --shadow: 0 6px 24px rgba(29,26,23,.08);
+  --shadow-lg: 0 20px 60px rgba(29,26,23,.16);
+  --max: 1240px;
+  --nav-h: 68px;
+  --ticker-h: 36px;
+}

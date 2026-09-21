@@ -1,0 +1,8 @@
+node_modules
+dist
+.DS_Store
+.claude
+
+# Source material kept out of the repository (confidential proposal and raw renders)
+*.pdf
+ChatGPT Image*.png
