@@ -7,5 +7,5 @@ export default defineConfig({
   base: process.env.VITE_BASE ?? '/',
   plugins: [react()],
   resolve: { alias: { '@': path.resolve(__dirname, 'src') } },
-  server: { port: 5173 },
+  server: { port: Number(process.env.PORT) || 5173 },
 })
