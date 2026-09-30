@@ -3,7 +3,7 @@ import { Outlet, NavLink, Link } from 'react-router-dom'
 import { Icon } from '@/components/Icon'
 import { useStore } from '@/store/store'
 
-const NAV = [['/admin', 'Dashboard', 'grid', true], ['/admin/commerce', 'Commerce', 'bag', false], ['/admin/members', 'Members', 'users', false], ['/admin/challenges', 'Challenges', 'sun', false], ['/admin/rewards', 'Rewards', 'gift', false], ['/admin/community', 'Community activity', 'sparkle', false], ['/admin/campaigns', 'Campaigns', 'bell', false], ['/admin/risk', 'Risk controls', 'shield', false], ['/admin/analytics', 'Analytics', 'bar-chart', false]] as const
+const NAV = [['/admin', 'Dashboard', 'grid', true], ['/admin/commerce', 'Commerce', 'bag', false], ['/admin/glow-club', 'Glow Club', 'sparkle', false], ['/admin/members', 'Members', 'users', false], ['/admin/challenges', 'Challenges', 'sun', false], ['/admin/rewards', 'Rewards', 'gift', false], ['/admin/community', 'Community activity', 'sparkle', false], ['/admin/campaigns', 'Campaigns', 'bell', false], ['/admin/risk', 'Risk controls', 'shield', false], ['/admin/analytics', 'Analytics', 'bar-chart', false]] as const
 export function AdminShell() {
   const { state } = useStore()
   return <div className="admin">

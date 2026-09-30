@@ -1,4 +1,4 @@
-import type { TierKey } from '@/data/club'
+import type { TierKey, ReferralStatus } from '@/data/club'
 
 export interface Address { id: string; label: string; line1: string; line2?: string; postal: string; isDefault: boolean }
 export interface Member {
@@ -16,13 +16,15 @@ export interface OrderItem { productId: string; qty: number; price: number; gift
 export interface Order { id: string; ts: string; items: OrderItem[]; subtotal: number; discount: number; shipping: number; total: number; status: 'processing' | 'shipped' | 'delivered' | 'refunded'; pointsEarned: number; voucherUsed?: string; express?: boolean; address: string; pointsAt: number }
 export interface Redemption { id: string; rewardId: string; ts: string; points: number; status: 'pending' | 'approved' | 'fulfilled' | 'rejected' | 'used'; code: string; note?: string }
 export interface Review { id: string; productId: string; rating: number; text: string; ts: string; verified: boolean; orderId?: string }
-export interface Referral { id: string; name: string; email: string; ts: string; status: 'invited' | 'joined' | 'ordered' }
+export interface Referral { id: string; name: string; email: string; ts: string; status: ReferralStatus; rewardedAt?: string }
 export interface AuditEntry { id: string; ts: string; actor: string; action: string; detail: string }
 export interface UserActivity { id: string; type: string; text: string; ts: string; icon: string }
 export interface AdminSettings {
   tickerEnabled: boolean; scrollModalEnabled: boolean; giftDrawerEnabled: boolean; modalScrollPercent: number; modalDelaySeconds: number
   missionPoints: Record<string, number>; rewardStock: Record<string, number | null>; hiddenActivity: string[]; approvedActivity: string[]
   activityTypes: Record<string, boolean>; announcement: string
+  pointsPerDollar: number; welcomePoints: number; firstPurchaseBonus: number; referralReward: number; friendDiscount: number; qualificationDays: number; referralLimit: number
+  thresholds: { radiant: number; luminous: number; ambassador: number }
 }
 export interface State {
   version: number

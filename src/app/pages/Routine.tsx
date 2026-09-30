@@ -20,7 +20,7 @@ export function AppRoutine() {
     {daysLeft !== null && <div className="reminder"><Icon name="bell" /><div style={{ flex: 1 }}><b className="small">{daysLeft > 0 ? `Serum may run low in ${daysLeft} days` : 'Time to reorder your serum'}</b><p className="tiny muted">We'll remind you to reorder.</p></div><Icon name="chevron" className="icon-sm muted" /></div>}
     <div className="between small" style={{ margin: '14px 0 10px' }}><span className="muted">Next refill estimate: <b style={{ color: 'var(--ink)' }}>{nextRefill}</b></span><Icon name="calendar" className="icon-sm muted" /></div>
     <button className="btn btn-primary btn-lg btn-block" onClick={rb.addAll} disabled={!rb.all.length}>Add Routine to Bag · {money(rb.discounted)}</button>
-    <button className="btn btn-secondary btn-block" style={{ marginTop: 8 }} onClick={rb.save}>Save routine · earn 30 pts per check-in</button>
+    <button className="btn btn-secondary btn-block" style={{ marginTop: 8 }} onClick={rb.save}>Save routine · earn 25 pts per check-in</button>
     <p className="tiny text-center copper" style={{ marginTop: 8 }}><Icon name="sun" className="icon-sm" /> Earn +{n(rb.pts)} points{rb.all.length >= 4 ? ' · complete ritual saves 15%' : ''}</p>
   </div>
 }

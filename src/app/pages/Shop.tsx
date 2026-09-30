@@ -27,7 +27,7 @@ export function AppProduct() {
   const { slug } = useParams(); const p = productBySlug(slug ?? ''); const { state, d, actions } = useStore(); const nav = useNavigate()
   const [img, setImg] = useState(0); const [qty, setQty] = useState(1); const [open, setOpen] = useState('benefits'); const [review, setReview] = useState(false)
   if (!p) return <Navigate to="/app/shop" replace />
-  const gallery = [p.image, p.imageDark]; const pts = Math.round(p.price * POINTS_PER_DOLLAR * (state.member ? d.tier.multiplier : 1)); const wished = state.wishlist.includes(p.id)
+  const gallery = [p.image, p.imageDark]; const pts = Math.round(p.price * d.pointsPerDollar * (state.member ? d.tier.multiplier : 1)); const wished = state.wishlist.includes(p.id)
   const reviews = [...state.reviews.filter(r => r.productId === p.id).map(r => ({ name: 'You', rating: r.rating, text: r.text, date: fmtDate(r.ts), verified: r.verified })), ...(REVIEWS[p.id] ?? [])]
   const Acc = ({ id, title, children }: { id: string; title: string; children: React.ReactNode }) => <div className="acc-item"><button className="acc-btn" onClick={() => setOpen(open === id ? '' : id)}>{title}<Icon name="chevron-down" className="icon-sm" /></button>{open === id && <div className="acc-body">{children}</div>}</div>
   const step = STEPS.find(s => s.key === p.step)
@@ -43,7 +43,7 @@ export function AppProduct() {
         <Acc id="benefits" title="Benefits"><ul className="benefit-list">{p.benefits.map(b => <li key={b}><Icon name="check-circle" className="icon-sm" />{b}</li>)}</ul></Acc>
         {p.ingredients.length > 0 && <Acc id="ingredients" title="Ingredients"><ul className="ing">{p.ingredients.map(i => <li key={i.name}><b>{i.name}</b>{i.role}</li>)}</ul></Acc>}
         <Acc id="use" title="How to Use"><ol className="numbered">{p.howToUse.map((h, i) => <li key={h}><span>{i + 1}</span>{h}</li>)}</ol></Acc>
-        <Acc id="reviews" title={`Reviews (${reviews.length})`}>{reviews.map((r, i) => <div key={i} className="review"><div className="review-head"><Stars rating={r.rating} /><b className="small">{r.name}</b>{r.verified && <span className="pill pill-success tiny">Verified</span>}</div><p>{r.text}</p></div>)}{state.member && <button className="btn btn-secondary btn-sm" style={{ marginTop: 10 }} onClick={() => setReview(true)}>Write a review · +150 pts</button>}</Acc>
+        <Acc id="reviews" title={`Reviews (${reviews.length})`}>{reviews.map((r, i) => <div key={i} className="review"><div className="review-head"><Stars rating={r.rating} /><b className="small">{r.name}</b>{r.verified && <span className="pill pill-success tiny">Verified</span>}</div><p>{r.text}</p></div>)}{state.member && <button className="btn btn-secondary btn-sm" style={{ marginTop: 10 }} onClick={() => setReview(true)}>Write a review · +250 pts</button>}</Acc>
       </div>
       <div className="sub-head"><h2>Pairs with</h2><Link to="/app/routine">Build routine →</Link></div>
       <div className="h-scroll">{PRODUCTS.filter(x => x.id !== p.id && !x.includes && x.category !== 'minis').map(x => <ProductCard key={x.id} product={x} compact />)}</div>

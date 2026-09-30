@@ -4,7 +4,7 @@ import { Icon } from '@/components/Icon'
 import { useStore } from '@/store/store'
 import { PRODUCTS, productById, money } from '@/data/products'
 import { REWARDS, rewardById } from '@/data/rewards'
-import { MISSIONS, WEEKLY_CHALLENGES, TIERS } from '@/data/club'
+import { MISSIONS, WEEKLY_CHALLENGES, TIERS, REFERRAL_MILESTONES, RULEBOOK, POINT_VALUE_SGD } from '@/data/club'
 import { ACTIVITY, LEADERS } from '@/data/community'
 import { n, fmtDate, ago } from '@/lib/format'
 
@@ -47,7 +47,7 @@ export function Commerce() {
 
 export function Members() {
   const { state, d, actions } = useStore(); const [pts, setPts] = useState(''); const [reason, setReason] = useState('')
-  const rows = [...(state.member ? [{ name: `${state.member.firstName} ${state.member.lastName}`, id: state.member.memberId, tier: d.tier.short, balance: d.balance, lifetime: d.lifetime, consent: state.member.consent.publicActivity, joined: state.member.joinedAt, you: true }] : []), ...LEADERS.filter(l => !(state.demoSeeded && l.name === 'Amelia K.')).map((l, i) => ({ name: l.name, id: 'LC-' + (24000 + i * 37), tier: l.allTime > 150000 ? 'Platinum' : l.allTime > 60000 ? 'Gold' : 'Silver', balance: Math.round(l.allTime * 0.08), lifetime: l.allTime, consent: i % 4 !== 3, joined: new Date(Date.now() - (200 + i * 40) * 864e5).toISOString(), you: false }))]
+  const rows = [...(state.member ? [{ name: `${state.member.firstName} ${state.member.lastName}`, id: state.member.memberId, tier: d.tier.short, balance: d.balance, lifetime: d.lifetime, consent: state.member.consent.publicActivity, joined: state.member.joinedAt, you: true }] : []), ...LEADERS.filter(l => !(state.demoSeeded && l.name === 'Amelia K.')).map((l, i) => ({ name: l.name, id: 'LC-' + (24000 + i * 37), tier: l.allTime > 150000 ? 'Ambassador' : l.allTime > 60000 ? 'Luminous' : l.allTime > 30000 ? 'Radiant' : 'Glow', balance: Math.round(l.allTime * 0.08), lifetime: l.allTime, consent: i % 4 !== 3, joined: new Date(Date.now() - (200 + i * 40) * 864e5).toISOString(), you: false }))]
   return <>
     <Head title="Members" blurb="Profiles, tiers, consent, points ledger, redemptions, activity history and account support." right={<span className="status neutral">{rows.length} shown · 4,812 total</span>} />
     <div className="admin-panel"><table className="table"><thead><tr><th>Member</th><th>ID</th><th>Tier</th><th>Balance</th><th>Lifetime</th><th>Public activity</th><th>Joined</th></tr></thead><tbody>{rows.map(r => <tr key={r.id} style={r.you ? { background: 'var(--copper-soft)' } : undefined}><td><b>{r.name}</b>{r.you && <span className="status warn" style={{ marginLeft: 8 }}>this device</span>}</td><td>{r.id}</td><td>{r.tier}</td><td>{n(r.balance)}</td><td>{n(r.lifetime)}</td><td>{r.consent ? <span className="status ok">consented</span> : <span className="status neutral">off</span>}</td><td>{fmtDate(r.joined)}</td></tr>)}</tbody></table></div>
@@ -64,7 +64,7 @@ export function Challenges() {
   return <>
     <Head title="Challenges" blurb="Create daily or weekly missions, eligibility, point values, limits, dates and completion rules." right={<button className="btn btn-primary btn-sm"><Icon name="plus" className="icon-sm" /> New mission</button>} />
     <div className="admin-panel"><h3>Daily and ongoing missions</h3><table className="table"><thead><tr><th>Mission</th><th>Cadence</th><th>Points</th><th>Limit</th><th>Status</th></tr></thead><tbody>{MISSIONS.map(m => <tr key={m.id}><td><b>{m.title}</b><p className="tiny muted">{m.blurb}</p></td><td>{m.cadence}</td><td><input className="input admin-inline-input" type="number" value={state.admin.missionPoints[m.id] ?? m.points} onChange={e => set(m.id, +e.target.value)} /></td><td>{m.cadence === 'daily' ? '1 / day' : m.cadence === 'once' ? '1 lifetime' : 'per qualifying action'}</td><td><span className="status ok">live</span></td></tr>)}</tbody></table></div>
-    <div className="admin-panel"><h3>Weekly challenges</h3><table className="table"><thead><tr><th>Challenge</th><th>Tasks</th><th>Bonus</th><th>Badge</th><th>Window</th></tr></thead><tbody>{WEEKLY_CHALLENGES.map(c => <tr key={c.id}><td><b>{c.title}</b><p className="tiny muted">{c.blurb}</p></td><td>{c.tasks.map(t => `${t.label} (${t.target})`).join(' · ')}</td><td>+{c.bonus}</td><td>{c.badge ?? '—'}</td><td>Mon–Sun, resets 00:00 SGT</td></tr>)}</tbody></table></div>
+    <div className="admin-panel"><h3>Weekly and monthly challenges</h3><table className="table"><thead><tr><th>Challenge</th><th>Period</th><th>Tasks</th><th>Bonus</th><th>Badge</th><th>Window</th></tr></thead><tbody>{WEEKLY_CHALLENGES.map(c => <tr key={c.id}><td><b>{c.title}</b><p className="tiny muted">{c.blurb}</p></td><td><span className={`status ${c.period === 'monthly' ? 'warn' : 'ok'}`}>{c.period}</span></td><td>{c.tasks.map(t => `${t.label} (${t.target})`).join(' · ')}</td><td>+{c.bonus}</td><td>{c.badge ?? '—'}</td><td>{c.period === 'monthly' ? '1st to month end' : 'Mon–Sun, resets 00:00 SGT'}</td></tr>)}</tbody></table></div>
     <div className="admin-panel"><h3>Controls</h3><ul className="benefit-list"><li><Icon name="check-circle" className="icon-sm" />Engagement points capped at 400 per day per member.</li><li><Icon name="check-circle" className="icon-sm" />Streak protection limited to one per calendar month.</li><li><Icon name="check-circle" className="icon-sm" />Lesson points limited to one lesson per day; review points only for verified purchases.</li><li><Icon name="check-circle" className="icon-sm" />Referral points released only after the referred member's first qualifying order.</li></ul></div>
   </>
 }
@@ -138,6 +138,27 @@ export function Analytics() {
       <div className="admin-panel"><h3>Redemptions by category</h3><Bars data={[312, 188, 64, 22]} labels={['Everyday', 'Beauty', 'Experiences', 'Travel']} /><p className="tiny muted">Breakage this quarter: 11%. Average fulfilment time 1.8 days.</p></div>
       <div className="admin-panel"><h3>Retention cohorts</h3><table className="table"><thead><tr><th>Cohort</th><th>D30</th><th>D60</th><th>D90</th></tr></thead><tbody>{[['Jun', 68, 54, 47], ['Jul', 71, 58, 49], ['Aug', 74, 61, '—'], ['Sep', 77, '—', '—']].map(r => <tr key={r[0] as string}><td>{r[0]}</td><td>{r[1]}%</td><td>{r[2]}{r[2] !== '—' ? '%' : ''}</td><td>{r[3]}{r[3] !== '—' ? '%' : ''}</td></tr>)}</tbody></table></div>
       <div className="admin-panel"><h3>Trust</h3><ul className="funnel">{[['Opt-out rate', 1.2, 12], ['Complaints / 1k members', 0.8, 8], ['Fraud flags / 1k', 0.6, 6], ['Support resolution (hrs)', 6, 30]].map(([l, v, p]) => <li key={l as string}><span>{l}</span><div className="bar"><span style={{ width: `${p}%` }} /></div><b className="tnum">{v}</b></li>)}</ul></div>
+    </div>
+  </>
+}
+
+
+export function GlowClubAdmin() {
+  const { state, actions } = useStore(); const a = state.admin
+  const num = (k: keyof typeof a, label: string, min: number, max: number, step = 1, suffix = '') => <div><label className="label">{label}</label><div className="row"><input className="input" type="number" min={min} max={max} step={step} value={(a as any)[k] ?? ''} onChange={e => actions.adminSet({ [k]: +e.target.value } as any, `${label} → ${e.target.value}${suffix}`)} style={{ maxWidth: 140 }} /><span className="small muted">{suffix}</span></div></div>
+  const th = (k: 'radiant' | 'luminous' | 'ambassador', label: string, suffix: string) => <div><label className="label">{label}</label><div className="row"><input className="input" type="number" min={1} value={a.thresholds?.[k] ?? ''} onChange={e => actions.adminSet({ thresholds: { ...a.thresholds, [k]: +e.target.value } }, `tier ${k} → ${e.target.value}`)} style={{ maxWidth: 140 }} /><span className="small muted">{suffix}</span></div></div>
+  const liability = state.member ? Math.round(state.ledger.filter(e => e.type !== 'pending').reduce((t, e) => t + e.points, 0) * POINT_VALUE_SGD) : 0
+  return <>
+    <Head title="Glow Club" blurb="Programme economics. Change points, referrals, tiers and rewards without calling BrillianceTech." right={<span className="status ok">1,000 pts = S${(1000 * POINT_VALUE_SGD).toFixed(0)}</span>} />
+    <div className="kpi-grid"><KPI label="Points liability (this device)" value={`S$${liability.toLocaleString()}`} /><KPI label="Referral reward" value={`${(a.referralReward ?? 1500).toLocaleString()} pts`} /><KPI label="Friend discount" value={`${a.friendDiscount ?? 15}%`} /><KPI label="Qualification period" value={`${a.qualificationDays ?? 14} days`} /></div>
+    <div className="admin-grid-2">
+      <div className="admin-panel"><h3>Points</h3><div className="admin-form">{num('pointsPerDollar', 'Purchase earning rate', 1, 50, 1, 'pts per S$1')}{num('welcomePoints', 'Welcome points', 0, 5000, 50, 'pts')}{num('firstPurchaseBonus', 'First purchase bonus', 0, 5000, 50, 'pts')}</div>
+        <h3 style={{ marginTop: 18 }}>Engagement values</h3><div className="admin-form">{MISSIONS.filter(m => ['review', 'learn', 'am', 'skin-profile'].includes(m.id)).map(m => <div key={m.id}><label className="label">{m.title}</label><input className="input" type="number" value={a.missionPoints[m.id] ?? m.points} onChange={e => actions.adminSet({ missionPoints: { ...a.missionPoints, [m.id]: +e.target.value } }, `mission ${m.id} → ${e.target.value}`)} style={{ maxWidth: 140 }} /></div>)}</div></div>
+      <div className="admin-panel"><h3>Refer & Glow</h3><div className="admin-form">{num('referralReward', 'Referral reward', 0, 10000, 100, 'pts')}{num('friendDiscount', 'Friend discount', 0, 50, 1, '% off first order')}{num('qualificationDays', 'Qualification period', 0, 60, 1, 'days')}{num('referralLimit', 'Referral limit', 1, 100, 1, 'per member per period')}</div>
+        <table className="table" style={{ marginTop: 14 }}><thead><tr><th>Milestone</th><th>Friends</th><th>Reward</th></tr></thead><tbody>{REFERRAL_MILESTONES.map(m => <tr key={m.count}><td><b>{m.label}</b></td><td>{m.count}</td><td>{m.reward}</td></tr>)}</tbody></table></div>
+      <div className="admin-panel"><h3>Glow Levels</h3><div className="admin-form">{th('radiant', 'Radiant threshold', 'lifetime pts')}{th('luminous', 'Luminous threshold', 'lifetime pts')}{th('ambassador', 'Ambassador qualification', 'successful referrals')}</div>
+        <table className="table" style={{ marginTop: 14 }}><thead><tr><th>Level</th><th>Multiplier</th><th>Qualification</th></tr></thead><tbody>{TIERS.map(t => <tr key={t.key}><td><b>{t.name}</b></td><td>{t.multiplier}x</td><td>{t.how}</td></tr>)}</tbody></table></div>
+      <div className="admin-panel"><h3>Rulebook · the 15 locked decisions</h3><ol className="numbered">{RULEBOOK.map(([k, v], i) => <li key={k} style={{ fontSize: 13 }}><span>{i + 1}</span><span><b>{k}</b> · {v}</span></li>)}</ol></div>
     </div>
   </>
 }

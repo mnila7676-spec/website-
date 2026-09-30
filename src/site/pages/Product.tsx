@@ -15,7 +15,7 @@ export function ProductPage() {
   const [img, setImg] = useState(0); const [qty, setQty] = useState(1); const [open, setOpen] = useState<string>('benefits'); const [review, setReview] = useState(false)
   if (!p) return <Navigate to={L.shop} replace />
   const gallery = [p.image, p.imageDark, ...(p.includes ? [] : [asset('/images/hero-group.jpg')])]
-  const pts = Math.round(p.price * POINTS_PER_DOLLAR * (state.member ? d.tier.multiplier : 1))
+  const pts = Math.round(p.price * d.pointsPerDollar * (state.member ? d.tier.multiplier : 1))
   const related = PRODUCTS.filter(x => x.id !== p.id && !x.includes && x.category !== 'minis').slice(0, 4)
   const reviews = [...state.reviews.filter(r => r.productId === p.id).map(r => ({ name: 'You', rating: r.rating, text: r.text, date: fmtDate(r.ts), verified: r.verified })), ...(REVIEWS[p.id] ?? [])]
   const wished = state.wishlist.includes(p.id)
@@ -47,7 +47,7 @@ export function ProductPage() {
     </div>
 
     <section className="section tight">
-      <div className="section-head"><h2 style={{ fontSize: 30 }}>Reviews</h2><button className="btn btn-secondary btn-sm" onClick={() => state.member ? setReview(true) : null}>{state.member ? 'Write a review · +150 pts' : <Link to={L.signin}>Sign in to review</Link>}</button></div>
+      <div className="section-head"><h2 style={{ fontSize: 30 }}>Reviews</h2><button className="btn btn-secondary btn-sm" onClick={() => state.member ? setReview(true) : null}>{state.member ? 'Write a review · +250 pts' : <Link to={L.signin}>Sign in to review</Link>}</button></div>
       {reviews.map((r, i) => <div key={i} className="review"><div className="review-head"><Stars rating={r.rating} /><b className="small">{r.name}</b>{r.verified && <span className="pill pill-success tiny">Verified purchase</span>}<span className="tiny muted">{r.date}</span></div><p style={{ color: 'var(--ink-3)' }}>{r.text}</p></div>)}
       {review && <Modal onClose={() => setReview(false)} width={520}><div style={{ padding: 32 }}><h2 style={{ fontSize: 28, marginBottom: 4 }}>Review {p.name}</h2><p className="muted small" style={{ marginBottom: 16 }}>Useful, honest reviews help the community. Points apply to verified purchases only.</p><ReviewForm productId={p.id} onDone={() => setReview(false)} /></div></Modal>}
     </section>

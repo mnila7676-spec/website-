@@ -28,8 +28,8 @@ export function Avatar({ initials, variant = '', size }: { initials: string; var
 }
 
 export function TierBadge({ tier, size = 56 }: { tier: Tier; size?: number }) {
-  const g = tier.key === 'gold' ? 'linear-gradient(135deg,#e6c98a,#c9a55e 60%,#a07c34)' : tier.key === 'platinum' ? 'linear-gradient(135deg,#e8e6e2,#b9b4ad 60%,#8d8a86)' : 'linear-gradient(135deg,#d9d6d1,#b9b4ad 60%,#9a958f)'
-  return <span className="tier-badge" style={{ width: size, height: size, background: g, fontSize: size * 0.42 }}><span className="serif">L</span></span>
+  const g = tier.key === 'radiant' ? 'linear-gradient(135deg,#e6c98a,#c9a55e 60%,#a07c34)' : tier.key === 'luminous' ? 'linear-gradient(135deg,#f2f0ec,#b9b4ad 55%,#6f6b66)' : tier.key === 'ambassador' ? 'linear-gradient(135deg,#9c3a63,#6b1f3f 60%,#3f1127)' : 'linear-gradient(135deg,#f3e7c9,#d9bd88 60%,#b58f45)'
+  return <span className={`tier-badge ${tier.key}`} style={{ width: size, height: size, background: g, fontSize: size * 0.42 }}>{tier.key === 'ambassador' ? <Icon name="crown" style={{ width: size * 0.5, height: size * 0.5 }} /> : <span className="serif">L</span>}</span>
 }
 
 export function PointsPill({ dark }: { dark?: boolean }) {
@@ -49,7 +49,7 @@ export function QtyStepper({ value, onChange, small }: { value: number; onChange
 export function ProductCard({ product, compact, className }: { product: Product; compact?: boolean; className?: string }) {
   const { state, actions, d } = useStore(); const L = useLinks()
   const wished = state.wishlist.includes(product.id)
-  const basePts = product.price * POINTS_PER_DOLLAR; const pts = state.member ? Math.round(basePts * d.tier.multiplier) : basePts
+  const basePts = product.price * d.pointsPerDollar; const pts = state.member ? Math.round(basePts * d.tier.multiplier) : basePts
   return (
     <article className={cx('pcard', compact && 'compact', className)}>
       <Link to={L.product(product.slug)} className="pcard-img"><img src={product.image} alt={product.name} loading="lazy" />{product.badge && <span className="pcard-badge">{product.badge}</span>}</Link>

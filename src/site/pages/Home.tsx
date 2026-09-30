@@ -7,7 +7,7 @@ import { ActivityFeedList } from '@/components/Ticker'
 import { useStore, leaderboard } from '@/store/store'
 import { PRODUCTS, BEST_SELLERS, STEPS, RITUALS, productById, money } from '@/data/products'
 import { REWARDS } from '@/data/rewards'
-import { MILESTONES } from '@/data/club'
+import { MILESTONES, PILLARS, TAGLINES } from '@/data/club'
 import { n } from '@/lib/format'
 import { LeaderboardPanel } from './Community'
 
@@ -65,14 +65,10 @@ export function Home() {
       <div className="glow">
         <div className="glow-panel">
           <p className="eyebrow" style={{ color: '#fff', opacity: .85 }}>Glow Club</p>
-          <h2>Your routine goes further</h2>
-          <p style={{ opacity: .9 }}>Earn Glow Points every time you shop, then redeem rewards that make life a little brighter.</p>
+          <h2>{TAGLINES.club}</h2>
+          <p style={{ opacity: .9 }}>Not a loyalty programme. A club. Shop, glow, share and belong, and be rewarded for every part of it.</p>
           <div className="glow-balance"><div><span className="lbl">{state.member ? 'Your balance' : 'Welcome balance'}</span><div className="num tnum">{n(state.member ? d.balance : 500)}</div><span style={{ fontSize: 13 }}>Glow Points</span></div><div style={{ textAlign: 'center' }}><TierBadge tier={d.tier} size={58} /><div style={{ fontSize: 12, marginTop: 6 }}>{d.tier.name}</div></div></div>
-          <div className="glow-steps">
-            <div><b><Icon name="bag" className="icon-sm" /> Shop</b><small>Choose your favourites</small></div>
-            <div><b><Icon name="sun" className="icon-sm" /> Earn</b><small>Collect points with every action</small></div>
-            <div><b><Icon name="gift" className="icon-sm" /> Redeem</b><small>Unlock rewards you'll love</small></div>
-          </div>
+          <div className="glow-steps" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>{PILLARS.map(p => <div key={p.key}><b><Icon name={p.icon} className="icon-sm" /> {p.label}</b><small>{p.objective}</small></div>)}</div>
           <div className="row">{state.member ? <Link to="/glow-club" className="btn btn-light">View my Glow Club</Link> : <><Link to="/join" className="btn btn-light">Join Glow Club</Link><Link to="/sign-in" style={{ fontSize: 13 }}>Already a member? Sign in</Link></>}</div>
         </div>
         <div className="journey">

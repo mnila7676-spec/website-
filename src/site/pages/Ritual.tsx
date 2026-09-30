@@ -15,7 +15,7 @@ export function useRoutineBuilder() {
   const stepsFor = (slot: 'am' | 'pm') => slot === 'am' ? STEPS : STEPS.filter(s => s.key !== 'protect')
   const total = all.reduce((t, p) => t + p.price, 0)
   const discounted = all.length >= 4 ? Math.round(total * 0.85) : total
-  const pts = Math.round(discounted * POINTS_PER_DOLLAR * (state.member ? d.tier.multiplier : 1))
+  const pts = Math.round(discounted * d.pointsPerDollar * (state.member ? d.tier.multiplier : 1))
   const options = (step: string, slot: 'am' | 'pm' = 'am') => PRODUCTS.filter(p => p.step === step && p.category !== 'minis' && forTime(p, slot === 'am' ? 'day' : 'night'))
   const setStep = (slot: 'am' | 'pm', step: string, id: string | null) => { const set = slot === 'am' ? setAm : setPm; set(cur => { const rest = cur.filter(x => productById(x)?.step !== step); return id ? [...rest, id] : rest }) }
   const addAll = () => { all.forEach(p => actions.addToCart(p.id)); }
@@ -28,7 +28,7 @@ export function RoutineSlot({ slot, ids, options, setStep, log }: { slot: 'am' |
   const steps = slot === 'am' ? STEPS : STEPS.filter(s => s.key !== 'protect')
   const doneToday = state.routineLog[new Date().toISOString().slice(0, 10)]?.[slot]
   return <div className="rb-slot">
-    <div className="rb-slot-head"><h3><Icon name={slot === 'am' ? 'sun' : 'moon'} className="copper" /> {slot === 'am' ? 'Day' : 'Night'} ritual <span className="tiny muted" style={{ fontFamily: 'var(--font-body)', letterSpacing: 0 }}>· {slot.toUpperCase()}</span></h3>{log && (doneToday ? <span className="pill pill-success"><Icon name="check" className="icon-sm" /> Done today</span> : <button className="btn btn-copper btn-sm" onClick={log}>Mark complete · +30 pts</button>)}</div>
+    <div className="rb-slot-head"><h3><Icon name={slot === 'am' ? 'sun' : 'moon'} className="copper" /> {slot === 'am' ? 'Day' : 'Night'} ritual <span className="tiny muted" style={{ fontFamily: 'var(--font-body)', letterSpacing: 0 }}>· {slot.toUpperCase()}</span></h3>{log && (doneToday ? <span className="pill pill-success"><Icon name="check" className="icon-sm" /> Done today</span> : <button className="btn btn-copper btn-sm" onClick={log}>Mark complete · +25 pts</button>)}</div>
     {steps.map((s, i) => { const cur = ids.map(productById).find(p => p?.step === s.key); const opts = options(s.key, slot); return <div key={s.key} className={`rb-step ${cur ? '' : 'empty'}`}>
       <span className={`rb-num ${cur ? '' : 'muted'}`}>{i + 1}</span>
       {cur ? <img src={cur.image} alt="" /> : <span style={{ width: 64, height: 64, borderRadius: 8, background: 'var(--sand)' }} />}
@@ -43,7 +43,7 @@ export function Ritual() {
   const serum = productById('serum')!; const lastOrder = rb.state.orders.find(o => o.items.some(i => i.productId === 'serum'))
   const daysLeft = lastOrder ? Math.max(0, serum.usageDays - Math.round((Date.now() - new Date(lastOrder.ts).getTime()) / 864e5)) : null
   return <div className="container">
-    <div className="page-hero"><p className="eyebrow">Routine Builder</p><h1>Build your AM / PM ritual</h1><p>Choose a product for each step, save the routine to your account and add the complete set to your bag in one tap. Saving a routine unlocks daily routine check-ins worth 30 points each.</p></div>
+    <div className="page-hero"><p className="eyebrow">Routine Builder</p><h1>Build your AM / PM ritual</h1><p>Choose a product for each step, save the routine to your account and add the complete set to your bag in one tap. Saving a routine unlocks daily routine check-ins worth 25 points each.</p></div>
     <div className="rb">
       <div>
         <RoutineSlot slot="am" ids={rb.am} options={rb.options} setStep={rb.setStep} log={rb.state.routine.savedAt ? () => actions.logRoutine('am') : undefined} />

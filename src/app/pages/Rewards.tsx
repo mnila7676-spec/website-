@@ -12,12 +12,12 @@ import { SpinCard } from './Spin'
 
 export function AppRewards() {
   const { state, d } = useStore(); const lb = leaderboard(state, 'weekly')
-  if (!state.member) return <div className="screen"><div className="screen-head"><h1>Glow Club</h1></div><div className="banner copper"><div className="banner-copy"><h2>Join Glow Club</h2><p>Points, missions, milestones and rewards.</p><Link to="/app/join" className="btn btn-light btn-sm">Join free</Link></div><img src={asset('/images/hero-group.jpg')} alt="" /></div><AppCatalogueList tab="everyday" /></div>
+  if (!state.member) return <div className="screen"><div className="screen-head"><h1>Glow Club</h1></div><div className="banner copper"><div className="banner-copy"><h2>Join Glow Club</h2><p>Your skincare journey, rewarded.</p><Link to="/app/join" className="btn btn-light btn-sm">Join free</Link></div><img src={asset('/images/hero-group.jpg')} alt="" /></div><AppCatalogueList tab="everyday" /></div>
   return <div className="screen">
     <div className="screen-head"><h1>Glow Club</h1><Link to="/app/notifications" className="icon-btn"><Icon name="bell" /></Link></div>
     <ActivityCard />
     <div className="glow-card" style={{ marginTop: 12 }}><div className="between"><div><span className="lbl">Your balance</span><div className="num tnum">{n(d.balance)}</div><span style={{ fontSize: 12 }}>Glow Points</span></div><div style={{ textAlign: 'center' }}><TierBadge tier={d.tier} size={50} /><div style={{ fontSize: 11, marginTop: 4 }}>{d.tier.name}</div></div></div>
-      {d.next && <><div className="progress"><span style={{ width: `${(d.lifetime / d.next.min) * 100}%` }} /></div><div className="between" style={{ fontSize: 11.5 }}><span>{n(d.next.min - d.lifetime)} points to {d.next.short}</span><Icon name="medal" className="icon-sm" /></div></>}</div>
+      {d.next && <><div className="progress"><span style={{ width: `${d.next.unit === 'points' ? (d.lifetime / (d.lifetime + d.next.need)) * 100 : (d.successfulReferrals / (d.successfulReferrals + d.next.need)) * 100}%` }} /></div><div className="between" style={{ fontSize: 11.5 }}><span>{n(d.next.need)} {d.next.unit} to {d.next.tier.short}</span><Icon name="medal" className="icon-sm" /></div></>}</div>
     <div className="app-card"><div className="between"><h3>Milestone Rewards</h3><Link to="/app/journey" className="tiny muted">View All</Link></div>
       <div className="ms-row" style={{ marginTop: 10 }}>{[0, 2, 4].map((idx, i) => { const m = MILESTONES[idx]; return <React.Fragment key={m.points}>{i > 0 && <span className="dash" />}<Link to="/app/journey" className={`node ${d.lifetime >= m.points ? '' : 'locked'}`}><img src={m.image} alt="" /><b>{m.name}</b><small>at {n(m.points)} pts</small></Link></React.Fragment> })}</div></div>
     <SpinCard />

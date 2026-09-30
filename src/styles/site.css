@@ -454,3 +454,33 @@
 .acct-hero { display: grid; grid-template-columns: 1fr 1.2fr; gap: 16px; align-items: stretch; }
 .acct-hero .member-card { margin: 0; }
 @media (max-width: 900px) { .acct-hero { grid-template-columns: 1fr; } }
+
+/* Glow Club V1: pillars, referral ladder, rulebook */
+.pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 22px; }
+.pillar { background: var(--ivory); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: center; }
+.pillar .act-icon { grid-row: span 2; }
+.pillar b { font-size: 14px; } .pillar small { color: var(--taupe); font-size: 12px; line-height: 1.35; }
+@media (max-width: 900px) { .pillars { grid-template-columns: 1fr 1fr; } }
+.tier-grid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.tier-card { padding: 22px; }
+.tier-card h3 { font-size: 24px; }
+@media (max-width: 1000px) { .tier-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .tier-grid { grid-template-columns: 1fr; } }
+.tier-badge.ambassador { color: #f0d8a8; }
+.ladder li { display: grid; grid-template-columns: 30px 1fr auto; gap: 12px; align-items: center; padding: 9px 0; border-bottom: 1px dashed var(--line); font-size: 13.5px; }
+.ladder li:last-child { border: 0; }
+.ladder .ladder-n { width: 28px; height: 28px; border-radius: 50%; background: var(--sand); color: var(--taupe); display: grid; place-items: center; font-size: 12px; font-weight: 600; }
+.ladder li.done .ladder-n { background: var(--burgundy); color: #fff; }
+.ladder li.next .ladder-n { background: var(--gold-soft); color: #7d5f1f; outline: 2px solid var(--gold); }
+.ladder b { display: block; } .ladder small { color: var(--taupe); font-size: 12px; }
+.ladder li.done b { color: var(--burgundy); }
+.ref-steps { display: flex; gap: 3px; margin-top: 6px; }
+.ref-steps i { width: 18px; height: 4px; border-radius: 2px; background: var(--sand-2); }
+.ref-steps i.on { background: var(--burgundy); }
+.rulebook { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.rulebook > div { background: var(--ivory); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.rulebook .rb-n { font-size: 11px; letter-spacing: .12em; color: var(--copper); display: block; margin-bottom: 4px; }
+.rulebook b { display: block; font-size: 14px; margin-bottom: 2px; }
+@media (max-width: 900px) { .rulebook { grid-template-columns: 1fr; } .milestone-strip[style] { grid-template-columns: repeat(2, 1fr) !important; } }
+.glow-circle .gc-bar { height: 8px; background: var(--sand-2); border-radius: 999px; overflow: hidden; margin: 10px 0 6px; }
+.glow-circle .gc-bar span { display: block; height: 100%; background: var(--burgundy-grad); border-radius: 999px; }

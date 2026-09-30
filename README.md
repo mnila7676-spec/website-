@@ -17,12 +17,14 @@ npm run preview    # serve the production build
 | --- | --- |
 | `/` | Responsive storefront: home, shop, product detail, skin solutions, Routine Builder, Glow Club, rewards, leaderboard, live activity, learn, story, cart, checkout, account |
 | `/app` | Installable member web app (PWA manifest + service worker). Shown in a phone frame on desktop, full screen on mobile. Includes Today, Glow Spin, Daily Glow, Journey, Achievements, Leaderboard, Notifications, Membership |
-| `/admin` | Operations portal: dashboard, commerce, members, challenges, rewards and approvals, community moderation, campaigns, risk controls, analytics |
+| `/admin` | Operations portal: dashboard, commerce, Glow Club economics (points, referrals, tiers, rulebook), members, challenges, rewards and approvals, community moderation, campaigns, risk controls, analytics |
 
 ## How the ecosystem maps to the proposal
 
 - **One connected journey** – a single store (`src/store/store.tsx`) persisted in `localStorage` backs the website, app and admin. Points, orders, routine, missions and redemptions are the same everywhere and sync across open tabs.
 - **Commerce** – catalogue, search, filters, wishlist, cart, checkout, orders, account, Routine Builder with "add the complete set to the bag".
+- **Glow Club V1 framework** – four Glow Levels (Glow, Radiant, Luminous, Glow Ambassador; Ambassador is earned with 10 successful referrals), the Shop / Glow / Share / Belong pillars, V1 point values (500 welcome, 500 skin profile, 1,000 first purchase bonus, 250 verified review, 100 lesson, 25 routine check-in, 300 to 500 weekly, 1,000 monthly Glow Together, 1,500 referral), reward levels Everyday / Glow / Experience / Hero, the Glow Leaderboard and the 15-decision rulebook. 1,000 Glow Points = S$10.
+- **Refer & Glow** – "Give the glow. Get rewarded." Friends get 15% off their first qualifying order; referrers get 1,500 points after the Invited → Clicked → Registered → Purchased → Pending → Qualified → Rewarded chain, with milestone bonuses at 3, 5, 10, 25 and 50 friends.
 - **Glow Club** – points wallet (balance, earned, redeemed, pending/held, expiry), tiers (Silver / Gold 1.25x / Platinum 1.5x), milestone journey (2,500 · 5,000 · 10,000 · 20,000 · 50,000), reward marketplace with eligibility, stock, validity, redemption steps and terms.
 - **Daily and weekly engagement** – check-in with controlled streak bonus and monthly streak protection, AM/PM routine check-ins, learn-and-earn with a knowledge check, verified-purchase reviews, referral points released only after the friend's first order, weekly challenges including the 7-Day Barrier Reset (450 pts + badge). Engagement points are capped per day.
 - **Game layer (app)** – Today view with week strip and check-in, daily **Glow Spin** wheel with small prizes (10 to 80 points, streak shield, free express delivery, mini sample) at shown odds, once per day; weekly progress dots; badge-unlock celebrations; 32 collectible achievements; streak shields usable as extra streak protection.

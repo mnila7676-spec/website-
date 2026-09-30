@@ -2,7 +2,8 @@ import React, { createContext, useContext, useEffect, useMemo, useReducer, useRe
 import type { State, Member, LedgerEntry, CartItem, Order, Redemption, Review, Referral, AuditEntry, UserActivity, AdminSettings } from './types'
 import { PRODUCTS, productById, POINTS_PER_DOLLAR, FREE_SHIPPING_THRESHOLD, SHIPPING_FEE } from '@/data/products'
 import { REWARDS, rewardById } from '@/data/rewards'
-import { TIERS, tierFor, nextTier, MILESTONES, MISSIONS, STREAK_BONUS, DAILY_ENGAGEMENT_CAP, WELCOME_POINTS, WEEKLY_CHALLENGES, ACHIEVEMENTS, LESSONS, LEADERBOARD_PURCHASE_CAP, SPIN_PRIZES } from '@/data/club'
+import { TIERS, tierFor, nextTier, MILESTONES, MISSIONS, STREAK_BONUS, DAILY_ENGAGEMENT_CAP, WELCOME_POINTS, WEEKLY_CHALLENGES, ACHIEVEMENTS, LESSONS, LEADERBOARD_PURCHASE_CAP, SPIN_PRIZES, REFERRAL_MILESTONES, REFERRAL_STATES, DEFAULT_THRESHOLDS, FIRST_PURCHASE_BONUS, REFERRAL_REWARD, FRIEND_DISCOUNT, QUALIFICATION_DAYS } from '@/data/club'
+import type { ReferralStatus } from '@/data/club'
 import { LEADERS } from '@/data/community'
 
 const KEY = 'lumiva-glow-club-v1'
@@ -19,6 +20,8 @@ const defaultAdmin = (): AdminSettings => ({
   rewardStock: Object.fromEntries(REWARDS.map(r => [r.id, r.stock])),
   hiddenActivity: [], approvedActivity: ['a16'], activityTypes: { redeem: true, earn: true, tier: true, streak: true, milestone: true, order: true, achievement: true },
   announcement: '',
+  pointsPerDollar: POINTS_PER_DOLLAR, welcomePoints: WELCOME_POINTS, firstPurchaseBonus: FIRST_PURCHASE_BONUS, referralReward: REFERRAL_REWARD, friendDiscount: FRIEND_DISCOUNT, qualificationDays: QUALIFICATION_DAYS, referralLimit: 20,
+  thresholds: { ...DEFAULT_THRESHOLDS },
 })
 export const initialState = (): State => ({
   version: 1, member: null, ledger: [], cart: [], wishlist: [], orders: [], routine: { am: [], pm: [] }, routineLog: {}, checkins: [],
@@ -38,31 +41,35 @@ export function demoState(base: State): State {
   const add = (n: number, type: LedgerEntry['type'], source: string, points: number, note: string, lb = true) => L.push({ id: uid(), ts: isoDaysAgo(n), type, source, points, note, leaderboardEligible: lb })
   add(560, 'earn', 'welcome', 500, 'Welcome to Glow Club')
   add(555, 'earn', 'order', 1880, 'Order LU-1042 · The Lumiva Ritual Set')
+  add(555, 'earn', 'bonus', 1000, 'First purchase bonus')
+  add(540, 'earn', 'profile', 500, 'Skin profile completed')
   add(520, 'earn', 'order', 850, 'Order LU-1103 · Glow Renewal Serum')
-  add(490, 'earn', 'review', 150, 'Review · Glow Renewal Serum')
-  add(470, 'earn', 'referral', 500, 'Referral · Sofia T. placed her first order')
+  add(490, 'earn', 'review', 250, 'Verified review · Glow Renewal Serum')
   add(440, 'earn', 'order', 900, 'Order LU-1188 · Barrier Repair Cream')
-  add(410, 'spend', 'reward', -600, 'Redeemed · Coffee or Matcha')
   add(380, 'earn', 'order', 2625, 'Order LU-1240 · The Complete Ritual')
-  add(350, 'earn', 'weekly', 450, '7-Day Barrier Reset completed')
-  add(320, 'spend', 'reward', -2000, 'Redeemed · S$20 Lumiva Voucher')
+  add(350, 'earn', 'weekly', 500, '7-Day Barrier Reset completed')
   add(290, 'earn', 'order', 850, 'Order LU-1302 · Glow Renewal Serum')
   add(260, 'earn', 'order', 725, 'Order LU-1355 · Daily Defence SPF')
-  add(230, 'earn', 'referral', 500, 'Referral · Chloe D. placed her first order')
-  add(170, 'spend', 'reward', -600, 'Redeemed · Coffee or Matcha')
   add(150, 'earn', 'order', 900, 'Order LU-1466 · Barrier Repair Cream')
   add(120, 'earn', 'order', 850, 'Order LU-1520 · Glow Renewal Serum')
-  add(100, 'spend', 'reward', -600, 'Redeemed · Coffee or Matcha')
   add(80, 'earn', 'order', 2625, 'Order LU-1588 · The Complete Ritual')
-  add(60, 'spend', 'reward', -2000, 'Redeemed · S$20 Lumiva Voucher')
   add(40, 'earn', 'order', 725, 'Order LU-1634 · Daily Defence SPF')
-  add(20, 'spend', 'reward', -620, 'Redeemed · Express Delivery + Coffee')
-  // Daily engagement over the last 30 days
-  for (let d = 20; d >= 1; d--) { add(d, 'earn', 'checkin', 80 + (STREAK_BONUS[Math.min(7, 21 - d)] ?? 0), 'Daily check-in'); if (d % 2 === 0) add(d, 'earn', 'routine', 60, 'AM + PM routine'); if (d % 5 === 0) add(d, 'earn', 'learn', 20, 'Learn and earn') }
-  // Match the proposal: earned 18,900 · redeemed 6,420 · balance 12,480
-  const earned = L.filter(e => e.points > 0).reduce((s, e) => s + e.points, 0)
-  const diff = 18900 - earned
-  if (diff > 0) add(90, 'earn', 'milestone', diff, 'Birthday bonus · June 2026')
+  add(30, 'earn', 'monthly', 1000, 'Glow Together completed')
+  const friends: [string, string, number][] = [['Sofia T.', 'sofia@example.com', 475], ['Chloe D.', 'chloe@example.com', 400], ['Mei Lin W.', 'mei@example.com', 330], ['Hannah K.', 'hannah@example.com', 260], ['Priya N.', 'priya@example.com', 200], ['Jasmine O.', 'jasmine@example.com', 140], ['Aisha R.', 'aisha@example.com', 90], ['Nadia S.', 'nadia@example.com', 35]]
+  const referrals: Referral[] = friends.map(([name, email, n], i) => { add(n, 'earn', 'referral', 1500, `Refer & Glow · ${name} qualified`); if (i + 1 === 3) add(n, 'earn', 'referral-bonus', 2500, 'Glow Circle · 3 friends bonus'); if (i + 1 === 5) add(n, 'earn', 'referral-bonus', 5000, 'Glow Giver · 5 friends bonus'); return { id: uid(), name, email, ts: isoDaysAgo(n + 12), status: 'rewarded' as ReferralStatus, rewardedAt: isoDaysAgo(n) } })
+  referrals.push({ id: uid(), name: 'Rina P.', email: 'rina@example.com', ts: isoDaysAgo(9), status: 'pending' }, { id: uid(), name: 'Tessa L.', email: 'tessa@example.com', ts: isoDaysAgo(3), status: 'registered' })
+  for (let d = 20; d >= 1; d--) { add(d, 'earn', 'checkin', 80 + (STREAK_BONUS[Math.min(7, 21 - d)] ?? 0), 'Daily check-in'); if (d % 2 === 0) add(d, 'earn', 'routine', 50, 'AM + PM routine'); if (d % 5 === 0) add(d, 'earn', 'learn', 100, 'Learn & Earn') }
+  add(410, 'spend', 'reward', -600, 'Redeemed · Coffee or Matcha')
+  add(320, 'spend', 'reward', -2000, 'Redeemed · S$20 Lumiva Voucher')
+  add(240, 'spend', 'reward', -10000, 'Redeemed · Signature Facial')
+  add(170, 'spend', 'reward', -600, 'Redeemed · Coffee or Matcha')
+  add(100, 'spend', 'reward', -8500, 'Redeemed · Dinner for Two')
+  add(60, 'spend', 'reward', -2000, 'Redeemed · S$20 Lumiva Voucher')
+  add(20, 'spend', 'reward', -1000, 'Redeemed · Express Delivery + Coffee')
+  // Land on the proposal's 12,480 balance: expire or bonus the remainder
+  const bal = L.reduce((t, e) => t + e.points, 0); const diff = bal - 12480
+  if (diff > 0) add(15, 'expire', 'expiry', -diff, 'Points expired · earned over 12 months ago', false)
+  else if (diff < 0) add(90, 'earn', 'milestone', -diff, 'Birthday bonus · June 2026')
   const checkins: string[] = []; for (let d = 6; d >= 0; d--) checkins.push(today(daysAgo(d)))
   const routineLog: State['routineLog'] = {}; for (let d = 12; d >= 1; d--) routineLog[today(daysAgo(d))] = { am: isoDaysAgo(d), pm: isoDaysAgo(d) }
   const orders: Order[] = [
@@ -74,18 +81,20 @@ export function demoState(base: State): State {
   const redemptions: Redemption[] = [
     { id: uid(), rewardId: 'coffee', ts: isoDaysAgo(20), points: 600, status: 'used', code: 'GLOW-7F2K' },
     { id: uid(), rewardId: 'express-delivery', ts: isoDaysAgo(20), points: 400, status: 'approved', code: 'EXP-9A1M' },
+    { id: uid(), rewardId: 'facial', ts: isoDaysAgo(240), points: 10000, status: 'used', code: 'FAC-2K1P' },
+    { id: uid(), rewardId: 'dinner', ts: isoDaysAgo(100), points: 8500, status: 'used', code: 'DIN-8H3Q' },
     { id: uid(), rewardId: 'voucher-20', ts: isoDaysAgo(60), points: 2000, status: 'used', code: 'LUM-20-4TQ' },
     { id: uid(), rewardId: 'coffee', ts: isoDaysAgo(100), points: 600, status: 'used', code: 'GLOW-2B8X' },
   ]
-  const ach: Record<string, string> = { 'first-glow': isoDaysAgo(500), 'glow-getter': isoDaysAgo(420), 'spa-retreat': isoDaysAgo(150), 'ritual-regular': isoDaysAgo(0), 'streak-7': isoDaysAgo(0), 'review-maven': isoDaysAgo(490), 'referral-circle': isoDaysAgo(470), 'barrier-reset': isoDaysAgo(350), 'first-order': isoDaysAgo(555), 'first-redeem': isoDaysAgo(410), 'gold': isoDaysAgo(420), 'skin-profile': isoDaysAgo(540), 'complete-ritual': isoDaysAgo(380), 'routine-builder': isoDaysAgo(550), 'store-visit': isoDaysAgo(300), 'learner': isoDaysAgo(300), 'anniversary': isoDaysAgo(188), 'first-spin': isoDaysAgo(3) }
+  const ach: Record<string, string> = { 'first-glow': isoDaysAgo(500), 'glow-getter': isoDaysAgo(420), 'spa-retreat': isoDaysAgo(150), 'ritual-regular': isoDaysAgo(0), 'streak-7': isoDaysAgo(0), 'review-maven': isoDaysAgo(490), 'referral-circle': isoDaysAgo(470), 'barrier-reset': isoDaysAgo(350), 'first-order': isoDaysAgo(555), 'first-redeem': isoDaysAgo(410), 'radiant': isoDaysAgo(420), 'luminous': isoDaysAgo(150), 'weekend-ready': isoDaysAgo(120), 'referral-3': isoDaysAgo(330), 'referral-5': isoDaysAgo(200), 'glow-together': isoDaysAgo(30), 'skin-profile': isoDaysAgo(540), 'complete-ritual': isoDaysAgo(380), 'routine-builder': isoDaysAgo(550), 'store-visit': isoDaysAgo(300), 'learner': isoDaysAgo(300), 'anniversary': isoDaysAgo(188), 'first-spin': isoDaysAgo(3) }
   return {
     ...base, member: m, ledger: L, orders, redemptions, checkins, routineLog, achievements: ach, demoSeeded: true,
     routine: { am: ['cleanser', 'essence', 'serum', 'cream', 'spf'], pm: ['barrier-cleanser', 'essence', 'sculpt-serum', 'firming-moisturiser'], savedAt: isoDaysAgo(550) },
     reviews: [{ id: uid(), productId: 'serum', rating: 5, text: 'Two weeks in and my skin looks lit from within.', ts: isoDaysAgo(490), verified: true, orderId: 'LU-1103' }],
-    referrals: [{ id: uid(), name: 'Sofia T.', email: 'sofia@example.com', ts: isoDaysAgo(475), status: 'ordered' }, { id: uid(), name: 'Chloe D.', email: 'chloe@example.com', ts: isoDaysAgo(240), status: 'ordered' }, { id: uid(), name: 'Rina P.', email: 'rina@example.com', ts: isoDaysAgo(5), status: 'invited' }],
+    referrals,
     spins: { [today(daysAgo(1))]: 'p20', [today(daysAgo(2))]: 'p10', [today(daysAgo(3))]: 'p50' }, streakShields: 1, seenAchievements: Object.keys(ach),
     lessonsDone: ['barrier', 'layering', 'spf'], prompts: { barDismissed: true, rewardReveal: false, giftDrawerSeenFor: [] },
-    userActivity: [{ id: uid(), type: 'redeem', text: 'You redeemed Coffee or Matcha', ts: isoDaysAgo(20), icon: 'coffee' }],
+    userActivity: [{ id: uid(), type: 'referral', text: 'You welcomed your 8th friend to Lumiva', ts: isoDaysAgo(35), icon: 'users' }, { id: uid(), type: 'redeem', text: 'You redeemed a Glow reward', ts: isoDaysAgo(20), icon: 'coffee' }],
   }
 }
 
@@ -199,9 +208,14 @@ export function derive(s: State) {
   const redeemed = s.ledger.filter(e => e.points < 0).reduce((t, e) => t - e.points, 0)
   const pending = s.ledger.filter(e => e.type === 'pending').reduce((t, e) => t + e.points, 0)
   const held = s.redemptions.filter(r => r.status === 'pending' && rewardById(r.rewardId)?.requiresApproval).reduce((t, r) => t + r.points, 0)
+  const availableNow = balance - held
+  const nextReward = REWARDS.filter(r => r.points > availableNow && r.points > 0).sort((a, b) => a.points - b.points)[0] ?? null
   const lifetime = earned
-  const tier = tierFor(lifetime)
-  const next = nextTier(lifetime)
+  const successfulReferrals = s.referrals.filter(r => r.status === 'rewarded').length
+  const thresholds = s.admin.thresholds ?? DEFAULT_THRESHOLDS
+  const tier = tierFor(lifetime, successfulReferrals, thresholds)
+  const next = nextTier(lifetime, successfulReferrals, thresholds)
+  const pointsPerDollar = s.admin.pointsPerDollar ?? POINTS_PER_DOLLAR
   const nextMilestone = MILESTONES.find(m => m.points > lifetime) ?? null
   const cartCount = s.cart.reduce((t, c) => t + c.qty, 0)
   const cartSubtotal = s.cart.reduce((t, c) => t + (c.gift ? 0 : (productById(c.productId)?.price ?? 0) * c.qty), 0)
@@ -212,12 +226,12 @@ export function derive(s: State) {
   const routineCheckins = Object.values(s.routineLog).reduce((t, r) => t + (r.am ? 1 : 0) + (r.pm ? 1 : 0), 0)
   const wk = weekKey()
   const weekRoutines = Object.entries(s.routineLog).filter(([k]) => k >= wk).reduce((t, [, r]) => t + (r.am ? 1 : 0) + (r.pm ? 1 : 0), 0)
-  const engagementToday = s.ledger.filter(e => e.ts.slice(0, 10) === d && e.points > 0 && !['order', 'welcome', 'referral', 'weekly', 'adjust', 'milestone'].includes(e.source)).reduce((t, e) => t + e.points, 0)
+  const engagementToday = s.ledger.filter(e => e.ts.slice(0, 10) === d && e.points > 0 && !['order', 'welcome', 'referral', 'referral-bonus', 'weekly', 'monthly', 'adjust', 'milestone', 'bonus', 'profile'].includes(e.source)).reduce((t, e) => t + e.points, 0)
   const weekly = leaderboardPoints(s, wk)
   const expiring = Math.min(balance, 1200)
   const spunToday = !!s.spins[d]
   const spinStreak = computeStreak(Object.keys(s.spins))
-  return { spunToday, spinStreak, balance, earned, redeemed, pending, held, available: balance - held, lifetime, tier, next, nextMilestone, cartCount, cartSubtotal, missionsToday, checkedInToday, streak, routineCheckins, weekRoutines, engagementToday, weeklyPoints: weekly, expiring }
+  return { spunToday, spinStreak, successfulReferrals, thresholds, pointsPerDollar, nextReward, balance, earned, redeemed, pending, held, available: balance - held, lifetime, tier, next, nextMilestone, cartCount, cartSubtotal, missionsToday, checkedInToday, streak, routineCheckins, weekRoutines, engagementToday, weeklyPoints: weekly, expiring }
 }
 function computeStreak(checkins: string[]) {
   if (!checkins.length) return 0
@@ -294,19 +308,22 @@ function makeActions(dispatch: React.Dispatch<Action>, get: () => State, toast: 
     setQty(productId: string, qty: number) { if (qty <= 0) dispatch({ type: 'CART_REMOVE', productId }); else dispatch({ type: 'CART_SET', productId, qty }) },
     removeFromCart(productId: string) { dispatch({ type: 'CART_REMOVE', productId }) },
     toggleWish(productId: string) { const s = get(); dispatch({ type: 'WISH_TOGGLE', productId }); toast(s.wishlist.includes(productId) ? 'Removed from saved items' : 'Saved to wishlist', { icon: 'heart' }) },
-    placeOrder(opts: { voucher?: Redemption; express?: boolean; address: string }) {
+    placeOrder(opts: { voucher?: Redemption; express?: boolean; address: string; referralCode?: string }) {
       const s = get(); const d = derive(s); const items = s.cart.map(c => ({ productId: c.productId, qty: c.qty, price: c.gift ? 0 : (productById(c.productId)?.price ?? 0), gift: c.gift }))
       const subtotal = items.reduce((t, i) => t + i.price * i.qty, 0)
-      const discount = opts.voucher ? 20 : 0
-      const shipping = opts.express ? 0 : subtotal >= FREE_SHIPPING_THRESHOLD || d.tier.key === 'platinum' ? 0 : SHIPPING_FEE
+      const friend = !!(s.member && !s.orders.length && opts.referralCode && /-GLOW$/i.test(opts.referralCode.trim()) && opts.referralCode.trim().toUpperCase() !== s.member.referralCode)
+      const discount = (opts.voucher ? 20 : 0) + (friend ? Math.round(subtotal * (s.admin.friendDiscount ?? FRIEND_DISCOUNT) / 100) : 0)
+      const shipping = opts.express ? 0 : subtotal >= FREE_SHIPPING_THRESHOLD || d.tier.key === 'luminous' || d.tier.key === 'ambassador' ? 0 : SHIPPING_FEE
       const total = Math.max(0, subtotal - discount + shipping)
       const mult = s.member ? d.tier.multiplier : 0
-      const pointsEarned = Math.round(subtotal * POINTS_PER_DOLLAR * mult)
+      const pointsEarned = Math.round(subtotal * (s.admin.pointsPerDollar ?? POINTS_PER_DOLLAR) * mult)
       const order: Order = { id: 'LU-' + Math.floor(1700 + Math.random() * 8000), ts: new Date().toISOString(), items, subtotal, discount, shipping, total, status: 'processing', pointsEarned, voucherUsed: opts.voucher?.id, express: opts.express, address: opts.address, pointsAt: mult }
       dispatch({ type: 'ORDER_PLACE', order })
       if (opts.voucher) dispatch({ type: 'REDEMPTION_SET', id: opts.voucher.id, status: 'used' })
       if (s.member) {
         if (pointsEarned > 0) dispatch({ type: 'EARN', source: 'order', points: pointsEarned, note: `Order ${order.id}`, leaderboardEligible: true })
+        if (!s.orders.length && (s.admin.firstPurchaseBonus ?? FIRST_PURCHASE_BONUS) > 0) { dispatch({ type: 'EARN', source: 'bonus', points: s.admin.firstPurchaseBonus ?? FIRST_PURCHASE_BONUS, note: 'First purchase bonus', leaderboardEligible: false }); toast(`First purchase bonus · +${(s.admin.firstPurchaseBonus ?? FIRST_PURCHASE_BONUS).toLocaleString()} pts`, { icon: 'sparkle', copper: true }) }
+        if (friend) toast(`Refer & Glow · ${s.admin.friendDiscount ?? FRIEND_DISCOUNT}% friend discount applied`, { icon: 'users' })
         if (items.some(i => i.gift)) dispatch({ type: 'UPDATE_MEMBER', patch: { oneForOneUsed: true } })
         const names = items.filter(i => !i.gift).map(i => productById(i.productId)?.name).filter(Boolean)
         activity('order', `You checked out ${names[0]}${names.length > 1 ? ` +${names.length - 1}` : ''}`, 'bag')
@@ -367,14 +384,30 @@ function makeActions(dispatch: React.Dispatch<Action>, get: () => State, toast: 
     },
     refer(name: string, email: string) {
       const s = get(); if (!s.member) return
+      if (s.referrals.length >= (s.admin.referralLimit ?? 20)) { toast('Referral limit reached for this period'); return }
+      if (email.trim().toLowerCase() === s.member.email.toLowerCase()) { toast('You cannot refer yourself'); return }
       dispatch({ type: 'REFERRAL_ADD', referral: { id: uid(), name, email, ts: new Date().toISOString(), status: 'invited' } })
-      toast(`Invitation sent to ${name}. Points arrive after their first order.`, { icon: 'users' })
+      dispatch({ type: 'MISSION_DONE', id: 'refer-invite' })
+      toast(`Invitation sent to ${name}. Points arrive once their first order qualifies.`, { icon: 'users' })
     },
-    simulateReferralOrder(id: string) {
-      const s = get(); const r = s.referrals.find(x => x.id === id); if (!r || r.status === 'ordered') return
-      dispatch({ type: 'REFERRAL_SET', id, status: 'ordered' }); dispatch({ type: 'EARN', source: 'referral', points: missionPts('refer'), note: `Referral · ${r.name} placed their first order` })
-      toast(`${r.name} ordered · +${missionPts('refer')} pts`, { icon: 'users', copper: true })
+    advanceReferral(id: string) {
+      const s = get(); const r = s.referrals.find(x => x.id === id); if (!r || !s.member) return
+      const order = REFERRAL_STATES.map(x => x.key); const i = order.indexOf(r.status); if (i < 0 || i >= order.length - 1) return
+      const next = order[i + 1]
+      dispatch({ type: 'REFERRAL_SET', id, status: next })
+      if (next !== 'rewarded') { toast(`${r.name} · ${REFERRAL_STATES[i + 1].label}`); return }
+      const count = s.referrals.filter(x => x.status === 'rewarded').length + 1
+      const reward = s.admin.referralReward ?? REFERRAL_REWARD
+      dispatch({ type: 'EARN', source: 'referral', points: reward, note: `Refer & Glow · ${r.name} qualified` })
+      const ms = REFERRAL_MILESTONES.find(m => m.count === count)
+      if (ms?.bonus) dispatch({ type: 'EARN', source: 'referral-bonus', points: ms.bonus, note: `${ms.label} · ${count} friends bonus`, leaderboardEligible: false })
+      if (ms?.badge) dispatch({ type: 'ACHIEVE', id: ms.badge })
+      const ord = count === 1 ? '1st' : count === 2 ? '2nd' : count === 3 ? '3rd' : `${count}th`
+      activity('referral', `You welcomed your ${ord} friend to Lumiva`, 'users')
+      toast(`${r.name} qualified · +${reward.toLocaleString()} pts${ms?.bonus ? ` · ${ms.label} bonus +${ms.bonus.toLocaleString()}` : ''}`, { icon: 'users', copper: true })
+      audit('system', 'referral.rewarded', `${s.member.firstName} · ${r.name} · ${reward} pts${ms ? ' · ' + ms.label : ''}`)
     },
+    simulateReferralOrder(id: string) { this.advanceReferral(id) },
     completeSkinProfile(profile: Member['skinProfile']) {
       const s = get(); if (!s.member) return
       const first = !s.member.skinProfile
@@ -387,9 +420,9 @@ function makeActions(dispatch: React.Dispatch<Action>, get: () => State, toast: 
       toast(`Welcome in store · +${missionPts('visit')} pts`, { icon: 'store', copper: true })
     },
     claimWeekly(challengeId: string) {
-      const s = get(); const key = `${challengeId}:${weekKey()}`; if (s.weeklyBonusClaimed.includes(key)) return
-      const ch = WEEKLY_CHALLENGES.find(c => c.id === challengeId)!; dispatch({ type: 'WEEKLY_CLAIM', key })
-      dispatch({ type: 'EARN', source: 'weekly', points: ch.bonus, note: `Weekly challenge · ${ch.title}` }); if (ch.badge) dispatch({ type: 'ACHIEVE', id: ch.badge })
+      const s = get(); const ch = WEEKLY_CHALLENGES.find(c => c.id === challengeId)!; const key = `${challengeId}:${ch.period === 'monthly' ? monthKey() : weekKey()}`; if (s.weeklyBonusClaimed.includes(key)) return
+      dispatch({ type: 'WEEKLY_CLAIM', key })
+      dispatch({ type: 'EARN', source: ch.period, points: ch.bonus, note: `${ch.period === 'monthly' ? 'Monthly' : 'Weekly'} challenge · ${ch.title}` }); if (ch.badge) dispatch({ type: 'ACHIEVE', id: ch.badge })
       activity('earn', `You completed ${ch.title}`, 'shield'); toast(`Challenge complete · +${ch.bonus} pts`, { icon: 'sparkle', copper: true })
     },
     redeem(rewardId: string) {
@@ -449,11 +482,11 @@ function checkAchievements(s: State, d: ReturnType<typeof derive>, dispatch: Rea
   if (!s.member) return
   const unlock = (id: string) => { if (!s.achievements[id]) { dispatch({ type: 'ACHIEVE', id }); const a = ACHIEVEMENTS.find(x => x.id === id); if (a) toast(`Badge unlocked · ${a.name}`, { icon: 'medal', copper: true }) } }
   if (d.lifetime >= 2500) unlock('first-glow'); if (d.lifetime >= 5000) unlock('glow-getter'); if (d.lifetime >= 10000) unlock('spa-retreat'); if (d.lifetime >= 20000) unlock('weekend-ready'); if (d.lifetime >= 50000) unlock('japan-bound')
-  if (d.tier.key === 'gold' || d.tier.key === 'platinum') unlock('gold'); if (d.tier.key === 'platinum') unlock('platinum')
+  if (['radiant', 'luminous', 'ambassador'].includes(d.tier.key) || d.lifetime >= d.thresholds.radiant) unlock('radiant'); if (d.lifetime >= d.thresholds.luminous) unlock('luminous')
+  const refs = d.successfulReferrals; if (refs >= 1) unlock('referral-circle'); if (refs >= 3) unlock('referral-3'); if (refs >= 5) unlock('referral-5'); if (refs >= d.thresholds.ambassador) unlock('ambassador'); if (refs >= 25) unlock('referral-25'); if (refs >= 50) unlock('referral-50')
   if (d.routineCheckins >= 7) unlock('ritual-regular'); if (d.routineCheckins >= 30) unlock('ritual-devotee')
   if (d.streak >= 7) unlock('streak-7'); if (d.streak >= 30) unlock('streak-30'); if (d.streak >= 100) unlock('streak-100')
   if (s.reviews.some(r => r.verified)) unlock('review-maven'); if (s.reviews.filter(r => r.verified).length >= 5) unlock('review-5')
-  if (s.referrals.some(r => r.status === 'ordered')) unlock('referral-circle'); if (s.referrals.filter(r => r.status === 'ordered').length >= 5) unlock('referral-5')
   if (s.lessonsDone.length >= 3) unlock('learner'); if (s.lessonsDone.length >= LESSONS.length) unlock('scholar')
   if (computeStreak(Object.keys(s.spins)) >= 7) unlock('spin-7')
   if (s.orders.length) unlock('first-order'); if (s.redemptions.length) unlock('first-redeem'); if (s.redemptions.filter(r => r.rewardId === 'coffee').length >= 5) unlock('coffee-club')

@@ -35,12 +35,13 @@ export function AppNotifications() {
   const items: { icon: string; title: string; sub: string; to: string; time: string }[] = []
   if (state.member) {
     if (!d.checkedInToday) items.push({ icon: 'calendar', title: 'Your daily check-in is ready', sub: `Claim ${80} pts and keep your ${d.streak}-day streak`, to: '/app/daily', time: 'Today' })
+    const pend = state.referrals.filter(r => r.status === 'pending' || r.status === 'purchased'); if (pend.length) items.push({ icon: 'users', title: `${pend[0].name}'s referral is qualifying`, sub: `${state.admin.referralReward ?? 1500} pts arrive after the ${state.admin.qualificationDays ?? 14}-day period`, to: '/app/profile/referrals', time: 'Refer & Glow' })
     if (!d.spunToday) items.push({ icon: 'compass', title: 'Glow Spin is ready', sub: 'One spin a day, small rewards, fair odds', to: '/app/spin', time: 'Today' })
     state.redemptions.filter(r => r.status === 'pending').forEach(r => items.push({ icon: 'clock', title: `${rewardById(r.rewardId)?.name} request received`, sub: 'We will confirm within 5 working days', to: `/app/rewards/${r.rewardId}`, time: ago(r.ts) }))
     state.redemptions.filter(r => r.status === 'approved').slice(0, 2).forEach(r => items.push({ icon: 'gift', title: `${rewardById(r.rewardId)?.name} is ready to use`, sub: `Code ${r.code}`, to: '/app/profile', time: ago(r.ts) }))
     const serum = state.orders.find(o => o.items.some(i => i.productId === 'serum' || productById(i.productId)?.includes?.includes('serum')))
     if (serum) items.push({ icon: 'bell', title: 'Serum may run low soon', sub: 'Based on typical usage. Reorder in one tap.', to: '/app/routine', time: 'Reminder' })
-    if (d.next) items.push({ icon: 'medal', title: `${n(d.next.min - d.lifetime)} points to ${d.next.name}`, sub: d.next.benefits[0], to: '/app/journey', time: 'Progress' })
+    if (d.next) items.push({ icon: d.next.tier.icon, title: `${n(d.next.need)} ${d.next.unit} to ${d.next.tier.name}`, sub: d.next.tier.benefits[0], to: d.next.unit === 'referrals' ? '/app/profile/referrals' : '/app/journey', time: 'Progress' })
     if (d.expiring) items.push({ icon: 'clock', title: `${n(d.expiring)} points expire in 90 days`, sub: 'Use them on a coffee, a voucher or a mini', to: '/app/rewards/catalogue', time: 'Wallet' })
     items.push({ icon: 'shield', title: WEEKLY_CHALLENGES[1].title + ' is live', sub: `${WEEKLY_CHALLENGES[1].bonus} pts and a limited badge`, to: '/app/daily', time: 'This week' })
   }

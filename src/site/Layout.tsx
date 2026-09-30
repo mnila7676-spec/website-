@@ -64,7 +64,7 @@ function Footer() {
         <div><h4>Shop</h4><Link to="/shop">All Products</Link><Link to="/shop?sort=best">Best Sellers</Link><Link to="/shop?cat=sets">Sets &amp; Gifts</Link><Link to="/shop?cat=minis">Minis</Link></div>
         <div><h4>Skin Solutions</h4><Link to="/skin-solutions">Find your routine</Link><Link to="/learn">Learn</Link><Link to="/skin-solutions#ingredients">Ingredients</Link></div>
         <div><h4>The Ritual</h4><Link to="/ritual">Build Your Routine</Link><Link to="/product/the-lumiva-ritual-set">The Ritual Set</Link><Link to="/learn">Ritual Guide</Link></div>
-        <div><h4>Glow Club</h4><Link to="/glow-club">How it works</Link><Link to="/rewards">Rewards</Link><Link to="/leaderboard">Leaderboard</Link><Link to="/app">Member app</Link></div>
+        <div><h4>Glow Club</h4><Link to="/glow-club">How it works</Link><Link to="/glow-club#refer">Refer & Glow</Link><Link to="/rewards">Rewards</Link><Link to="/leaderboard">Leaderboard</Link><Link to="/app">Member app</Link></div>
         <div><h4>Help</h4><Link to="/help">FAQ</Link><Link to="/help#shipping">Shipping</Link><Link to="/help#privacy">Privacy (PDPA)</Link><Link to="/help#terms">Terms</Link><Link to="/admin">Admin portal</Link></div>
       </div>
       <div className="footer-bottom"><span>© 2026 Lumiva Pte. Ltd. All rights reserved.</span><span>Singapore (S$ SGD) · Concept build by BrillianceTech</span></div>

@@ -1,21 +1,21 @@
-export type ActivityType = 'redeem' | 'earn' | 'tier' | 'streak' | 'milestone' | 'order' | 'achievement'
+export type ActivityType = 'redeem' | 'earn' | 'tier' | 'streak' | 'milestone' | 'order' | 'achievement' | 'referral'
 export interface Activity { id: string; type: ActivityType; name: string; text: string; minutesAgo: number; approved: boolean; icon: string; hidden?: boolean }
 export const ACTIVITY: Activity[] = [
-  { id: 'a1', type: 'redeem', name: 'Sofia T.', text: 'redeemed Japan Flight for Two', minutesAgo: 2, approved: true, icon: 'plane' },
-  { id: 'a2', type: 'redeem', name: 'Amelia K.', text: 'claimed a free coffee', minutesAgo: 15, approved: true, icon: 'coffee' },
+  { id: 'a1', type: 'redeem', name: 'Sofia T.', text: 'unlocked the Japan Experience', minutesAgo: 2, approved: true, icon: 'plane' },
+  { id: 'a2', type: 'redeem', name: 'Amelia K.', text: 'redeemed a Glow reward', minutesAgo: 15, approved: true, icon: 'coffee' },
   { id: 'a3', type: 'earn', name: 'Chloe L.', text: 'earned 680 Glow Points', minutesAgo: 24, approved: true, icon: 'sun' },
-  { id: 'a4', type: 'order', name: 'Isabella M.', text: 'checked out Glow Renewal Serum', minutesAgo: 31, approved: true, icon: 'bag' },
-  { id: 'a5', type: 'tier', name: 'Aisha R.', text: 'reached Radiance Gold', minutesAgo: 48, approved: true, icon: 'medal' },
+  { id: 'a4', type: 'referral', name: 'Isabella M.', text: 'welcomed her 3rd friend to Lumiva', minutesAgo: 31, approved: true, icon: 'users' },
+  { id: 'a5', type: 'tier', name: 'Aisha R.', text: 'unlocked Radiant', minutesAgo: 48, approved: true, icon: 'medal' },
   { id: 'a6', type: 'streak', name: 'Nadia S.', text: 'completed a 30-day streak', minutesAgo: 66, approved: true, icon: 'flame' },
   { id: 'a7', type: 'redeem', name: 'Emma R.', text: 'redeemed a S$20 Lumiva Voucher', minutesAgo: 95, approved: true, icon: 'gift' },
-  { id: 'a8', type: 'milestone', name: 'Maya L.', text: 'unlocked Japan flights for two', minutesAgo: 140, approved: true, icon: 'torii' },
+  { id: 'a8', type: 'tier', name: 'Maya L.', text: 'became a Glow Ambassador', minutesAgo: 140, approved: true, icon: 'crown' },
   { id: 'a9', type: 'redeem', name: 'Chloe D.', text: 'unlocked Signature Facial', minutesAgo: 180, approved: true, icon: 'leaf' },
   { id: 'a10', type: 'achievement', name: 'Hannah K.', text: 'earned the Ritual Regular badge', minutesAgo: 210, approved: true, icon: 'calendar-check' },
   { id: 'a11', type: 'earn', name: 'Olivia W.', text: 'completed the 7-Day Barrier Reset', minutesAgo: 260, approved: true, icon: 'shield' },
-  { id: 'a12', type: 'order', name: 'Grace T.', text: 'checked out The Lumiva Ritual Set', minutesAgo: 300, approved: true, icon: 'bag' },
+  { id: 'a12', type: 'referral', name: 'Grace T.', text: 'welcomed her 5th friend to Lumiva', minutesAgo: 300, approved: true, icon: 'users' },
   { id: 'a13', type: 'redeem', name: 'Mia J.', text: 'redeemed Dinner for Two', minutesAgo: 380, approved: true, icon: 'gift' },
   { id: 'a14', type: 'streak', name: 'Ella R.', text: 'completed a 7-day streak', minutesAgo: 420, approved: true, icon: 'flame' },
-  { id: 'a15', type: 'tier', name: 'Priya N.', text: 'reached Radiance Platinum', minutesAgo: 600, approved: true, icon: 'medal' },
+  { id: 'a15', type: 'tier', name: 'Priya N.', text: 'unlocked Luminous', minutesAgo: 600, approved: true, icon: 'medal' },
   { id: 'a16', type: 'redeem', name: 'Jasmine O.', text: 'redeemed a Staycation for Two', minutesAgo: 900, approved: false, icon: 'gift' },
 ]
 

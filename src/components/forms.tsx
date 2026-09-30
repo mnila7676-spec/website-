@@ -80,7 +80,7 @@ export function ReviewForm({ productId, onDone }: { productId: string; onDone?: 
     <div className="join-form">
       <div className="field"><label className="label">Your rating</label><div className="row">{[1, 2, 3, 4, 5].map(r => <button key={r} type="button" className="star-btn" onClick={() => setRating(r)} aria-label={`${r} stars`}><Icon name="star" className={r <= rating ? 'star-on' : ''} /></button>)}</div></div>
       <div className="field"><label className="label">Your review</label><textarea className="input" rows={4} value={text} onChange={e => setText(e.target.value)} placeholder="What changed for your skin? How does it feel and layer?" /></div>
-      <p className="tiny muted" style={{ marginBottom: 12 }}>{verified ? 'Verified purchase · earns 150 Glow Points.' : 'Points are awarded for verified purchases only.'}</p>
+      <p className="tiny muted" style={{ marginBottom: 12 }}>{verified ? 'Verified purchase · earns 250 Glow Points.' : 'Points are awarded for verified purchases only.'}</p>
       <button className="btn btn-primary btn-block" disabled={text.trim().length < 20} onClick={() => { actions.addReview(productId, rating, text.trim()); onDone?.() }}>Submit review</button>
     </div>
   )
