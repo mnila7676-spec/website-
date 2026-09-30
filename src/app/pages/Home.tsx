@@ -5,7 +5,7 @@ import { Icon } from '@/components/Icon'
 import { ProductCard, TierBadge, Progress } from '@/components/ui'
 import { ActivityCard } from '@/components/Ticker'
 import { useStore } from '@/store/store'
-import { PRODUCTS, BEST_SELLERS, STEPS, productById } from '@/data/products'
+import { PRODUCTS, BEST_SELLERS, STEPS, RITUALS, productById } from '@/data/products'
 import { greeting, n } from '@/lib/format'
 import { TodaySection } from './Today'
 
@@ -28,7 +28,8 @@ export function AppHome() {
     <TodaySection />
     {m && d.nextMilestone && <div className="app-card"><span className="tiny muted">Next milestone</span><div className="row" style={{ marginTop: 8 }}><img src={d.nextMilestone.image} alt="" style={{ width: 84, height: 84, borderRadius: 12, objectFit: 'cover' }} /><div style={{ flex: 1 }}><b className="small">{n(d.nextMilestone.points)} Points</b><div className="serif" style={{ fontSize: 22 }}>{d.nextMilestone.name}</div><p className="tiny muted">{n(d.nextMilestone.points - d.lifetime)} to go. You're on your way!</p><Link to="/app/journey" className="btn btn-sm btn-light" style={{ marginTop: 6 }}>See Journey <Icon name="chevron" className="icon-sm" /></Link></div></div><div style={{ marginTop: 10 }}><Progress value={d.lifetime} max={d.nextMilestone.points} /></div></div>}
     <div className="banner"><div className="banner-copy"><h2>The Lumiva Ritual</h2><p>Premium skincare. Thoughtfully made. Visibly radiant.</p><Link to="/app/product/the-lumiva-ritual-set" className="btn btn-primary btn-sm">Shop Collection</Link></div><img src={asset('/images/hero.jpg')} alt="" /></div>
-    <div className="cat-row">{STEPS.map(s => <Link key={s.key} to={`/app/shop?step=${s.key}`}><span><Icon name={s.key === 'cleanse' ? 'droplet' : s.key === 'treat' ? 'bottle' : s.key === 'hydrate' ? 'jar' : 'sun'} /></span>{s.label}</Link>)}</div>
+    <div className="cat-row">{STEPS.map(s => <Link key={s.key} to={`/app/shop?step=${s.key}`}><span><Icon name={s.icon} /></span>{s.label}</Link>)}</div>
+    <div className="dn-tabs">{RITUALS.map(r => <Link key={r.key} to={`/app/shop?time=${r.key}`} className={`dn-tab ${r.key}`}><Icon name={r.icon} /><div><b>{r.title}</b><small>{r.ids.length} steps</small></div><Icon name="chevron" className="icon-sm" /></Link>)}</div>
     <div className="sub-head"><h2>{m?.skinProfile ? 'Recommended for you' : 'Best Sellers'}</h2><Link to="/app/shop">View All →</Link></div>
     <div className="h-scroll">{rec.map(p => <ProductCard key={p.id} product={p} compact />)}</div>
     {daysLeft !== null && <div className="reminder" style={{ marginTop: 14 }}><Icon name="bell" /><div style={{ flex: 1 }}><b className="small">{daysLeft > 0 ? `Serum may run low in ${daysLeft} days` : 'Time to reorder your serum'}</b><p className="tiny muted">We'll remind you to reorder. Manage in settings.</p></div><button className="btn btn-sm btn-primary" onClick={() => actions.addToCart('serum')}>Reorder</button></div>}

@@ -80,7 +80,7 @@ export function demoState(base: State): State {
   const ach: Record<string, string> = { 'first-glow': isoDaysAgo(500), 'glow-getter': isoDaysAgo(420), 'spa-retreat': isoDaysAgo(150), 'ritual-regular': isoDaysAgo(0), 'streak-7': isoDaysAgo(0), 'review-maven': isoDaysAgo(490), 'referral-circle': isoDaysAgo(470), 'barrier-reset': isoDaysAgo(350), 'first-order': isoDaysAgo(555), 'first-redeem': isoDaysAgo(410), 'gold': isoDaysAgo(420), 'skin-profile': isoDaysAgo(540), 'complete-ritual': isoDaysAgo(380), 'routine-builder': isoDaysAgo(550), 'store-visit': isoDaysAgo(300), 'learner': isoDaysAgo(300), 'anniversary': isoDaysAgo(188), 'first-spin': isoDaysAgo(3) }
   return {
     ...base, member: m, ledger: L, orders, redemptions, checkins, routineLog, achievements: ach, demoSeeded: true,
-    routine: { am: ['cleanser', 'serum', 'cream', 'spf'], pm: ['cleanser', 'serum', 'cream'], savedAt: isoDaysAgo(550) },
+    routine: { am: ['cleanser', 'essence', 'serum', 'cream', 'spf'], pm: ['barrier-cleanser', 'essence', 'sculpt-serum', 'firming-moisturiser'], savedAt: isoDaysAgo(550) },
     reviews: [{ id: uid(), productId: 'serum', rating: 5, text: 'Two weeks in and my skin looks lit from within.', ts: isoDaysAgo(490), verified: true, orderId: 'LU-1103' }],
     referrals: [{ id: uid(), name: 'Sofia T.', email: 'sofia@example.com', ts: isoDaysAgo(475), status: 'ordered' }, { id: uid(), name: 'Chloe D.', email: 'chloe@example.com', ts: isoDaysAgo(240), status: 'ordered' }, { id: uid(), name: 'Rina P.', email: 'rina@example.com', ts: isoDaysAgo(5), status: 'invited' }],
     spins: { [today(daysAgo(1))]: 'p20', [today(daysAgo(2))]: 'p10', [today(daysAgo(3))]: 'p50' }, streakShields: 1, seenAchievements: Object.keys(ach),

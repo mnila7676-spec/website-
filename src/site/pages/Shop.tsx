@@ -2,24 +2,25 @@ import React, { useMemo, useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import { ProductCard } from '@/components/ui'
 import { Icon } from '@/components/Icon'
-import { PRODUCTS, CONCERNS, STEPS } from '@/data/products'
+import { PRODUCTS, CONCERNS, STEPS, RITUALS, forTime } from '@/data/products'
 import type { Category } from '@/data/products'
 
-const CATS: { key: Category | 'all'; label: string }[] = [{ key: 'all', label: 'All' }, { key: 'cleansers', label: 'Cleansers' }, { key: 'serums', label: 'Serums' }, { key: 'moisturisers', label: 'Moisturisers' }, { key: 'spf', label: 'SPF' }, { key: 'sets', label: 'Sets' }, { key: 'minis', label: 'Minis' }]
+const CATS: { key: Category | 'all'; label: string }[] = [{ key: 'all', label: 'All' }, { key: 'cleansers', label: 'Cleansers' }, { key: 'essences', label: 'Essences' }, { key: 'serums', label: 'Serums' }, { key: 'moisturisers', label: 'Moisturisers' }, { key: 'spf', label: 'SPF' }, { key: 'tools', label: 'Tools' }, { key: 'sets', label: 'Sets' }, { key: 'minis', label: 'Minis' }]
 
 export function Shop() {
   const [sp, setSp] = useSearchParams()
-  const cat = (sp.get('cat') ?? 'all') as Category | 'all'; const q = sp.get('q') ?? ''; const sort = sp.get('sort') ?? 'featured'
+  const cat = (sp.get('cat') ?? 'all') as Category | 'all'; const q = sp.get('q') ?? ''; const sort = sp.get('sort') ?? 'featured'; const time = sp.get('time') ?? 'all'
   const [concerns, setConcerns] = useState<string[]>(sp.get('concern') ? [sp.get('concern')!] : []); const [steps, setSteps] = useState<string[]>([]); const [maxPrice, setMaxPrice] = useState(250)
   const set = (k: string, v: string) => { const n = new URLSearchParams(sp); v ? n.set(k, v) : n.delete(k); setSp(n) }
   const list = useMemo(() => {
-    let l = PRODUCTS.filter(p => (cat === 'all' || p.category === cat) && p.price <= maxPrice && (!q || (p.name + ' ' + p.tagline + ' ' + p.description + ' ' + p.ingredients.map(i => i.name).join(' ')).toLowerCase().includes(q.toLowerCase())) && (!concerns.length || concerns.some(c => p.concerns.includes(c as any))) && (!steps.length || steps.includes(p.step)))
+    let l = PRODUCTS.filter(p => (cat === 'all' || p.category === cat) && (time === 'all' || forTime(p, time as 'day' | 'night')) && p.price <= maxPrice && (!q || (p.name + ' ' + p.tagline + ' ' + p.description + ' ' + p.ingredients.map(i => i.name).join(' ')).toLowerCase().includes(q.toLowerCase())) && (!concerns.length || concerns.some(c => p.concerns.includes(c as any))) && (!steps.length || steps.includes(p.step)))
     if (sort === 'price-asc') l = [...l].sort((a, b) => a.price - b.price); if (sort === 'price-desc') l = [...l].sort((a, b) => b.price - a.price); if (sort === 'best') l = [...l].sort((a, b) => b.reviews - a.reviews); if (sort === 'rating') l = [...l].sort((a, b) => b.rating - a.rating)
     return l
-  }, [cat, q, sort, concerns, steps, maxPrice])
+  }, [cat, q, sort, concerns, steps, maxPrice, time])
   const tog = (arr: string[], setArr: (v: string[]) => void, k: string) => setArr(arr.includes(k) ? arr.filter(x => x !== k) : [...arr, k])
   return <div className="container">
-    <div className="page-hero"><p className="eyebrow">Shop</p><h1>{q ? `Results for “${q}”` : cat === 'all' ? 'All skincare' : CATS.find(c => c.key === cat)?.label}</h1><p>Thoughtfully formulated, routine-led skincare. Every product earns Glow Points.</p></div>
+    <div className="page-hero"><p className="eyebrow">Shop</p><h1>{q ? `Results for “${q}”` : time !== 'all' ? RITUALS.find(r => r.key === time)?.title : cat === 'all' ? 'All skincare' : CATS.find(c => c.key === cat)?.label}</h1><p>Thoughtfully formulated, routine-led skincare. Every product earns Glow Points.</p></div>
+    <div className="chips" style={{ marginBottom: 22 }}><button className={`chip ${time === 'all' ? 'active' : ''}`} onClick={() => set('time', '')}>All</button>{RITUALS.map(r => <button key={r.key} className={`chip ${time === r.key ? 'active' : ''}`} onClick={() => set('time', r.key)}><Icon name={r.icon} className="icon-sm" /> {r.label} ritual</button>)}</div>
     <div className="shop-layout">
       <aside className="filters">
         <div><h4>Category</h4>{CATS.map(c => <label key={c.key}><input type="radio" name="cat" checked={cat === c.key} onChange={() => set('cat', c.key === 'all' ? '' : c.key)} /> {c.label}</label>)}</div>

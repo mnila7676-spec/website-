@@ -7,6 +7,7 @@ import { useStore } from '@/store/store'
 import { rewardById } from '@/data/rewards'
 import { productById, money } from '@/data/products'
 import { n, fmtDate, ago } from '@/lib/format'
+import { asset } from '@/lib/asset'
 
 const Head = ({ title, right }: { title: string; right?: React.ReactNode }) => { const nav = useNavigate(); return <div className="screen-head"><button className="icon-btn" onClick={() => nav(-1)}><Icon name="chevron-left" /></button><h1 style={{ fontSize: 26 }}>{title}</h1>{right ?? <span style={{ width: 38 }} />}</div> }
 
@@ -17,7 +18,7 @@ export function AppProfile() {
   return <div className="screen">
     <div className="screen-head"><span className="app-logo">LUMIVA<small>CIRCLE</small></span><Link to="/app/profile/settings" className="icon-btn"><Icon name="settings" /></Link></div>
     <h1 style={{ fontSize: 30, marginBottom: 12 }}>My Membership</h1>
-    <div className="member-card"><span className="lbl">Radiance</span><div className="tier">{d.tier.short.toUpperCase()}</div><div className="meta"><div><small>Member since</small>{new Date(m.joinedAt).toLocaleDateString('en-SG', { month: 'short', year: 'numeric' })}</div><div><small>Member ID</small>{m.memberId}</div></div></div>
+    <div className={`member-card art ${d.tier.key === 'silver' ? 'cream' : 'black'}`}><img src={asset(d.tier.key === 'silver' ? '/images/cards/cream.jpg' : '/images/cards/black.jpg')} alt="" /><div className="mc-top"><span className="lbl">Radiance</span><div className="tier">{d.tier.short.toUpperCase()}</div></div><div className="meta"><div><small>Member since</small>{new Date(m.joinedAt).toLocaleDateString('en-SG', { month: 'short', year: 'numeric' })}</div><div><small>Member ID</small>{m.memberId}</div></div></div>
     <div className="app-card between"><div><span className="tiny muted" style={{ letterSpacing: '.12em', textTransform: 'uppercase' }}>Points balance</span><div className="serif tnum" style={{ fontSize: 34, lineHeight: 1 }}>{n(d.balance)} <Icon name="sun" className="icon-sm copper" /></div></div><Link to="/app/profile/settings" style={{ textAlign: 'center', fontSize: 10.5, color: 'var(--ink-3)' }}><Icon name="qr" className="icon-lg" style={{ margin: '0 auto' }} />Scan to earn</Link></div>
     <div className="app-card"><span className="tiny muted" style={{ letterSpacing: '.12em', textTransform: 'uppercase' }}>Your tier benefits</span><div className="benefits-3" style={{ marginTop: 6 }}>{d.tier.benefits.slice(0, 3).map((b, i) => <div key={b}><Icon name={['gift', 'sparkle', 'clock'][i]} />{b}</div>)}</div></div>
     <div className="app-card"><span className="tiny muted" style={{ letterSpacing: '.12em', textTransform: 'uppercase' }}>Your activity summary</span><div className="grid" style={{ gridTemplateColumns: '1fr 1fr 1fr', marginTop: 8, gap: 8 }}><div><small className="tiny muted">Earned</small><div className="tnum" style={{ fontSize: 18, fontWeight: 600 }}>{n(d.earned)} pts</div></div><div><small className="tiny muted">Redeemed</small><div className="tnum" style={{ fontSize: 18, fontWeight: 600 }}>{n(d.redeemed)} pts</div></div><div><small className="tiny muted">Streak shields</small><div className="tnum" style={{ fontSize: 18, fontWeight: 600 }}>{state.streakShields}</div></div></div></div>

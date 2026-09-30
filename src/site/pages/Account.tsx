@@ -8,6 +8,7 @@ import { productById, money, PRODUCTS } from '@/data/products'
 import { rewardById } from '@/data/rewards'
 import { ACHIEVEMENTS } from '@/data/club'
 import { n, fmtDate, ago } from '@/lib/format'
+import { asset } from '@/lib/asset'
 
 const NAV = [['', 'Overview', 'user'], ['orders', 'Orders', 'bag'], ['wallet', 'Rewards wallet', 'gift'], ['points', 'Point history', 'sun'], ['wishlist', 'Saved items', 'heart'], ['referrals', 'Referrals', 'users'], ['addresses', 'Addresses', 'home'], ['preferences', 'Privacy & preferences', 'settings']]
 
@@ -30,7 +31,10 @@ function Overview() {
   const { state, d } = useStore(); const m = state.member!; const [prof, setProf] = useState(false)
   const badges = Object.keys(state.achievements).length
   return <div className="stack">
-    <div className="glow-panel" style={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 16 }}><div><p className="eyebrow" style={{ color: '#fff', opacity: .85 }}>{d.tier.name} · Member {m.memberId}</p><div className="serif tnum" style={{ fontSize: 48, lineHeight: 1 }}>{n(d.balance)}</div><span>Glow Points{d.held > 0 && ` · ${n(d.held)} held`}</span>{d.next && <div style={{ marginTop: 12, maxWidth: 320 }}><div className="progress" style={{ background: 'rgba(255,255,255,.25)' }}><span style={{ width: `${(d.lifetime / d.next.min) * 100}%`, background: '#fff' }} /></div><span className="tiny">{n(d.next.min - d.lifetime)} points to {d.next.short}</span></div>}</div><TierBadge tier={d.tier} size={72} /></div>
+    <div className="acct-hero">
+      <div className={`member-card art ${d.tier.key === 'silver' ? 'cream' : 'black'}`}><img src={asset(d.tier.key === 'silver' ? '/images/cards/cream.jpg' : '/images/cards/black.jpg')} alt="" /><div className="mc-top"><span className="lbl">Radiance</span><div className="tier">{d.tier.short.toUpperCase()}</div></div><div className="meta"><div><small>Member since</small>{new Date(m.joinedAt).toLocaleDateString('en-SG', { month: 'short', year: 'numeric' })}</div><div><small>Member ID</small>{m.memberId}</div></div></div>
+      <div className="glow-panel" style={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 16 }}><div><p className="eyebrow" style={{ color: '#fff', opacity: .85 }}>{d.tier.name}</p><div className="serif tnum" style={{ fontSize: 48, lineHeight: 1 }}>{n(d.balance)}</div><span>Glow Points{d.held > 0 && ` · ${n(d.held)} held`}</span>{d.next && <div style={{ marginTop: 12, maxWidth: 320 }}><div className="progress" style={{ background: 'rgba(255,255,255,.25)' }}><span style={{ width: `${(d.lifetime / d.next.min) * 100}%`, background: '#fff' }} /></div><span className="tiny">{n(d.next.min - d.lifetime)} points to {d.next.short}</span></div>}</div><TierBadge tier={d.tier} size={72} /></div>
+    </div>
     <div className="stat-grid"><div className="stat"><b className="tnum">{d.streak}</b><small>Day streak</small></div><div className="stat"><b className="tnum">{n(d.earned)}</b><small>Lifetime earned</small></div><div className="stat"><b className="tnum">{badges}</b><small>Badges unlocked</small></div><div className="stat"><b className="tnum">{state.orders.length}</b><small>Orders</small></div></div>
     <div className="two-col">
       <div className="panel"><div className="panel-head"><h3>Skin profile</h3><button className="btn btn-sm btn-secondary" onClick={() => setProf(true)}>{m.skinProfile ? 'Edit' : 'Complete · +200 pts'}</button></div>{m.skinProfile ? <p className="small">{m.skinProfile.type} · {m.skinProfile.concerns.join(', ')} · Goal: {m.skinProfile.goal}</p> : <p className="small muted">Tell us about your skin for tailored recommendations and missions.</p>}</div>

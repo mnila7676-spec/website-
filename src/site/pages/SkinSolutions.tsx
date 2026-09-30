@@ -16,7 +16,7 @@ export function SkinSolutions() {
     <div className="concern-grid">{CONCERNS.map(x => <button key={x.key} className={`concern ${sel === x.key ? 'on' : ''}`} onClick={() => setSel(x.key)}><h3>{x.label}</h3><p className="small muted">{x.blurb}</p></button>)}</div>
     <section className="section">
       <SectionHead eyebrow="Recommended for" title={c.label} blurb={`A ${list.length}-step approach. Products below are ordered by routine step.`} action={<Link to={`/shop?concern=${sel}`} className="link-arrow">Shop all for {c.label.toLowerCase()} <Icon name="chevron" className="icon-sm" /></Link>} />
-      <div className="pgrid">{list.sort((a, b) => ['cleanse', 'treat', 'hydrate', 'protect', 'all'].indexOf(a.step) - ['cleanse', 'treat', 'hydrate', 'protect', 'all'].indexOf(b.step)).map(p => <ProductCard key={p.id} product={p} />)}</div>
+      <div className="pgrid">{list.sort((a, b) => ['cleanse', 'prep', 'treat', 'hydrate', 'protect', 'all'].indexOf(a.step) - ['cleanse', 'prep', 'treat', 'hydrate', 'protect', 'all'].indexOf(b.step)).map(p => <ProductCard key={p.id} product={p} />)}</div>
     </section>
     <section className="section tight" id="ingredients">
       <SectionHead title="Ingredients we trust" blurb="Every ingredient earns its place. Here is what does the work in each formula." />

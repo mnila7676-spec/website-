@@ -233,3 +233,11 @@
 .shield-pill { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--taupe); }
 .banner img { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 40%); mask-image: linear-gradient(90deg, transparent 0, #000 40%); }
 .banner-copy { max-width: 62%; }
+.cat-row { grid-template-columns: repeat(5, 1fr); gap: 4px; }
+.cat-row span { width: 50px; height: 50px; }
+.dn-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 4px 0 6px; }
+.dn-tab { display: flex; align-items: center; gap: 8px; padding: 12px; border-radius: 14px; background: var(--ivory); border: 1px solid var(--line); font-size: 12px; }
+.dn-tab b { display: block; font-size: 12.5px; } .dn-tab small { color: var(--taupe); font-size: 11px; }
+.dn-tab > .icon:first-child { color: var(--copper); }
+.dn-tab.night { background: var(--ink); color: #fff; border-color: #3a342e; } .dn-tab.night small { color: #b8afa5; } .dn-tab.night > .icon:first-child { color: var(--copper-3); }
+.dn-tab .icon:last-child { margin-left: auto; color: var(--taupe-2); }

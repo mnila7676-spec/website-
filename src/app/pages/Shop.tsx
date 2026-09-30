@@ -4,18 +4,19 @@ import { Icon } from '@/components/Icon'
 import { ProductCard, Stars, QtyStepper, Modal } from '@/components/ui'
 import { ReviewForm } from '@/components/forms'
 import { useStore } from '@/store/store'
-import { PRODUCTS, productBySlug, productById, money, POINTS_PER_DOLLAR, STEPS } from '@/data/products'
+import { PRODUCTS, productBySlug, productById, money, POINTS_PER_DOLLAR, STEPS, RITUALS, forTime } from '@/data/products'
 import { REVIEWS } from '@/data/community'
 import { n, fmtDate } from '@/lib/format'
 
-const CATS = [['all', 'All'], ['cleansers', 'Cleansers'], ['serums', 'Serums'], ['moisturisers', 'Moisturisers'], ['spf', 'SPF'], ['sets', 'Sets'], ['minis', 'Minis']]
+const CATS = [['all', 'All'], ['cleansers', 'Cleansers'], ['essences', 'Essences'], ['serums', 'Serums'], ['moisturisers', 'Moisturisers'], ['spf', 'SPF'], ['tools', 'Tools'], ['sets', 'Sets'], ['minis', 'Minis']]
 export function AppShop() {
   const [sp] = useSearchParams(); const [cat, setCat] = useState('all'); const [q, setQ] = useState(''); const { d } = useStore()
-  const step = sp.get('step')
-  const list = PRODUCTS.filter(p => (cat === 'all' || p.category === cat) && (!step || p.step === step) && (!q || (p.name + p.tagline).toLowerCase().includes(q.toLowerCase())))
+  const step = sp.get('step'); const [time, setTime] = useState<string>(sp.get('time') ?? 'all')
+  const list = PRODUCTS.filter(p => (cat === 'all' || p.category === cat) && (time === 'all' || forTime(p, time as 'day' | 'night')) && (!step || p.step === step) && (!q || (p.name + p.tagline).toLowerCase().includes(q.toLowerCase())))
   return <div className="screen">
     <div className="screen-head"><h1>Shop</h1><Link to="/app/bag" className="icon-btn" aria-label="Bag"><Icon name="bag" />{d.cartCount > 0 && <span className="count">{d.cartCount}</span>}</Link></div>
     <div className="app-search"><input className="input" placeholder="Search products" value={q} onChange={e => setQ(e.target.value)} /><button className="btn btn-light btn-sm"><Icon name="filter" className="icon-sm" /> Filter</button></div>
+    <div className="tabs full" style={{ marginBottom: 10 }}><button className={time === 'all' ? 'active' : ''} onClick={() => setTime('all')}>All</button>{RITUALS.map(r => <button key={r.key} className={time === r.key ? 'active' : ''} onClick={() => setTime(r.key)}><Icon name={r.icon} className="icon-sm" /> {r.label}</button>)}</div>
     <div className="h-scroll" style={{ marginBottom: 12 }}>{CATS.map(([k, l]) => <button key={k} className={`chip ${cat === k ? 'active' : ''}`} onClick={() => setCat(k)} style={{ flex: 'none' }}>{l}</button>)}</div>
     {step && <p className="tiny muted" style={{ marginBottom: 10 }}>Showing step: {STEPS.find(s => s.key === step)?.label} · <Link to="/app/shop" className="copper">clear</Link></p>}
     <div className="grid" style={{ gridTemplateColumns: '1fr 1fr', gap: 10 }}>{list.map(p => <ProductCard key={p.id} product={p} compact />)}</div>

@@ -5,7 +5,7 @@ import { Icon } from '@/components/Icon'
 import { ProductCard, RewardCard, SectionHead, TierBadge, Progress } from '@/components/ui'
 import { ActivityFeedList } from '@/components/Ticker'
 import { useStore, leaderboard } from '@/store/store'
-import { PRODUCTS, BEST_SELLERS, STEPS } from '@/data/products'
+import { PRODUCTS, BEST_SELLERS, STEPS, RITUALS, productById, money } from '@/data/products'
 import { REWARDS } from '@/data/rewards'
 import { MILESTONES } from '@/data/club'
 import { n } from '@/lib/format'
@@ -45,10 +45,20 @@ export function Home() {
           <p className="eyebrow">The Ritual</p>
           <h2>A routine designed to work together</h2>
           <p className="muted">Simple steps. Powerful results. Better together.</p>
-          <div className="steps">{STEPS.map(s => <div key={s.key} className="step"><Icon name={s.key === 'cleanse' ? 'droplet' : s.key === 'treat' ? 'bottle' : s.key === 'hydrate' ? 'jar' : 'sun'} /><span className="num">{s.num}</span><b>{s.label}</b><small>{s.blurb}</small></div>)}</div>
+          <div className="steps">{STEPS.map(s => <div key={s.key} className="step"><Icon name={s.icon} /><span className="num">{s.num}</span><b>{s.label}</b><small>{s.blurb}</small></div>)}</div>
           <Link to="/ritual" className="btn btn-primary">Build My Routine</Link>
         </div>
       </div>
+    </div></section>
+
+    <section className="section tight"><div className="container">
+      <SectionHead eyebrow="Day & Night" title="Two rituals. One routine." blurb="Lighter layers by day, deeper repair by night. Build either in a tap." action={<Link to="/ritual" className="link-arrow">Routine Builder <Icon name="chevron" className="icon-sm" /></Link>} />
+      <div className="daynight">{RITUALS.map(r => <div key={r.key} className={`dn-panel ${r.key}`}>
+        <div className="dn-head"><span className="dn-icon"><Icon name={r.icon} /></span><div><p className="eyebrow">{r.label} ritual</p><h3>{r.title}</h3></div></div>
+        <p className="dn-blurb">{r.blurb}</p>
+        <ul className="dn-list">{r.ids.map((id, i) => { const p = productById(id)!; const st = STEPS.find(x => x.key === p.step); return <li key={id}><Link to={`/product/${p.slug}`}><span className="dn-num">{String(i + 1).padStart(2, '0')}</span><img src={p.image} alt="" /><span className="dn-name"><b>{p.name}</b><small>{st ? st.label : 'Tool'} · {money(p.price)}</small></span><Icon name="chevron" className="icon-sm" /></Link></li> })}</ul>
+        <Link to={`/shop?time=${r.key}`} className={`btn btn-sm ${r.key === 'night' ? 'btn-light' : 'btn-primary'}`}>Shop the {r.label.toLowerCase()} ritual</Link>
+      </div>)}</div>
     </div></section>
 
     <section className="section"><div className="container">
