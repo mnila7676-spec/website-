@@ -25,8 +25,11 @@ export interface AdminSettings {
   activityTypes: Record<string, boolean>; announcement: string
   pointsPerDollar: number; welcomePoints: number; firstPurchaseBonus: number; referralReward: number; friendDiscount: number; qualificationDays: number; referralLimit: number
   thresholds: { radiant: number; luminous: number; ambassador: number }
+  race: { win: number; podium: number; dailyCap: number; freeEntries: number; enabled: boolean }
 }
+export interface RacePick { roundId: string; roundIndex: number; win: string; podium?: string[]; ts: string; settled?: boolean; result?: string[]; points?: number }
 export interface State {
+  race: { picks: RacePick[]; entries: Record<string, number> }
   version: number
   member: Member | null
   ledger: LedgerEntry[]

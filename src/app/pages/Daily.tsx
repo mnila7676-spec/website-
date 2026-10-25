@@ -8,6 +8,7 @@ import type { WeeklyChallenge } from '@/data/club'
 import { useLinks } from '@/lib/links'
 import { n } from '@/lib/format'
 import { SpinCard } from './Spin'
+import { RaceCard } from './Race'
 
 export function MissionList() {
   const { state, d, actions } = useStore(); const L = useLinks(); const nav = useNavigate(); const m = state.member
@@ -57,6 +58,7 @@ export function AppDaily() {
       {canProtect && <button className="btn btn-light btn-sm btn-block" style={{ marginTop: 8 }} onClick={() => actions.useStreakProtection()}><Icon name="shield" className="icon-sm" /> Use streak protection ({state.streakShields > 0 ? `${state.streakShields} shield${state.streakShields > 1 ? 's' : ''}` : '1 per month'})</button>}
       {state.member && <p className="shield-pill" style={{ marginTop: 8 }}><Icon name="shield" className="icon-sm" /> {state.streakShields} streak shield{state.streakShields === 1 ? '' : 's'} · win more on Glow Spin</p>}
     </div>
+    <RaceCard />
     <SpinCard />
     <div className="app-card"><h3 style={{ marginBottom: 4 }}>Daily Missions</h3><MissionList /></div>
     {WEEKLY_CHALLENGES.map(c => <WeeklyChallengeCard key={c.id} challenge={c} />)}

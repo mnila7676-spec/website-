@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useReducer, useRef } from 'react'
-import type { State, Member, LedgerEntry, CartItem, Order, Redemption, Review, Referral, AuditEntry, UserActivity, AdminSettings } from './types'
+import type { State, Member, RacePick, LedgerEntry, CartItem, Order, Redemption, Review, Referral, AuditEntry, UserActivity, AdminSettings } from './types'
 import { PRODUCTS, productById, POINTS_PER_DOLLAR, FREE_SHIPPING_THRESHOLD, SHIPPING_FEE } from '@/data/products'
 import { REWARDS, rewardById } from '@/data/rewards'
 import { TIERS, tierFor, nextTier, MILESTONES, MISSIONS, STREAK_BONUS, DAILY_ENGAGEMENT_CAP, WELCOME_POINTS, WEEKLY_CHALLENGES, ACHIEVEMENTS, LESSONS, LEADERBOARD_PURCHASE_CAP, SPIN_PRIZES, REFERRAL_MILESTONES, REFERRAL_STATES, DEFAULT_THRESHOLDS, FIRST_PURCHASE_BONUS, REFERRAL_REWARD, FRIEND_DISCOUNT, QUALIFICATION_DAYS } from '@/data/club'
@@ -22,10 +22,11 @@ const defaultAdmin = (): AdminSettings => ({
   announcement: '',
   pointsPerDollar: POINTS_PER_DOLLAR, welcomePoints: WELCOME_POINTS, firstPurchaseBonus: FIRST_PURCHASE_BONUS, referralReward: REFERRAL_REWARD, friendDiscount: FRIEND_DISCOUNT, qualificationDays: QUALIFICATION_DAYS, referralLimit: 20,
   thresholds: { ...DEFAULT_THRESHOLDS },
+  race: { win: 100, podium: 500, dailyCap: 1000, freeEntries: 3, enabled: true },
 })
 export const initialState = (): State => ({
   version: 1, member: null, ledger: [], cart: [], wishlist: [], orders: [], routine: { am: [], pm: [] }, routineLog: {}, checkins: [],
-  missionsDone: {}, lessonsDone: [], reviews: [], referrals: [], redemptions: [], savedRewards: [], achievements: {}, weeklyBonusClaimed: [], spins: {}, streakShields: 0, seenAchievements: [],
+  missionsDone: {}, lessonsDone: [], reviews: [], referrals: [], redemptions: [], savedRewards: [], achievements: {}, weeklyBonusClaimed: [], spins: {}, streakShields: 0, seenAchievements: [], race: { picks: [], entries: {} },
   userActivity: [], audit: [], admin: defaultAdmin(), prompts: { barDismissed: false, rewardReveal: false, giftDrawerSeenFor: [] },
 })
 
@@ -86,13 +87,14 @@ export function demoState(base: State): State {
     { id: uid(), rewardId: 'voucher-20', ts: isoDaysAgo(60), points: 2000, status: 'used', code: 'LUM-20-4TQ' },
     { id: uid(), rewardId: 'coffee', ts: isoDaysAgo(100), points: 600, status: 'used', code: 'GLOW-2B8X' },
   ]
-  const ach: Record<string, string> = { 'first-glow': isoDaysAgo(500), 'glow-getter': isoDaysAgo(420), 'spa-retreat': isoDaysAgo(150), 'ritual-regular': isoDaysAgo(0), 'streak-7': isoDaysAgo(0), 'review-maven': isoDaysAgo(490), 'referral-circle': isoDaysAgo(470), 'barrier-reset': isoDaysAgo(350), 'first-order': isoDaysAgo(555), 'first-redeem': isoDaysAgo(410), 'radiant': isoDaysAgo(420), 'luminous': isoDaysAgo(150), 'weekend-ready': isoDaysAgo(120), 'referral-3': isoDaysAgo(330), 'referral-5': isoDaysAgo(200), 'glow-together': isoDaysAgo(30), 'skin-profile': isoDaysAgo(540), 'complete-ritual': isoDaysAgo(380), 'routine-builder': isoDaysAgo(550), 'store-visit': isoDaysAgo(300), 'learner': isoDaysAgo(300), 'anniversary': isoDaysAgo(188), 'first-spin': isoDaysAgo(3) }
+  const ach: Record<string, string> = { 'first-glow': isoDaysAgo(500), 'glow-getter': isoDaysAgo(420), 'spa-retreat': isoDaysAgo(150), 'ritual-regular': isoDaysAgo(0), 'streak-7': isoDaysAgo(0), 'review-maven': isoDaysAgo(490), 'referral-circle': isoDaysAgo(470), 'barrier-reset': isoDaysAgo(350), 'first-order': isoDaysAgo(555), 'first-redeem': isoDaysAgo(410), 'radiant': isoDaysAgo(420), 'luminous': isoDaysAgo(150), 'weekend-ready': isoDaysAgo(120), 'referral-3': isoDaysAgo(330), 'referral-5': isoDaysAgo(200), 'glow-together': isoDaysAgo(30), 'skin-profile': isoDaysAgo(540), 'complete-ritual': isoDaysAgo(380), 'routine-builder': isoDaysAgo(550), 'store-visit': isoDaysAgo(300), 'learner': isoDaysAgo(300), 'anniversary': isoDaysAgo(188), 'first-spin': isoDaysAgo(3), 'race-first': isoDaysAgo(2) }
   return {
     ...base, member: m, ledger: L, orders, redemptions, checkins, routineLog, achievements: ach, demoSeeded: true,
     routine: { am: ['cleanser', 'essence', 'serum', 'cream', 'spf'], pm: ['barrier-cleanser', 'essence', 'sculpt-serum', 'firming-moisturiser'], savedAt: isoDaysAgo(550) },
     reviews: [{ id: uid(), productId: 'serum', rating: 5, text: 'Two weeks in and my skin looks lit from within.', ts: isoDaysAgo(490), verified: true, orderId: 'LU-1103' }],
     referrals,
-    spins: { [today(daysAgo(1))]: 'p20', [today(daysAgo(2))]: 'p10', [today(daysAgo(3))]: 'p50' }, streakShields: 1, seenAchievements: Object.keys(ach),
+    spins: { [today(daysAgo(1))]: 'p20', [today(daysAgo(2))]: 'p10', [today(daysAgo(3))]: 'p50' },
+    race: { picks: [{ roundId: 'R-DEMO1', roundIndex: 0, win: 'serum', ts: isoDaysAgo(1), settled: true, result: ['serum', 'spf', 'cream', 'cleanser'], points: 100 }, { roundId: 'R-DEMO2', roundIndex: 0, win: 'cream', podium: ['cream', 'serum', 'spf'], ts: isoDaysAgo(1), settled: true, result: ['spf', 'cream', 'serum', 'cleanser'], points: 0 }, { roundId: 'R-DEMO3', roundIndex: 0, win: 'spf', ts: isoDaysAgo(2), settled: true, result: ['spf', 'cleanser', 'serum', 'cream'], points: 100 }], entries: {} }, streakShields: 1, seenAchievements: Object.keys(ach),
     lessonsDone: ['barrier', 'layering', 'spf'], prompts: { barDismissed: true, rewardReveal: false, giftDrawerSeenFor: [] },
     userActivity: [{ id: uid(), type: 'referral', text: 'You welcomed your 8th friend to Lumiva', ts: isoDaysAgo(35), icon: 'users' }, { id: uid(), type: 'redeem', text: 'You redeemed a Glow reward', ts: isoDaysAgo(20), icon: 'coffee' }],
   }
@@ -131,6 +133,8 @@ type Action =
   | { type: 'STREAK_PROTECT'; month: string; day: string; useShield?: boolean }
   | { type: 'SPIN'; prizeId: string }
   | { type: 'SEEN_ACHIEVEMENTS'; ids: string[] }
+  | { type: 'RACE_PICK'; pick: RacePick }
+  | { type: 'RACE_SETTLE'; roundId: string; result: string[]; points: number }
   | { type: 'RESET' }
 
 function reducer(s: State, a: Action): State {
@@ -196,11 +200,18 @@ function reducer(s: State, a: Action): State {
       return next
     }
     case 'SEEN_ACHIEVEMENTS': return { ...s, seenAchievements: Array.from(new Set([...s.seenAchievements, ...a.ids])) }
+    case 'RACE_PICK': { const d = today(); const ex = s.race.picks.find(p => p.roundId === a.pick.roundId); const used = s.race.entries[d] ?? 0; return { ...s, race: { picks: ex ? s.race.picks.map(p => p.roundId === a.pick.roundId ? { ...p, win: a.pick.win, podium: a.pick.podium } : p) : [a.pick, ...s.race.picks].slice(0, 100), entries: ex ? s.race.entries : { ...s.race.entries, [d]: used + 1 } } } }
+    case 'RACE_SETTLE': {
+      const pick = s.race.picks.find(p => p.roundId === a.roundId); if (!pick || pick.settled) return s
+      const ledger = a.points > 0 ? [...s.ledger, { id: uid(), ts: new Date().toISOString(), type: 'earn' as const, source: 'race', points: a.points, note: `Glow Race ${a.roundId} · called ${BALL_NAME(pick.win)}${pick.podium && a.points >= (s.admin.race?.podium ?? 500) ? ' · exact podium' : ''}`, leaderboardEligible: true }] : s.ledger
+      return { ...s, ledger, race: { ...s.race, picks: s.race.picks.map(p => p.roundId === a.roundId ? { ...p, settled: true, result: a.result, points: a.points } : p) } }
+    }
     case 'RESET': return initialState()
     default: return s
   }
 }
 
+const BALL_NAME = (id: string) => ({ serum: 'Serum', cream: 'Cream', cleanser: 'Cleanser', spf: 'SPF' } as Record<string, string>)[id] ?? id
 /* ---------- Derived selectors ---------- */
 export function derive(s: State) {
   const balance = s.ledger.filter(e => e.type !== 'pending').reduce((t, e) => t + e.points, 0)
@@ -231,7 +242,10 @@ export function derive(s: State) {
   const expiring = Math.min(balance, 1200)
   const spunToday = !!s.spins[d]
   const spinStreak = computeStreak(Object.keys(s.spins))
-  return { spunToday, spinStreak, successfulReferrals, thresholds, pointsPerDollar, nextReward, balance, earned, redeemed, pending, held, available: balance - held, lifetime, tier, next, nextMilestone, cartCount, cartSubtotal, missionsToday, checkedInToday, streak, routineCheckins, weekRoutines, engagementToday, weeklyPoints: weekly, expiring }
+  const raceEntriesToday = s.race.entries[d] ?? 0
+  const raceEntriesAllowed = (s.admin.race?.freeEntries ?? 3) + TIERS.findIndex(t => t.key === tier.key)
+  const racePointsToday = s.ledger.filter(e => e.ts.slice(0, 10) === d && e.source === 'race').reduce((t, e) => t + e.points, 0)
+  return { raceEntriesToday, raceEntriesAllowed, racePointsToday, spunToday, spinStreak, successfulReferrals, thresholds, pointsPerDollar, nextReward, balance, earned, redeemed, pending, held, available: balance - held, lifetime, tier, next, nextMilestone, cartCount, cartSubtotal, missionsToday, checkedInToday, streak, routineCheckins, weekRoutines, engagementToday, weeklyPoints: weekly, expiring }
 }
 function computeStreak(checkins: string[]) {
   if (!checkins.length) return 0
@@ -264,7 +278,7 @@ interface Toast { id: string; msg: string; icon?: string; copper?: boolean }
 const StoreCtx = createContext<Ctx | null>(null)
 
 function load(): State {
-  try { const raw = localStorage.getItem(KEY); if (raw) { const p = JSON.parse(raw); if (p && p.version === 1) return { ...initialState(), ...p, admin: { ...defaultAdmin(), ...(p.admin ?? {}) } } } } catch {}
+  try { const raw = localStorage.getItem(KEY); if (raw) { const p = JSON.parse(raw); if (p && p.version === 1) return { ...initialState(), ...p, race: p.race ?? { picks: [], entries: {} }, admin: { ...defaultAdmin(), ...(p.admin ?? {}), race: { ...defaultAdmin().race, ...(p.admin?.race ?? {}) } } } } } catch {}
   return initialState()
 }
 
@@ -457,6 +471,25 @@ function makeActions(dispatch: React.Dispatch<Action>, get: () => State, toast: 
       if (prize.kind !== 'points') activity('earn', `You won ${prize.sub.toLowerCase()} on Glow Spin`, prize.icon)
     },
     markAchievementsSeen(ids: string[]) { dispatch({ type: 'SEEN_ACHIEVEMENTS', ids }) },
+    racePick(roundId: string, roundIndex: number, win: string, podium?: string[]) {
+      const s = get(); const d = derive(s); if (!s.member) { toast('Join Glow Club to call the race'); return false }
+      const existing = s.race.picks.find(p => p.roundId === roundId)
+      if (!existing && d.raceEntriesToday >= d.raceEntriesAllowed) { toast(`You have used today's ${d.raceEntriesAllowed} free calls. More tomorrow.`); return false }
+      dispatch({ type: 'RACE_PICK', pick: { roundId, roundIndex, win, podium, ts: new Date().toISOString() } })
+      toast(existing ? `Call changed to ${BALL_NAME(win)}` : `You called ${BALL_NAME(win)}${podium ? ' and a podium' : ''}`, { icon: 'flame' })
+      return true
+    },
+    raceSettle(roundId: string, result: string[]) {
+      const s = get(); const pick = s.race.picks.find(p => p.roundId === roundId); if (!pick || pick.settled || !s.member) return
+      const cfg = s.admin.race ?? { win: 100, podium: 500, dailyCap: 1000 }
+      let pts = 0; if (pick.win === result[0]) pts += cfg.win; if (pick.podium && pick.podium.join() === result.slice(0, 3).join()) pts += cfg.podium
+      const d = derive(s); pts = Math.max(0, Math.min(pts, cfg.dailyCap - d.racePointsToday))
+      dispatch({ type: 'RACE_SETTLE', roundId, result, points: pts })
+      const watched = s.race.picks.length; if (watched >= 10) dispatch({ type: 'ACHIEVE', id: 'race-10' })
+      if (pts > 0) { dispatch({ type: 'ACHIEVE', id: 'race-first' }); if (pick.podium && pick.podium.join() === result.slice(0, 3).join()) { dispatch({ type: 'ACHIEVE', id: 'race-podium' }); activity('earn', 'called an exact Glow Race podium', 'crown') } else activity('earn', `called the Glow Race winner`, 'flame'); toast(`${BALL_NAME(result[0])} wins · +${pts} pts`, { icon: 'flame', copper: true }) }
+      else toast(`${BALL_NAME(result[0])} wins. Better luck next race.`, { icon: 'flame' })
+      audit('system', 'race.settle', `${roundId} · ${result[0]} · ${s.member.firstName} +${pts}`)
+    },
     prompt(patch: Partial<State['prompts']>) { dispatch({ type: 'PROMPT', patch }) },
     /* Admin */
     adminApprove(id: string, approve: boolean, note?: string) {

@@ -145,6 +145,9 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'early-bird', name: 'Early Bird', blurb: 'Complete an AM routine before 8am', icon: 'sun', category: 'routine' },
   { id: 'night-owl', name: 'Night Owl', blurb: 'Complete a PM routine 7 nights in a row', icon: 'moon', category: 'routine' },
   { id: 'anniversary', name: 'One Year', blurb: 'Celebrate a year with Glow Club', icon: 'sparkle', category: 'milestone' },
+  { id: 'race-first', name: 'Race Caller', blurb: 'Call your first Glow Race winner', icon: 'flame', category: 'community' },
+  { id: 'race-podium', name: 'Podium Prophet', blurb: 'Call an exact 1-2-3 finish', icon: 'crown', category: 'community' },
+  { id: 'race-10', name: 'Trackside Regular', blurb: 'Watch 10 Glow Races', icon: 'eye', category: 'community' },
   { id: 'first-spin', name: 'Glow Spinner', blurb: 'Take your first Glow Spin', icon: 'compass', category: 'routine' },
   { id: 'spin-7', name: 'Lucky Week', blurb: 'Spin 7 days in a row', icon: 'crown', category: 'routine' },
 ]

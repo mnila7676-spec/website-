@@ -9,6 +9,7 @@ import { REWARDS, REWARD_TABS } from '@/data/rewards'
 import { MILESTONES } from '@/data/club'
 import { n } from '@/lib/format'
 import { SpinCard } from './Spin'
+import { RaceCard } from './Race'
 
 export function AppRewards() {
   const { state, d } = useStore(); const lb = leaderboard(state, 'weekly')
@@ -20,6 +21,7 @@ export function AppRewards() {
       {d.next && <><div className="progress"><span style={{ width: `${d.next.unit === 'points' ? (d.lifetime / (d.lifetime + d.next.need)) * 100 : (d.successfulReferrals / (d.successfulReferrals + d.next.need)) * 100}%` }} /></div><div className="between" style={{ fontSize: 11.5 }}><span>{n(d.next.need)} {d.next.unit} to {d.next.tier.short}</span><Icon name="medal" className="icon-sm" /></div></>}</div>
     <div className="app-card"><div className="between"><h3>Milestone Rewards</h3><Link to="/app/journey" className="tiny muted">View All</Link></div>
       <div className="ms-row" style={{ marginTop: 10 }}>{[0, 2, 4].map((idx, i) => { const m = MILESTONES[idx]; return <React.Fragment key={m.points}>{i > 0 && <span className="dash" />}<Link to="/app/journey" className={`node ${d.lifetime >= m.points ? '' : 'locked'}`}><img src={m.image} alt="" /><b>{m.name}</b><small>at {n(m.points)} pts</small></Link></React.Fragment> })}</div></div>
+    <RaceCard />
     <SpinCard />
     <Link to="/app/daily" className="daily-cta"><Icon name="sun" /><b style={{ flex: 1 }}>Daily Glow · {d.checkedInToday ? 'missions' : 'Collect 80 pts'}</b><Icon name="chevron" className="icon-sm" /></Link>
     <Link to="/app/leaderboard" className="app-card" style={{ display: 'block' }}><div className="row"><Icon name="bar-chart" className="copper" /><div style={{ flex: 1 }}><b className="small">Leaderboard</b><p className="tiny muted">You are #{lb.youIdx + 1} this week</p></div><Icon name="chevron" className="icon-sm muted" /></div><div className="row" style={{ marginTop: 10, gap: 4 }}>{lb.rows.slice(0, 3).map(r => <Avatar key={r.name} initials={r.initials} size={28} />)}<span className="tiny muted" style={{ marginLeft: 6 }}>See how you rank</span></div></Link>

@@ -4,6 +4,7 @@ import { Icon } from '@/components/Icon'
 import { useStore } from '@/store/store'
 import { MissionList } from './Daily'
 import { SpinCard } from './Spin'
+import { RaceCard } from './Race'
 import { STREAK_BONUS, REFERRAL_MILESTONES, TAGLINES } from '@/data/club'
 import { REWARDS } from '@/data/rewards'
 import { n } from '@/lib/format'
@@ -33,6 +34,7 @@ export function TodaySection() {
     <div className="between" style={{ marginBottom: 6 }}><h2 className="serif" style={{ fontSize: 30 }}>Today's Glow</h2><span className="pill pill-outline"><Icon name="flame" className="icon-sm copper" /> {d.streak} day streak</span></div>
     <WeekStrip />
     <button className={`checkin-row ${d.checkedInToday ? 'done' : ''}`} onClick={() => !d.checkedInToday && actions.checkIn()}><span className="ck"><Icon name="check" /></span><span style={{ flex: 1, textAlign: 'left' }}><b>Daily Check-In <em>+{80 + bonus} pts</em></b><small>{d.checkedInToday ? "You've claimed today" : 'Claim to keep your streak alive'}</small></span><span className={`mgo ${d.checkedInToday ? 'ok' : ''}`}><Icon name={d.checkedInToday ? 'check' : 'chevron'} className="icon-sm" /></span></button>
+    <RaceCard />
     <SpinCard />
     <div className="app-card" style={{ padding: '4px 14px' }}><MissionList /></div>
     <div className="app-card"><WeeklyDots /></div>

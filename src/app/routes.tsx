@@ -6,6 +6,7 @@ import { AppRoutine } from './pages/Routine'
 import { AppRewards, AppCatalogue } from './pages/Rewards'
 import { AppRewardDetail } from './pages/RewardDetailApp'
 import { AppSpin } from './pages/Spin'
+import { AppRace } from './pages/Race'
 import { AppSaved, AppAddresses, AppNotifications } from './pages/More'
 import { AppDaily } from './pages/Daily'
 import { AppJourney, AppAchievements, AppLeaderboard, AppActivity } from './pages/Progress'
@@ -22,6 +23,7 @@ export const appRoutes = <>
   <Route path="rewards/:id" element={<AppRewardDetail />} />
   <Route path="daily" element={<AppDaily />} />
   <Route path="spin" element={<AppSpin />} />
+  <Route path="race" element={<AppRace />} />
   <Route path="notifications" element={<AppNotifications />} />
   <Route path="profile/saved" element={<AppSaved />} />
   <Route path="profile/addresses" element={<AppAddresses />} />
