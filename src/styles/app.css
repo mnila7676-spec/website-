@@ -271,3 +271,67 @@
 .race-pick.on { border-color: var(--burgundy); background: #f6e6ec; box-shadow: 0 0 0 3px rgba(107,31,63,.12); }
 .race-pick:disabled { opacity: .6; }
 .race-swatch { width: 28px; height: 28px; border-radius: 50%; border: 2px solid; display: block; flex: none; }
+
+/* ===== Soft editorial restyle (reference: airy cream UI, white cards, circular categories) ===== */
+.phone-screen { background: #f8f5f0; }
+.screen { padding: 10px 18px 110px; }
+.app-card, .rcard-app, .spin-card, .checkin-row, .weekly, .dn-tab, .glow-circle { border-radius: 20px; border-color: #efe9e1; background: #fff; box-shadow: 0 2px 10px rgba(29,26,23,.035); }
+.app-search .input { background: #fff; border-color: #efe9e1; box-shadow: 0 2px 10px rgba(29,26,23,.03); }
+.hello b { font-size: 20px; font-weight: 600; }
+.hello small { font-size: 12.5px; }
+/* landing hero for guests */
+.app-hero { border-radius: 24px; background: #fff; border: 1px solid #efe9e1; padding: 22px 20px 0; margin-bottom: 14px; overflow: hidden; position: relative; }
+.app-hero h1 { font-size: 38px; line-height: 1.02; letter-spacing: -.01em; }
+.app-hero h1 em { font-style: italic; color: var(--copper-2); font-weight: 400; }
+.app-hero p { font-size: 13px; color: var(--taupe); margin: 10px 0 14px; max-width: 70%; }
+.app-hero .hero-img { margin: 6px -20px 0; height: 220px; }
+.app-hero .hero-img img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 60%; }
+.values-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; background: #fff; border: 1px solid #efe9e1; border-radius: 18px; padding: 12px 8px; margin-bottom: 16px; text-align: center; font-size: 10.5px; color: var(--ink-3); line-height: 1.25; }
+.values-row .icon { color: var(--copper-2); margin: 0 auto 5px; width: 20px; height: 20px; }
+/* circular categories with product thumbnails */
+.cat-row { grid-template-columns: repeat(5, 1fr); gap: 6px; margin: 4px 0 18px; }
+.cat-row a { font-size: 11px; color: var(--ink-3); gap: 7px; }
+.cat-row span { width: 56px; height: 56px; border-radius: 50%; background: #fff; border: 1px solid #efe9e1; box-shadow: 0 2px 10px rgba(29,26,23,.05); overflow: hidden; display: grid; place-items: center; }
+.cat-row span img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.35); }
+/* product cards */
+.pcard { border-radius: 20px; border-color: #efe9e1; box-shadow: 0 2px 10px rgba(29,26,23,.035); }
+.pcard-img { background: #f5efe7; }
+.pcard-badge { background: #fff; color: var(--copper-2); border: 1px solid #f2e2d3; font-size: 9.5px; padding: 4px 8px; }
+.pcard-badge::before { content: '✦ '; }
+.pcard.compact .pcard-body { padding: 10px 12px 12px; }
+.pcard.compact h3 { font-size: 13.5px; }
+.pcard-wish { background: #fff; border-color: #efe9e1; width: 30px; height: 30px; }
+.h-scroll .pcard { flex: 0 0 158px; }
+/* launch banner */
+.launch { position: relative; border-radius: 22px; overflow: hidden; background: linear-gradient(135deg, #f3ede4, #e9e1d6); min-height: 160px; margin: 14px 0 16px; display: flex; align-items: center; border: 1px solid #efe9e1; }
+.launch img { position: absolute; right: -4px; top: 0; height: 100%; width: 56%; object-fit: cover; object-position: center; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 30%); mask-image: linear-gradient(90deg, transparent 0, #000 30%); }
+.launch-copy { position: relative; padding: 18px 20px; max-width: 58%; }
+.launch-copy small { font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--copper-2); font-weight: 600; }
+.launch-copy h2 { font-size: 22px; line-height: 1.08; margin: 4px 0 4px; }
+.launch-copy p { font-size: 11.5px; color: var(--taupe); margin-bottom: 10px; }
+.sub-head h2 { font-size: 17px; }
+/* product detail */
+.pd-top { display: grid; grid-template-columns: 58px 1fr; gap: 10px; margin: 0 -4px 10px; }
+.pd-thumbs { display: flex; flex-direction: column; gap: 8px; }
+.pd-thumbs button { width: 58px; height: 58px; border-radius: 14px; overflow: hidden; border: 1px solid #efe9e1; padding: 0; background: #fff; }
+.pd-thumbs button.on { border-color: var(--copper); box-shadow: 0 0 0 2px #f2e2d3; }
+.pd-thumbs img { width: 100%; height: 100%; object-fit: cover; }
+.pd-main { position: relative; border-radius: 22px; overflow: hidden; background: #f6f1ea; aspect-ratio: 0.86; }
+.pd-main::before { content: ''; position: absolute; left: 12%; top: 14%; width: 76%; height: 72%; border-radius: 45% 55% 50% 50% / 55% 45% 55% 45%; background: #efe4d6; }
+.pd-main img { position: relative; width: 100%; height: 100%; object-fit: cover; }
+.pd-main .pd-btn { position: absolute; top: 10px; width: 34px; height: 34px; border-radius: 50%; border: 1px solid #efe9e1; background: rgba(255,255,255,.92); display: grid; place-items: center; z-index: 2; }
+.pd-title { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.pd-title h1 { font-size: 28px; }
+.pd-price { font-size: 20px; font-weight: 600; white-space: nowrap; }
+.pd-sub { font-size: 13px; color: var(--taupe); margin: 2px 0 6px; }
+.benefit-tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; background: #fff; border: 1px solid #efe9e1; border-radius: 18px; padding: 12px 6px; margin: 14px 0 12px; text-align: center; font-size: 10.5px; color: var(--ink-3); line-height: 1.2; }
+.benefit-tiles span { width: 34px; height: 34px; border-radius: 50%; background: #f6f1ea; display: grid; place-items: center; margin: 0 auto 6px; color: var(--copper-2); }
+.pd-acc .acc-item { background: #fff; border: 1px solid #efe9e1; border-radius: 16px; padding: 2px 14px; margin-bottom: 8px; }
+.pd-acc .acc-btn { padding: 13px 0; font-size: 14px; }
+.pd-acc .acc-btn .icon { width: 22px; height: 22px; border-radius: 50%; border: 1px solid #efe9e1; padding: 3px; }
+.pd-acc .acc-body { font-size: 13px; padding-bottom: 14px; }
+.sticky-cta { bottom: 92px; background: transparent; padding: 10px 0 0; }
+.sticky-cta .qty { background: #fff; }
+.sticky-cta .btn-primary { border-radius: 16px; }
+@media (max-width: 900px) { .sticky-cta { position: fixed; left: 18px; right: 18px; bottom: calc(84px + env(safe-area-inset-bottom)); } }
+.screen:has(.sticky-cta) { padding-bottom: 170px; }
