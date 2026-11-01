@@ -83,21 +83,16 @@ export function Home() {
       <img src={L('satin-17')} alt="Kessora Glow Club" />
     </div></section>
 
-    {/* Reviews */}
-    <section className="t-section alt"><div className="t-wide t-reviews">
-      <div className="big">4.8 out of 5 stars</div>
-      <p className="sub">From over 1,200 verified reviews</p>
-      <blockquote>“{review.text}”</blockquote>
-      <p className="who">{review.name} — Verified purchase</p>
-      <p className="about">About Vitamin C Day Serum</p>
-      <Link to="/product/vitamin-c-day-serum" className="t-link">See all reviews</Link>
-    </div></section>
-
-    {/* Testimonials: three endless vertical columns */}
+    {/* Reviews + testimonials: one black section */}
     <section className="t-testi-band"><div className="t-wide">
-      <p className="eyebrow" style={{ color: '#9f9f9f', textAlign: 'center' }}>Trusted customer and member testimonials</p>
-      <h2 className="t-title" style={{ color: '#fff', marginTop: 10 }}>What members say</h2>
-      <div className="t-testi-cols" style={{ marginTop: 40 }}>
+      <div className="t-reviews dark">
+        <div className="big">4.8 out of 5 stars</div>
+        <p className="sub">From over 1,200 verified reviews</p>
+        <blockquote>“{review.text}”</blockquote>
+        <p className="who">{review.name} — Verified purchase</p>
+        <p className="about">About Vitamin C Day Serum</p>
+      </div>
+      <div className="t-testi-cols" style={{ marginTop: 48 }}>
         {[0, 1, 2].map(col => { const items = TESTIMONIALS.filter((_, i) => i % 3 === col); return <div key={col} className={`t-testi-col ${col === 1 ? 'down' : 'up'}`}><div className="t-testi-track">{[...items, ...items].map((t, i) => <div key={i} className="t-testi-card"><div className="stars">{[1, 2, 3, 4, 5].map(k => <Icon key={k} name="star" />)}</div><b>{t.title}</b><p>“{t.text}”</p><small>{t.name} — {t.role}</small></div>)}</div></div> })}
       </div>
       <div className="t-center"><Link to="/product/vitamin-c-day-serum" className="t-link" style={{ color: '#fff' }}>See all reviews</Link></div>

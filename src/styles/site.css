@@ -759,3 +759,9 @@
 .t-testi-card small { font-family: var(--font-mono); font-size: 11px; color: var(--taupe); }
 @media (max-width: 900px) { .t-testi-cols { grid-template-columns: 1fr; height: 460px; } .t-testi-col:nth-child(n+2) { display: none; } }
 @media (prefers-reduced-motion: reduce) { .t-testi-track { animation: none; } }
+.t-reviews.dark { color: #fff; }
+.t-reviews.dark .big { color: #fff; }
+.t-reviews.dark .sub, .t-reviews.dark .about { color: #9f9f9f; }
+.t-reviews.dark blockquote { color: #e6e6e3; }
+.t-reviews.dark .who { color: #fff; }
+.t-reviews.dark .about { margin-bottom: 0; }
