@@ -27,9 +27,11 @@ export function useScrollReveal() {
         io.observe(el)
       })
     }
-    scan()
     const mo = new MutationObserver(() => scan())
-    mo.observe(document.body, { childList: true, subtree: true })
-    return () => { io.disconnect(); mo.disconnect(); document.querySelectorAll<HTMLElement>('.site-main [data-reveal]:not(.in)').forEach(el => { delete el.dataset.reveal }) }
+    // Wait for the intro to open before revealing anything, so the hero animates in view.
+    const start = () => { scan(); mo.observe(document.body, { childList: true, subtree: true }) }
+    if (document.documentElement.classList.contains('preloading')) window.addEventListener('kessora:ready', start, { once: true })
+    else start()
+    return () => { window.removeEventListener('kessora:ready', start); io.disconnect(); mo.disconnect(); document.querySelectorAll<HTMLElement>('.site-main [data-reveal]:not(.in)').forEach(el => { delete el.dataset.reveal }) }
   }, [])
 }

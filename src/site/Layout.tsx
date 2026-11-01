@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { asset } from '@/lib/asset'
 import { useScrollReveal } from '@/components/Reveal'
+import { Preloader } from '@/components/Preloader'
 import { Outlet, Link, NavLink, useNavigate } from 'react-router-dom'
 import { Icon } from '@/components/Icon'
 import { PointsPill } from '@/components/ui'
@@ -46,6 +47,7 @@ export function SiteLayout() {
         <Link to="/app" className="menu-sub" onClick={() => setMenu(false)}>Member app</Link>
         <div style={{ marginTop: 16 }}><PointsPill dark /></div>
       </div></>}
+      <Preloader />
       <main className="site-main"><Outlet /></main>
       <Footer />
       <MembershipPrompts /><GiftDrawer /><RewardReveal />

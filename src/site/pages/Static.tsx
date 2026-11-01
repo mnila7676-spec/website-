@@ -7,9 +7,18 @@ import { SectionHead } from '@/components/ui'
 export function OurStory() {
   return <div className="container">
     <section className="section story-hero">
-      <div><p className="eyebrow">Our Story</p><h1>Thoughtfully made. Visibly radiant.</h1><p>Kessora began in Singapore with a simple frustration: skincare that promised everything and asked for a cabinet of products in return. We wanted fewer, better formulas that work together, and a way to make the daily ritual feel rewarding rather than routine.</p><p>Every product is formulated around the skin barrier first. Every reward in Glow Club is designed to be useful in real life. And every part of the experience, from the marquee to the leaderboard, is built to feel premium and calm.</p><div className="row" style={{ marginTop: 10 }}><Link to="/shop" className="btn btn-primary">Shop the ritual</Link><Link to="/glow-club" className="btn btn-secondary">About Glow Club</Link></div></div>
+      <div><p className="eyebrow">Our Story</p><h1>Your skin deserves a considered routine.</h1><p>Choosing skincare can feel like homework. Another ingredient to understand. Another product to add. Another promise to weigh against the bottles already on your shelf.</p><p>We started Kessora with a different ambition: to make premium skincare easier to choose, a pleasure to use and personal from the beginning.</p><div className="row" style={{ marginTop: 10 }}><Link to="/shop" className="btn btn-primary">Begin with the Essential 3</Link><Link to="/glow-club" className="btn btn-secondary">About Glow Club</Link></div></div>
       <img src={asset('/images/editorial/dropper-bowl.jpg')} alt="Vitamin C Day Serum on travertine" />
     </section>
+    <section className="section tight"><div className="story-letter">
+      <p className="lead">Our collection centres on Twin Essence, our signature dual-chamber serum. Around it, we are building two considered routines: the Essential 3, a focused place to begin, and the Complete 7, for those who enjoy a fuller skincare ritual.</p>
+      <p>Every product should have a clear place. Every recommendation should have a reason. And you should understand what you are choosing before you buy.</p>
+      <p>As founders, our backgrounds span sourcing, hospitality and customer service. Those experiences taught us how much the details matter: listening carefully, explaining clearly and following through.</p>
+      <p>We chose to work with Korean manufacturing partners because we wanted Korean-made skincare at the heart of Kessora. Our responsibility is to select thoughtfully, ask demanding questions and give our customers an honest account of what each product offers.</p>
+      <p>For our founding members, that relationship starts with a collection prepared personally for them, and an invitation to help shape what comes next through their experience and feedback.</p>
+      <p className="lead">Begin with the Essential 3. Make the ritual yours.</p>
+      <p className="sign">The Kessora founders</p>
+    </div></section>
     <section className="section tight"><SectionHead title="What we stand for" center /><div className="values">
       {[['leaf', 'Barrier first', 'Formulas that respect the skin’s own chemistry. No fragrance, no stripping, no noise.'], ['layers', 'Routine over products', 'Four steps that work together. We would rather you use less, consistently.'], ['users', 'Community, not casino', 'Recognition and rewards without pressure. Gamification with a conscience.']].map(([i, t, b]) => <div key={t}><Icon name={i} className="icon-lg copper" /><h3>{t}</h3><p className="small muted">{b}</p></div>)}
     </div></section>
