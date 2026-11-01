@@ -1,6 +1,6 @@
-# Lumiva · Digital Commerce & Glow Club Ecosystem
+# Kessora · Skin Cycle System, Glow Club and Member App
 
-Concept build of the BrillianceTech proposal (26 August 2026): a responsive ecommerce website, an installable member web app (Glow Club) and an administration portal, all sharing one member account, points wallet and activity history.
+Concept build for Kessora: a responsive website in the Cycle 28 editorial layout (hero with giant wordmark, skin cycle, products, advantages, membership preview, before/after, locations, testimonials, articles, FAQ), an installable member web app (Glow Club) and an administration portal, all sharing one member account, points wallet and activity history. Seven Kessora products in two finishes, mapped to Day and Night cycles.
 
 ## Run
 

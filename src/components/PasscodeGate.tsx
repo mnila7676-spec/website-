@@ -5,10 +5,10 @@ import { Icon } from './Icon'
 /* Preview passcode for the member app and admin portal.
    This is a courtesy gate for a concept build, not real security: anything shipped to the browser can be read.
    Real access control belongs to the authenticated backend described in the proposal. */
-const KEY = 'lumiva-preview-unlocked'
-const HASH = 2466914090 // hash of the 4-digit preview passcode
+const KEY = 'kessora-preview-unlocked'
+const HASH = 2373365460 // hash of the 4-digit preview passcode
 const hash = (s: string) => { let h = 5381; for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0; return h >>> 0 }
-const salted = (pin: string) => hash('lumiva:' + pin + ':glow')
+const salted = (pin: string) => hash('kessora:' + pin + ':glow')
 const isUnlocked = () => { try { return localStorage.getItem(KEY) === '1' } catch { return false } }
 
 export function PasscodeGate({ children, label }: { children: React.ReactNode; label: string }) {
@@ -22,7 +22,7 @@ export function PasscodeGate({ children, label }: { children: React.ReactNode; l
   if (ok) return <>{children}</>
   return <div className="gate" onClick={() => input.current?.focus()}>
     <div className={`gate-card ${err ? 'shake' : ''}`}>
-      <span className="gate-logo">LUMIVA</span>
+      <span className="gate-logo">KESSORA</span>
       <span className="gate-lock"><Icon name="lock" /></span>
       <h1>{label}</h1>
       <p>Private preview. Enter the 4-digit passcode to continue.</p>

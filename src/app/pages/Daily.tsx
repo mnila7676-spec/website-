@@ -6,6 +6,7 @@ import { useStore, weekKey, monthKey } from '@/store/store'
 import { MISSIONS, WEEKLY_CHALLENGES, STREAK_BONUS, DAILY_ENGAGEMENT_CAP } from '@/data/club'
 import type { WeeklyChallenge } from '@/data/club'
 import { useLinks } from '@/lib/links'
+import { productById } from '@/data/products'
 import { n } from '@/lib/format'
 import { SpinCard } from './Spin'
 import { RaceCard } from './Race'
@@ -19,11 +20,11 @@ export function MissionList() {
     { id: 'am', icon: 'sun', title: 'Complete AM routine', sub: state.routine.savedAt ? 'Confirm your morning ritual' : 'Save a routine first', pts: pts('am'), done: !!log.am, go: () => state.routine.savedAt ? actions.logRoutine('am') : nav(L.ritual) },
     { id: 'pm', icon: 'moon', title: 'Complete PM routine', sub: state.routine.savedAt ? 'Confirm your evening ritual' : 'Save a routine first', pts: pts('pm'), done: !!log.pm, go: () => state.routine.savedAt ? actions.logRoutine('pm') : nav(L.ritual) },
     { id: 'learn', icon: 'book', title: 'Learn & Earn: ' + (['Barrier care 101', 'Layering serums', 'Why SPF every day', 'Vitamin C, explained', 'To double cleanse or not', 'Skincare in humid climates'].find((t, i) => !state.lessonsDone.includes(['barrier', 'layering', 'spf', 'vitc', 'double-cleanse', 'humidity'][i])) ?? 'All lessons done'), sub: 'Read and pass a quick check', pts: pts('learn'), done: done.includes('learn'), go: () => nav(L.app ? '/app/learn' : '/learn') },
-    { id: 'review', icon: 'star', title: 'Review your last purchase', sub: state.orders.length ? 'Verified reviews earn points' : 'After your first order', pts: pts('review'), done: done.includes('review'), go: () => nav(state.orders.length ? L.product(['glow-renewal-serum', 'barrier-repair-cream', 'gentle-cloud-cleanser', 'daily-defence-spf', 'the-lumiva-ritual-set', 'the-complete-ritual'].find(s => true)!) : L.shop) },
+    { id: 'review', icon: 'star', title: 'Review your last purchase', sub: state.orders.length ? 'Verified reviews earn points' : 'After your first order', pts: pts('review'), done: done.includes('review'), go: () => { const last = state.orders[0]?.items.find(i => !i.gift); const slug = last ? productById(last.productId)?.slug : undefined; nav(slug ? L.product(slug) : L.shop) } },
   ]
   if (m && !m.skinProfile) rows.push({ id: 'skin-profile', icon: 'face', title: 'Complete your skin profile', sub: 'Better recommendations', pts: pts('skin-profile'), done: false, go: () => nav(L.app ? '/app/profile/skin' : '/skin-solutions') })
   rows.push({ id: 'refer', icon: 'users', title: 'Refer & Glow', sub: 'Give the glow · points once their order qualifies', pts: pts('refer'), done: false, go: () => nav(L.app ? '/app/profile/referrals' : '/account/referrals') })
-  if (m && !m.storeVisited) rows.push({ id: 'visit', icon: 'store', title: 'Visit Lumiva', sub: 'Scan the store code', pts: pts('visit'), done: false, go: () => actions.storeVisit() })
+  if (m && !m.storeVisited) rows.push({ id: 'visit', icon: 'store', title: 'Visit Kessora', sub: 'Scan the store code', pts: pts('visit'), done: false, go: () => actions.storeVisit() })
   return <div>
     {rows.map(r => <div key={r.id} className="mission-row"><span className="act-icon"><Icon name={r.icon} className="icon-sm" /></span><div style={{ flex: 1, minWidth: 0 }}><b style={{ fontSize: 13.5, display: 'block' }}>{r.title}</b><small className="muted" style={{ fontSize: 11.5 }}>{r.sub}</small></div><span className="mpts">+{r.pts} pts</span>{r.done ? <span className="mdone"><Icon name="check" className="icon-sm" /></span> : <button className="mgo" onClick={m ? r.go : () => nav(L.join)} aria-label="Go"><Icon name="chevron" className="icon-sm" /></button>}</div>)}
     {m && <p className="tiny muted" style={{ marginTop: 8 }}>Engagement points today: {n(d.engagementToday)} of {DAILY_ENGAGEMENT_CAP}. Tasks reset at midnight SGT.</p>}

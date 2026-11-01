@@ -10,9 +10,9 @@ import { useLinks } from '@/lib/links'
 export function useRoutineBuilder() {
   const { state, actions, d } = useStore()
   const [am, setAm] = useState<string[]>(state.routine.am.length ? state.routine.am : RITUALS[0].ids)
-  const [pm, setPm] = useState<string[]>(state.routine.pm.length ? state.routine.pm : ['barrier-cleanser', 'essence', 'sculpt-serum', 'firming-moisturiser'])
+  const [pm, setPm] = useState<string[]>(state.routine.pm.length ? state.routine.pm : RITUALS[1].ids)
   const all = Array.from(new Set([...am, ...pm])).map(id => productById(id)!).filter(Boolean)
-  const stepsFor = (slot: 'am' | 'pm') => slot === 'am' ? STEPS : STEPS.filter(s => s.key !== 'protect')
+  const stepsFor = (_slot: 'am' | 'pm') => STEPS
   const total = all.reduce((t, p) => t + p.price, 0)
   const discounted = all.length >= 4 ? Math.round(total * 0.85) : total
   const pts = Math.round(discounted * d.pointsPerDollar * (state.member ? d.tier.multiplier : 1))
@@ -25,7 +25,7 @@ export function useRoutineBuilder() {
 
 export function RoutineSlot({ slot, ids, options, setStep, log }: { slot: 'am' | 'pm'; ids: string[]; options: (s: string, slot?: 'am' | 'pm') => typeof PRODUCTS; setStep: (slot: 'am' | 'pm', step: string, id: string | null) => void; log?: () => void }) {
   const { state } = useStore(); const L = useLinks()
-  const steps = slot === 'am' ? STEPS : STEPS.filter(s => s.key !== 'protect')
+  const steps = STEPS
   const doneToday = state.routineLog[new Date().toISOString().slice(0, 10)]?.[slot]
   return <div className="rb-slot">
     <div className="rb-slot-head"><h3><Icon name={slot === 'am' ? 'sun' : 'moon'} className="copper" /> {slot === 'am' ? 'Day' : 'Night'} ritual <span className="tiny muted" style={{ fontFamily: 'var(--font-body)', letterSpacing: 0 }}>· {slot.toUpperCase()}</span></h3>{log && (doneToday ? <span className="pill pill-success"><Icon name="check" className="icon-sm" /> Done today</span> : <button className="btn btn-copper btn-sm" onClick={log}>Mark complete · +25 pts</button>)}</div>

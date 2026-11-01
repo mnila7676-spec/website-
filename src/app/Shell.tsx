@@ -20,7 +20,7 @@ export function AppShell() {
   const celebrate = unseen.length && mounted.current ? ACHIEVEMENTS.find(a => a.id === unseen[0]) : null
   return <div className="app-stage">
     <aside className="app-aside">
-      <p className="eyebrow">Lumiva member app</p>
+      <p className="eyebrow">Kessora member app</p>
       <h1>Glow Club, in your hand</h1>
       <p>An installable web app that shares one account, points wallet and activity history with the website. Open this URL on your phone and add it to your home screen.</p>
       <ul className="kv-list"><li><Icon name="check-circle" className="icon-sm" />Personalised home, shop, routine builder and smart reorder reminders</li><li><Icon name="check-circle" className="icon-sm" />Daily Glow missions, streaks and weekly challenges</li><li><Icon name="check-circle" className="icon-sm" />Journey milestones, achievements, rewards and leaderboard</li><li><Icon name="check-circle" className="icon-sm" />Membership card, wallet, point history and privacy controls</li></ul>

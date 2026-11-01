@@ -9,7 +9,7 @@ export const BALLS: Ball[] = [
   { id: 'serum', name: 'Serum', color: '#1d1a17', ring: '#c98a5e', label: 'S' },
   { id: 'cream', name: 'Cream', color: '#f3e7c9', ring: '#c9a55e', label: 'C' },
   { id: 'cleanser', name: 'Cleanser', color: '#4a423b', ring: '#d9d6d1', label: 'L' },
-  { id: 'spf', name: 'SPF', color: '#b8734a', ring: '#f0d8a8', label: 'P' },
+  { id: 'essence', name: 'Essence', color: '#c08777', ring: '#f0d8a8', label: 'E' },
 ]
 
 export const W = 100, H = 880, FINISH_Y = 830, R = 3

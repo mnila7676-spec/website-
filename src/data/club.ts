@@ -81,7 +81,7 @@ export const MISSIONS: Mission[] = [
   { id: 'review', title: 'Review a verified purchase', blurb: 'Share a useful review for a product you bought.', points: 250, cadence: 'per-purchase', icon: 'star' },
   { id: 'skin-profile', title: 'Complete your skin profile', blurb: 'Tell us about your skin for better recommendations.', points: 500, cadence: 'once', icon: 'face' },
   { id: 'refer', title: 'Refer a friend', blurb: 'Points arrive after your friend’s first order.', points: 500, cadence: 'per-purchase', icon: 'users' },
-  { id: 'visit', title: 'Visit Lumiva', blurb: 'Scan the store code at the counter.', points: 50, cadence: 'once', icon: 'store' },
+  { id: 'visit', title: 'Visit Kessora', blurb: 'Scan the store code at the counter.', points: 50, cadence: 'once', icon: 'store' },
 ]
 export const STREAK_BONUS = [0, 0, 10, 20, 30, 40, 50, 80] // extra points by streak day (index = day, capped at 7)
 export const DAILY_ENGAGEMENT_CAP = 600
@@ -141,7 +141,7 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'radiant', name: 'Radiant', blurb: 'Reach Radiant tier', icon: 'sparkle', category: 'milestone' },
   { id: 'luminous', name: 'Luminous', blurb: 'Reach Luminous tier', icon: 'medal', category: 'milestone' },
   { id: 'skin-profile', name: 'Know Your Skin', blurb: 'Complete your skin profile', icon: 'face', category: 'learning' },
-  { id: 'store-visit', name: 'In Person', blurb: 'Visit the Lumiva store', icon: 'store', category: 'community' },
+  { id: 'store-visit', name: 'In Person', blurb: 'Visit the Kessora store', icon: 'store', category: 'community' },
   { id: 'early-bird', name: 'Early Bird', blurb: 'Complete an AM routine before 8am', icon: 'sun', category: 'routine' },
   { id: 'night-owl', name: 'Night Owl', blurb: 'Complete a PM routine 7 nights in a row', icon: 'moon', category: 'routine' },
   { id: 'anniversary', name: 'One Year', blurb: 'Celebrate a year with Glow Club', icon: 'sparkle', category: 'milestone' },

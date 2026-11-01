@@ -9,7 +9,7 @@ import { WELCOME_POINTS } from '@/data/club'
 import { useLinks } from '@/lib/links'
 import { n } from '@/lib/format'
 
-const SS = { modal: 'lumiva-modal-shown', bar: 'lumiva-bar-dismissed' }
+const SS = { modal: 'kessora-modal-shown', bar: 'kessora-bar-dismissed' }
 const ss = { get: (k: string) => { try { return sessionStorage.getItem(k) } catch { return null } }, set: (k: string, v: string) => { try { sessionStorage.setItem(k, v) } catch {} } }
 
 /* 1. Scroll modal at ~30% + 2. Floating reminder */
@@ -36,16 +36,16 @@ export function MembershipPrompts() {
     {modal && <Modal onClose={later} className="promo-modal">
       <div className="promo-grid">
         <div className="promo-copy">
-          <p className="eyebrow">New member exclusive</p>
-          <h2>Join Glow Club.<br />Receive 1-for-1.</h2>
-          <p className="muted">Purchase one eligible skincare item and choose a second eligible item on us.</p>
+          <p className="eyebrow">Kessora membership</p>
+          <h2>Join Glow Club.<br />Your cycle, rewarded.</h2>
+          <ul className="perks">{[['sparkle', '500 welcome Glow Points'], ['gift', '1-for-1 on your first eligible order'], ['calendar', 'Birthday gift and member-only launches'], ['users', 'Refer & Glow: friends get 15% off']].map(([i, t]) => <li key={t}><span className="act-icon"><Icon name={i} className="icon-sm" /></span>{t}</li>)}</ul>
           <input className="input" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} type="email" />
           <input className="input" placeholder="Mobile number" value={mobile} onChange={e => setMobile(e.target.value)} type="tel" />
           <button className="btn btn-primary btn-block" onClick={go}>Unlock My 1-for-1</button>
-          <button className="link-btn" onClick={later}>Maybe later</button>
+          <button className="link-btn" onClick={later}>Continue browsing</button>
           <p className="tiny muted">Lowest-priced eligible item complimentary. One redemption per new member. Shown once per session. T&amp;Cs apply.</p>
         </div>
-        <div className="promo-img"><img src={asset('/images/hero-group.jpg')} alt="Lumiva ritual" /></div>
+        <div className="promo-img"><img src={asset('/images/lifestyle/satin-15.jpg')} alt="Kessora Dual-Action Sculpting Serum" /></div>
       </div>
     </Modal>}
     {bar && !modal && <div className="promo-bar">

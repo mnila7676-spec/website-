@@ -12,7 +12,7 @@ import { MissionList, WeeklyChallengeCard } from '@/app/pages/Daily'
 export function GlowClub() {
   const { state, d, actions } = useStore()
   return <div className="container">
-    <div className="page-hero"><p className="eyebrow">Glow Club</p><h1>{TAGLINES.club}</h1><p>Not just buying skincare from Lumiva. Being part of Lumiva. A visible identity, real progress, friends you bring along and rewards worth wanting.</p>
+    <div className="page-hero"><p className="eyebrow">Glow Club</p><h1>{TAGLINES.club}</h1><p>Not just buying skincare from Kessora. Being part of Kessora. A visible identity, real progress, friends you bring along and rewards worth wanting.</p>
       <div className="pillars">{PILLARS.map(p => <div key={p.key} className="pillar"><span className="act-icon"><Icon name={p.icon} className="icon-sm" /></span><b>{p.label}</b><small>{p.objective}</small></div>)}</div>
       {!state.member && <div className="row" style={{ marginTop: 18 }}><Link to="/join" className="btn btn-primary btn-lg">Join Glow Club · 500 welcome points</Link><Link to="/sign-in" className="btn btn-secondary btn-lg">Sign in</Link></div>}</div>
 

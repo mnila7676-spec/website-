@@ -6,7 +6,7 @@ import { TIERS, tierFor, nextTier, MILESTONES, MISSIONS, STREAK_BONUS, DAILY_ENG
 import type { ReferralStatus } from '@/data/club'
 import { LEADERS } from '@/data/community'
 
-const KEY = 'lumiva-glow-club-v1'
+const KEY = 'kessora-glow-club-v1'
 export const uid = () => Math.random().toString(36).slice(2, 10)
 export const today = (d = new Date()) => d.toISOString().slice(0, 10)
 const daysAgo = (n: number) => { const d = new Date(); d.setDate(d.getDate() - n); return d }
@@ -15,7 +15,7 @@ export const monthKey = (d = new Date()) => d.toISOString().slice(0, 7)
 export const weekKey = (d = new Date()) => { const t = new Date(d); const day = (t.getDay() + 6) % 7; t.setDate(t.getDate() - day); return t.toISOString().slice(0, 10) }
 
 const defaultAdmin = (): AdminSettings => ({
-  tickerEnabled: true, scrollModalEnabled: true, giftDrawerEnabled: true, modalScrollPercent: 30, modalDelaySeconds: 30,
+  tickerEnabled: true, scrollModalEnabled: true, giftDrawerEnabled: true, modalScrollPercent: 30, modalDelaySeconds: 4,
   missionPoints: Object.fromEntries(MISSIONS.map(m => [m.id, m.points])),
   rewardStock: Object.fromEntries(REWARDS.map(r => [r.id, r.stock])),
   hiddenActivity: [], approvedActivity: ['a16'], activityTypes: { redeem: true, earn: true, tier: true, streak: true, milestone: true, order: true, achievement: true },
@@ -33,7 +33,7 @@ export const initialState = (): State => ({
 /* ---------- Demo member (Amelia K.) ---------- */
 export function demoState(base: State): State {
   const m: Member = {
-    id: 'demo', memberId: 'LC-24870', firstName: 'Amelia', lastName: 'Koh', email: 'amelia@example.com', mobile: '+65 9123 4567',
+    id: 'demo', memberId: 'KS-24870', firstName: 'Amelia', lastName: 'Koh', email: 'amelia@example.com', mobile: '+65 9123 4567',
     joinedAt: '2024-03-12T09:00:00.000Z', birthday: '1994-06-18', skinProfile: { type: 'Combination', concerns: ['dullness', 'dehydration'], goal: 'Even, radiant tone' },
     consent: { marketing: true, publicActivity: true, push: true }, addresses: [{ id: 'ad1', label: 'Home', line1: '12 Duxton Hill', line2: '#03-01', postal: '089596', isDefault: true }],
     referralCode: 'AMELIA-GLOW', oneForOneUsed: true, welcomeSeen: true, storeVisited: true,
@@ -41,31 +41,31 @@ export function demoState(base: State): State {
   const L: LedgerEntry[] = []
   const add = (n: number, type: LedgerEntry['type'], source: string, points: number, note: string, lb = true) => L.push({ id: uid(), ts: isoDaysAgo(n), type, source, points, note, leaderboardEligible: lb })
   add(560, 'earn', 'welcome', 500, 'Welcome to Glow Club')
-  add(555, 'earn', 'order', 1880, 'Order LU-1042 · The Lumiva Ritual Set')
+  add(555, 'earn', 'order', 1880, 'Order KS-1042 · The Complete Skin Cycle')
   add(555, 'earn', 'bonus', 1000, 'First purchase bonus')
   add(540, 'earn', 'profile', 500, 'Skin profile completed')
-  add(520, 'earn', 'order', 850, 'Order LU-1103 · Glow Renewal Serum')
-  add(490, 'earn', 'review', 250, 'Verified review · Glow Renewal Serum')
-  add(440, 'earn', 'order', 900, 'Order LU-1188 · Barrier Repair Cream')
-  add(380, 'earn', 'order', 2625, 'Order LU-1240 · The Complete Ritual')
+  add(520, 'earn', 'order', 850, 'Order KS-1103 · Vitamin C Day Serum')
+  add(490, 'earn', 'review', 250, 'Verified review · Vitamin C Day Serum')
+  add(440, 'earn', 'order', 900, 'Order KS-1188 · Firming Barrier Moisturizer')
+  add(380, 'earn', 'order', 2625, 'Order KS-1240 · The Night Cycle Set')
   add(350, 'earn', 'weekly', 500, '7-Day Barrier Reset completed')
-  add(290, 'earn', 'order', 850, 'Order LU-1302 · Glow Renewal Serum')
-  add(260, 'earn', 'order', 725, 'Order LU-1355 · Daily Defence SPF')
-  add(150, 'earn', 'order', 900, 'Order LU-1466 · Barrier Repair Cream')
-  add(120, 'earn', 'order', 850, 'Order LU-1520 · Glow Renewal Serum')
-  add(80, 'earn', 'order', 2625, 'Order LU-1588 · The Complete Ritual')
-  add(40, 'earn', 'order', 725, 'Order LU-1634 · Daily Defence SPF')
+  add(290, 'earn', 'order', 850, 'Order KS-1302 · Dual-Action Sculpting Serum')
+  add(260, 'earn', 'order', 725, 'Order KS-1355 · Fresh Shake Emulsion')
+  add(150, 'earn', 'order', 900, 'Order KS-1466 · Firming Barrier Moisturizer')
+  add(120, 'earn', 'order', 850, 'Order KS-1520 · Vitamin C Day Serum')
+  add(80, 'earn', 'order', 2625, 'Order KS-1588 · The Complete Skin Cycle')
+  add(40, 'earn', 'order', 725, 'Order KS-1634 · Vitamin C Day Serum')
   add(30, 'earn', 'monthly', 1000, 'Glow Together completed')
   const friends: [string, string, number][] = [['Sofia T.', 'sofia@example.com', 475], ['Chloe D.', 'chloe@example.com', 400], ['Mei Lin W.', 'mei@example.com', 330], ['Hannah K.', 'hannah@example.com', 260], ['Priya N.', 'priya@example.com', 200], ['Jasmine O.', 'jasmine@example.com', 140], ['Aisha R.', 'aisha@example.com', 90], ['Nadia S.', 'nadia@example.com', 35]]
   const referrals: Referral[] = friends.map(([name, email, n], i) => { add(n, 'earn', 'referral', 1500, `Refer & Glow · ${name} qualified`); if (i + 1 === 3) add(n, 'earn', 'referral-bonus', 2500, 'Glow Circle · 3 friends bonus'); if (i + 1 === 5) add(n, 'earn', 'referral-bonus', 5000, 'Glow Giver · 5 friends bonus'); return { id: uid(), name, email, ts: isoDaysAgo(n + 12), status: 'rewarded' as ReferralStatus, rewardedAt: isoDaysAgo(n) } })
   referrals.push({ id: uid(), name: 'Rina P.', email: 'rina@example.com', ts: isoDaysAgo(9), status: 'pending' }, { id: uid(), name: 'Tessa L.', email: 'tessa@example.com', ts: isoDaysAgo(3), status: 'registered' })
   for (let d = 20; d >= 1; d--) { add(d, 'earn', 'checkin', 80 + (STREAK_BONUS[Math.min(7, 21 - d)] ?? 0), 'Daily check-in'); if (d % 2 === 0) add(d, 'earn', 'routine', 50, 'AM + PM routine'); if (d % 5 === 0) add(d, 'earn', 'learn', 100, 'Learn & Earn') }
   add(410, 'spend', 'reward', -600, 'Redeemed · Coffee or Matcha')
-  add(320, 'spend', 'reward', -2000, 'Redeemed · S$20 Lumiva Voucher')
+  add(320, 'spend', 'reward', -2000, 'Redeemed · S$20 Kessora Voucher')
   add(240, 'spend', 'reward', -10000, 'Redeemed · Signature Facial')
   add(170, 'spend', 'reward', -600, 'Redeemed · Coffee or Matcha')
   add(100, 'spend', 'reward', -8500, 'Redeemed · Dinner for Two')
-  add(60, 'spend', 'reward', -2000, 'Redeemed · S$20 Lumiva Voucher')
+  add(60, 'spend', 'reward', -2000, 'Redeemed · S$20 Kessora Voucher')
   add(20, 'spend', 'reward', -1000, 'Redeemed · Express Delivery + Coffee')
   // Land on the proposal's 12,480 balance: expire or bonus the remainder
   const bal = L.reduce((t, e) => t + e.points, 0); const diff = bal - 12480
@@ -74,10 +74,10 @@ export function demoState(base: State): State {
   const checkins: string[] = []; for (let d = 6; d >= 0; d--) checkins.push(today(daysAgo(d)))
   const routineLog: State['routineLog'] = {}; for (let d = 12; d >= 1; d--) routineLog[today(daysAgo(d))] = { am: isoDaysAgo(d), pm: isoDaysAgo(d) }
   const orders: Order[] = [
-    { id: 'LU-1634', ts: isoDaysAgo(40), items: [{ productId: 'spf', qty: 1, price: 58 }], subtotal: 58, discount: 0, shipping: 6, total: 64, status: 'delivered', pointsEarned: 725, address: '12 Duxton Hill #03-01', pointsAt: 1.25 },
-    { id: 'LU-1588', ts: isoDaysAgo(80), items: [{ productId: 'complete-set', qty: 1, price: 210 }], subtotal: 210, discount: 0, shipping: 0, total: 210, status: 'delivered', pointsEarned: 2625, address: '12 Duxton Hill #03-01', pointsAt: 1.25 },
-    { id: 'LU-1520', ts: isoDaysAgo(120), items: [{ productId: 'serum', qty: 1, price: 68 }], subtotal: 68, discount: 0, shipping: 6, total: 74, status: 'delivered', pointsEarned: 850, address: '12 Duxton Hill #03-01', pointsAt: 1.25 },
-    { id: 'LU-1466', ts: isoDaysAgo(150), items: [{ productId: 'cream', qty: 1, price: 72 }], subtotal: 72, discount: 0, shipping: 6, total: 78, status: 'delivered', pointsEarned: 900, address: '12 Duxton Hill #03-01', pointsAt: 1.25 },
+    { id: 'KS-1634', ts: isoDaysAgo(40), items: [{ productId: 'serum', qty: 1, price: 88 }], subtotal: 88, discount: 0, shipping: 0, total: 88, status: 'delivered', pointsEarned: 725, address: '12 Duxton Hill #03-01', pointsAt: 1.25 },
+    { id: 'KS-1588', ts: isoDaysAgo(80), items: [{ productId: 'ritual-set', qty: 1, price: 468 }], subtotal: 468, discount: 0, shipping: 0, total: 468, status: 'delivered', pointsEarned: 2625, address: '12 Duxton Hill #03-01', pointsAt: 1.25 },
+    { id: 'KS-1520', ts: isoDaysAgo(120), items: [{ productId: 'serum', qty: 1, price: 88 }], subtotal: 88, discount: 0, shipping: 0, total: 88, status: 'delivered', pointsEarned: 1100, address: '12 Duxton Hill #03-01', pointsAt: 1.25 },
+    { id: 'KS-1466', ts: isoDaysAgo(150), items: [{ productId: 'cream', qty: 1, price: 108 }], subtotal: 108, discount: 0, shipping: 0, total: 108, status: 'delivered', pointsEarned: 1350, address: '12 Duxton Hill #03-01', pointsAt: 1.25 },
   ]
   const redemptions: Redemption[] = [
     { id: uid(), rewardId: 'coffee', ts: isoDaysAgo(20), points: 600, status: 'used', code: 'GLOW-7F2K' },
@@ -90,13 +90,13 @@ export function demoState(base: State): State {
   const ach: Record<string, string> = { 'first-glow': isoDaysAgo(500), 'glow-getter': isoDaysAgo(420), 'spa-retreat': isoDaysAgo(150), 'ritual-regular': isoDaysAgo(0), 'streak-7': isoDaysAgo(0), 'review-maven': isoDaysAgo(490), 'referral-circle': isoDaysAgo(470), 'barrier-reset': isoDaysAgo(350), 'first-order': isoDaysAgo(555), 'first-redeem': isoDaysAgo(410), 'radiant': isoDaysAgo(420), 'luminous': isoDaysAgo(150), 'weekend-ready': isoDaysAgo(120), 'referral-3': isoDaysAgo(330), 'referral-5': isoDaysAgo(200), 'glow-together': isoDaysAgo(30), 'skin-profile': isoDaysAgo(540), 'complete-ritual': isoDaysAgo(380), 'routine-builder': isoDaysAgo(550), 'store-visit': isoDaysAgo(300), 'learner': isoDaysAgo(300), 'anniversary': isoDaysAgo(188), 'first-spin': isoDaysAgo(3), 'race-first': isoDaysAgo(2) }
   return {
     ...base, member: m, ledger: L, orders, redemptions, checkins, routineLog, achievements: ach, demoSeeded: true,
-    routine: { am: ['cleanser', 'essence', 'serum', 'cream', 'spf'], pm: ['barrier-cleanser', 'essence', 'sculpt-serum', 'firming-moisturiser'], savedAt: isoDaysAgo(550) },
-    reviews: [{ id: uid(), productId: 'serum', rating: 5, text: 'Two weeks in and my skin looks lit from within.', ts: isoDaysAgo(490), verified: true, orderId: 'LU-1103' }],
+    routine: { am: ['cleanser', 'essence', 'serum', 'sculpt-serum', 'emulsion'], pm: ['cleanser', 'essence', 'renew-serum', 'sculpt-serum', 'cream'], savedAt: isoDaysAgo(550) },
+    reviews: [{ id: uid(), productId: 'serum', rating: 5, text: 'Two weeks in and my skin looks lit from within.', ts: isoDaysAgo(490), verified: true, orderId: 'KS-1103' }],
     referrals,
     spins: { [today(daysAgo(1))]: 'p20', [today(daysAgo(2))]: 'p10', [today(daysAgo(3))]: 'p50' },
-    race: { picks: [{ roundId: 'R-DEMO1', roundIndex: 0, win: 'serum', ts: isoDaysAgo(1), settled: true, result: ['serum', 'spf', 'cream', 'cleanser'], points: 100 }, { roundId: 'R-DEMO2', roundIndex: 0, win: 'cream', podium: ['cream', 'serum', 'spf'], ts: isoDaysAgo(1), settled: true, result: ['spf', 'cream', 'serum', 'cleanser'], points: 0 }, { roundId: 'R-DEMO3', roundIndex: 0, win: 'spf', ts: isoDaysAgo(2), settled: true, result: ['spf', 'cleanser', 'serum', 'cream'], points: 100 }], entries: {} }, streakShields: 1, seenAchievements: Object.keys(ach),
+    race: { picks: [{ roundId: 'R-DEMO1', roundIndex: 0, win: 'serum', ts: isoDaysAgo(1), settled: true, result: ['serum', 'essence', 'cream', 'cleanser'], points: 100 }, { roundId: 'R-DEMO2', roundIndex: 0, win: 'cream', podium: ['cream', 'serum', 'essence'], ts: isoDaysAgo(1), settled: true, result: ['essence', 'cream', 'serum', 'cleanser'], points: 0 }, { roundId: 'R-DEMO3', roundIndex: 0, win: 'essence', ts: isoDaysAgo(2), settled: true, result: ['essence', 'cleanser', 'serum', 'cream'], points: 100 }], entries: {} }, streakShields: 1, seenAchievements: Object.keys(ach),
     lessonsDone: ['barrier', 'layering', 'spf'], prompts: { barDismissed: true, rewardReveal: false, giftDrawerSeenFor: [] },
-    userActivity: [{ id: uid(), type: 'referral', text: 'You welcomed your 8th friend to Lumiva', ts: isoDaysAgo(35), icon: 'users' }, { id: uid(), type: 'redeem', text: 'You redeemed a Glow reward', ts: isoDaysAgo(20), icon: 'coffee' }],
+    userActivity: [{ id: uid(), type: 'referral', text: 'You welcomed your 8th friend to Kessora', ts: isoDaysAgo(35), icon: 'users' }, { id: uid(), type: 'redeem', text: 'You redeemed a Glow reward', ts: isoDaysAgo(20), icon: 'coffee' }],
   }
 }
 
@@ -144,7 +144,7 @@ function reducer(s: State, a: Action): State {
     case 'SIGN_OUT': return { ...initialState(), admin: s.admin, audit: s.audit, prompts: { ...s.prompts, rewardReveal: false } }
     case 'JOIN': {
       const { consent: c, ...rest } = a.member
-      const m: Member = { ...rest, id: uid(), memberId: 'LC-' + Math.floor(20000 + Math.random() * 79999), joinedAt: new Date().toISOString(), referralCode: (a.member.firstName.toUpperCase() + '-GLOW').replace(/\s/g, ''), oneForOneUsed: false, welcomeSeen: false, storeVisited: false, addresses: [], consent: { marketing: c?.marketing ?? true, publicActivity: c?.publicActivity ?? false, push: c?.push ?? true } }
+      const m: Member = { ...rest, id: uid(), memberId: 'KS-' + Math.floor(20000 + Math.random() * 79999), joinedAt: new Date().toISOString(), referralCode: (a.member.firstName.toUpperCase() + '-GLOW').replace(/\s/g, ''), oneForOneUsed: false, welcomeSeen: false, storeVisited: false, addresses: [], consent: { marketing: c?.marketing ?? true, publicActivity: c?.publicActivity ?? false, push: c?.push ?? true } }
       const welcome: LedgerEntry = { id: uid(), ts: new Date().toISOString(), type: 'earn', source: 'welcome', points: WELCOME_POINTS, note: 'Welcome to Glow Club', leaderboardEligible: true }
       return { ...s, member: m, ledger: [...s.ledger, welcome], prompts: { ...s.prompts, rewardReveal: true } }
     }
@@ -211,7 +211,7 @@ function reducer(s: State, a: Action): State {
   }
 }
 
-const BALL_NAME = (id: string) => ({ serum: 'Serum', cream: 'Cream', cleanser: 'Cleanser', spf: 'SPF' } as Record<string, string>)[id] ?? id
+const BALL_NAME = (id: string) => ({ serum: 'Serum', cream: 'Cream', cleanser: 'Cleanser', essence: 'Essence' } as Record<string, string>)[id] ?? id
 /* ---------- Derived selectors ---------- */
 export function derive(s: State) {
   const balance = s.ledger.filter(e => e.type !== 'pending').reduce((t, e) => t + e.points, 0)
@@ -331,7 +331,7 @@ function makeActions(dispatch: React.Dispatch<Action>, get: () => State, toast: 
       const total = Math.max(0, subtotal - discount + shipping)
       const mult = s.member ? d.tier.multiplier : 0
       const pointsEarned = Math.round(subtotal * (s.admin.pointsPerDollar ?? POINTS_PER_DOLLAR) * mult)
-      const order: Order = { id: 'LU-' + Math.floor(1700 + Math.random() * 8000), ts: new Date().toISOString(), items, subtotal, discount, shipping, total, status: 'processing', pointsEarned, voucherUsed: opts.voucher?.id, express: opts.express, address: opts.address, pointsAt: mult }
+      const order: Order = { id: 'KS-' + Math.floor(1700 + Math.random() * 8000), ts: new Date().toISOString(), items, subtotal, discount, shipping, total, status: 'processing', pointsEarned, voucherUsed: opts.voucher?.id, express: opts.express, address: opts.address, pointsAt: mult }
       dispatch({ type: 'ORDER_PLACE', order })
       if (opts.voucher) dispatch({ type: 'REDEMPTION_SET', id: opts.voucher.id, status: 'used' })
       if (s.member) {
@@ -417,7 +417,7 @@ function makeActions(dispatch: React.Dispatch<Action>, get: () => State, toast: 
       if (ms?.bonus) dispatch({ type: 'EARN', source: 'referral-bonus', points: ms.bonus, note: `${ms.label} · ${count} friends bonus`, leaderboardEligible: false })
       if (ms?.badge) dispatch({ type: 'ACHIEVE', id: ms.badge })
       const ord = count === 1 ? '1st' : count === 2 ? '2nd' : count === 3 ? '3rd' : `${count}th`
-      activity('referral', `You welcomed your ${ord} friend to Lumiva`, 'users')
+      activity('referral', `You welcomed your ${ord} friend to Kessora`, 'users')
       toast(`${r.name} qualified · +${reward.toLocaleString()} pts${ms?.bonus ? ` · ${ms.label} bonus +${ms.bonus.toLocaleString()}` : ''}`, { icon: 'users', copper: true })
       audit('system', 'referral.rewarded', `${s.member.firstName} · ${r.name} · ${reward} pts${ms ? ' · ' + ms.label : ''}`)
     },
@@ -524,7 +524,7 @@ function checkAchievements(s: State, d: ReturnType<typeof derive>, dispatch: Rea
   if (computeStreak(Object.keys(s.spins)) >= 7) unlock('spin-7')
   if (s.orders.length) unlock('first-order'); if (s.redemptions.length) unlock('first-redeem'); if (s.redemptions.filter(r => r.rewardId === 'coffee').length >= 5) unlock('coffee-club')
   const owned = new Set(s.orders.flatMap(o => o.items.flatMap(i => productById(i.productId)?.includes ?? [i.productId])))
-  if (['cleanser', 'serum', 'cream', 'spf'].every(p => owned.has(p))) unlock('complete-ritual')
+  if (['cleanser', 'essence', 'serum', 'cream'].every(p => owned.has(p))) unlock('complete-ritual')
   const pmNights = [0, 1, 2, 3, 4, 5, 6].every(n => s.routineLog[today(daysAgo(n))]?.pm); if (pmNights) unlock('night-owl')
   if (s.member.joinedAt && Date.now() - new Date(s.member.joinedAt).getTime() > 365 * 864e5) unlock('anniversary')
 }

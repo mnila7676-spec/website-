@@ -5,7 +5,7 @@ import { Icon } from '@/components/Icon'
 import { Stars, QtyStepper, ProductCard, Modal } from '@/components/ui'
 import { ReviewForm } from '@/components/forms'
 import { useStore } from '@/store/store'
-import { PRODUCTS, productBySlug, productById, money, POINTS_PER_DOLLAR, STEPS } from '@/data/products'
+import { PRODUCTS, productBySlug, productById, money, POINTS_PER_DOLLAR, STEPS, galleryFor } from '@/data/products'
 import { REVIEWS } from '@/data/community'
 import { fmtDate, n } from '@/lib/format'
 import { useLinks } from '@/lib/links'
@@ -14,7 +14,7 @@ export function ProductPage() {
   const { slug } = useParams(); const p = productBySlug(slug ?? ''); const { state, actions, d } = useStore(); const L = useLinks()
   const [img, setImg] = useState(0); const [qty, setQty] = useState(1); const [open, setOpen] = useState<string>('benefits'); const [review, setReview] = useState(false)
   if (!p) return <Navigate to={L.shop} replace />
-  const gallery = [p.image, p.imageDark, ...(p.includes ? [] : [asset('/images/hero-group.jpg')])]
+  const gallery = galleryFor(p)
   const pts = Math.round(p.price * d.pointsPerDollar * (state.member ? d.tier.multiplier : 1))
   const related = PRODUCTS.filter(x => x.id !== p.id && !x.includes && x.category !== 'minis').slice(0, 4)
   const reviews = [...state.reviews.filter(r => r.productId === p.id).map(r => ({ name: 'You', rating: r.rating, text: r.text, date: fmtDate(r.ts), verified: r.verified })), ...(REVIEWS[p.id] ?? [])]

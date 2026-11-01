@@ -1,93 +1,133 @@
-import React from 'react'
-import { asset } from '@/lib/asset'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Icon } from '@/components/Icon'
-import { ProductCard, RewardCard, SectionHead, TierBadge, Progress } from '@/components/ui'
-import { ActivityFeedList } from '@/components/Ticker'
-import { useStore, leaderboard } from '@/store/store'
-import { PRODUCTS, BEST_SELLERS, STEPS, RITUALS, productById, money } from '@/data/products'
-import { REWARDS } from '@/data/rewards'
-import { MILESTONES, PILLARS, TAGLINES } from '@/data/club'
+import { ProductCard, TierBadge } from '@/components/ui'
+import { useStore } from '@/store/store'
+import { PRODUCTS, STEPS, productById } from '@/data/products'
+import { LESSONS, TAGLINES, PILLARS } from '@/data/club'
+import { asset } from '@/lib/asset'
 import { n } from '@/lib/format'
-import { LeaderboardPanel } from './Community'
+
+const L = (f: string) => asset(`/images/lifestyle/${f}.jpg`)
+const CYCLE = [
+  { k: 'Diagnose', t: 'Skin profile, concerns and goals. In clinic or in the app.' },
+  { k: 'Treat', t: 'Brighten by day, renew by night, sculpt in both.' },
+  { k: 'Support', t: 'A guided routine, reminders and Glow Club missions.' },
+  { k: 'Renew', t: 'Firm, repair and progress, cycle after cycle.' },
+]
+const TESTIMONIALS = [
+  { name: 'Chloe L.', role: 'Luminous member · Singapore', text: 'The Dual-Action Sculpting Serum changed my jawline in a month. The app keeps me honest with the routine, and the points paid for my facial.' },
+  { name: 'Aisha R.', role: 'Radiant member · Kuala Lumpur', text: 'Barrier first, always. My skin stopped reacting to everything once I switched to the cleanser and the night moisturizer.' },
+  { name: 'Sofia T.', role: 'Glow Ambassador', text: 'I have brought eight friends in. Not because of the points, because the system works. The points are a lovely bonus.' },
+]
+const FAQ = [
+  ['What is the Kessora skin cycle?', 'Five steps, twice a day: cleanse, prep, treat, sculpt and hydrate. Day products brighten and protect, night products renew and firm. Glow Club keeps you on track between visits.'],
+  ['Do I need the whole system?', 'No. Start with the cleanser and the Dual-Action Sculpting Serum. The Routine Builder shows what to add next, and sets save 15%.'],
+  ['How does Glow Club work?', 'Free to join. Earn Glow Points on orders, routines, learning, reviews and referrals. Progress through Glow, Radiant, Luminous and Glow Ambassador, and redeem rewards from coffee to a Japan trip.'],
+  ['Is Kessora suitable for sensitive skin?', 'Every formula is fragrance-free and barrier-led. Start with the cleanser, essence and Firming Barrier Moisturizer, then add actives slowly.'],
+  ['Where can I visit a clinic?', 'Our flagship is at Duxton Hill, Singapore, with partner clinics in Kuala Lumpur, Bangkok, Hong Kong and Tokyo. Book a diagnosis in the app.'],
+]
 
 export function Home() {
-  const { state, d } = useStore()
-  const best = BEST_SELLERS.map(id => PRODUCTS.find(p => p.id === id)!)
-  const featured = ['coffee', 'voucher-20', 'staycation', 'japan'].map(id => REWARDS.find(r => r.id === id)!)
-  return <>
-    <section className="hero"><div className="container hero-inner">
-      <div className="hero-copy fade-up">
-        <h1>Skincare that rewards your ritual.</h1>
-        <p>Build your routine, earn Glow Points and unlock rewards made for real life.</p>
-        <div className="row"><Link to="/shop" className="btn btn-primary btn-lg">Shop Skincare</Link><Link to="/glow-club" className="btn btn-secondary btn-lg">Explore Glow Club</Link></div>
+  const { state, d } = useStore(); const [ba, setBa] = useState(0); const [faq, setFaq] = useState(0)
+  const whatsNew = ['sculpt-serum', 'renew-serum', 'emulsion'].map(id => productById(id)!)
+  return <div className="k-home">
+    {/* 1. Hero */}
+    <section className="k-hero container">
+      <div className="k-hero-copy">
+        <img src={asset('/images/products/sculpt-serum.jpg')} alt="" className="k-hero-thumb" />
+        <h1><em>KESSORA</em> is a complete skin cycle system: clinic, home care, and long-term skin support.</h1>
+        <div className="row"><Link to="/shop" className="btn btn-primary">Shop the cycle</Link><Link to={state.member ? '/glow-club' : '/join'} className="link-arrow">{state.member ? 'My Glow Club' : 'Join Glow Club'} <Icon name="chevron" className="icon-sm" /></Link></div>
       </div>
-      <div className="hero-img">
-        <picture><source media="(max-width: 720px)" srcSet={asset('/images/hero-mobile.jpg')} /><img src={asset('/images/hero.jpg')} alt="The Lumiva ritual: cleanser, serum, cream and SPF" {...({ fetchpriority: 'high' } as any)} /></picture>
-        {state.member ? <div className="hero-chip" style={{ left: 24, bottom: 28 }}><TierBadge tier={d.tier} size={40} /><div><b>{n(d.balance)} Glow Points</b><span className="muted">{d.tier.name} · {d.nextMilestone ? `${n(d.nextMilestone.points - d.lifetime)} to ${d.nextMilestone.name}` : 'All milestones reached'}</span></div></div>
-          : <div className="hero-chip" style={{ left: 24, bottom: 28 }}><span className="act-icon"><Icon name="gift" className="icon-sm" /></span><div><b>New member 1-for-1</b><span className="muted">Join free, 500 welcome points</span></div></div>}
+      <div className="k-hero-img"><img src={asset('/images/kessora/after.jpg')} alt="Kessora skin" /></div>
+      <div className="k-word">Kessora</div>
+    </section>
+
+    {/* 2. Intro */}
+    <section className="k-intro container">
+      <p>KESSORA is a skincare house <img src={L('satin-15')} alt="" /> and a member community <img src={asset('/images/kessora/after.jpg')} alt="" /> built on the principle of natural renewal of the skin.</p>
+      <Link to="/our-story" className="btn btn-secondary btn-sm">Discover more</Link>
+    </section>
+
+    {/* 3. System tiles */}
+    <section className="section tight container">
+      <h2 className="k-h2 text-center"><em>KESSORA</em> is a complete skin cycle system</h2>
+      <div className="k-tiles">
+        {[['Clinic', 'Diagnosis, treatments and in-clinic rituals with our therapists.', asset('/images/kessora/before-after.jpg'), '/skin-solutions'], ['Shop', 'Seven formulas, two finishes, one cycle. Delivered anywhere in Singapore.', L('satin-13'), '/shop'], ['Community & Membership', 'Glow Club: points, missions, workshops and rewards.', L('satin-17'), '/glow-club']].map(([t, b, img, to]) => <Link key={t} to={to} className="k-tile"><img src={img} alt="" /><b>{t}</b><small>{b}</small></Link>)}
       </div>
+    </section>
+
+    {/* 4. Skin cycle dark band */}
+    <section className="k-dark"><div className="container">
+      <h2 className="k-h2 text-center" style={{ color: '#fff' }}>Skin <em>Cycle</em></h2>
+      <div className="k-cycle">{CYCLE.map((c, i) => <div key={c.k} className="k-circle"><span className="k-circle-dot" /><b>{c.k}</b><small>{c.t}</small>{i < CYCLE.length - 1 && <i className="k-circle-link" />}</div>)}</div>
     </div></section>
 
-    <div className="value-bar"><div className="container">
-      {[['leaf', 'Thoughtfully Formulated'], ['bottle', 'Routine-Led Skincare'], ['sun', 'Rewards With Real Value'], ['truck', 'Complimentary Delivery Over S$80']].map(([i, t]) => <div key={t} className="value-item"><Icon name={i} className="copper" />{t}</div>)}
-    </div></div>
+    {/* 5. Products */}
+    <section className="section container">
+      <h2 className="k-h2 text-center"><em>KESSORA</em> Products</h2>
+      <div className="between" style={{ margin: '18px 0 14px' }}><b>What's New</b><Link to="/shop" className="link-arrow">Shop All Products <Icon name="chevron" className="icon-sm" /></Link></div>
+      <div className="pgrid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>{whatsNew.map(p => <ProductCard key={p.id} product={p} />)}</div>
+    </section>
 
-    <section className="section"><div className="container">
-      <SectionHead title="Best Sellers" action={<Link to="/shop" className="link-arrow">View all <Icon name="chevron" className="icon-sm" /></Link>} />
-      <div className="pgrid">{best.map(p => <ProductCard key={p.id} product={p} />)}</div>
-    </div></section>
+    {/* 6. Advantages */}
+    <section className="section tight container">
+      <h2 className="k-h2 text-center">Our <em>Advantages</em></h2>
+      <div className="k-adv">{[['leaf', 'Natural Skin Renewal', 'Formulas that work with the skin’s own 28-day cycle, never against it.'], ['layers', 'Clinic + Home Care System', 'One diagnosis, one plan. What happens in clinic continues at home.'], ['users', 'Personalised Skin Support', 'Routine Builder, reminders and a member community that keeps you going.']].map(([i, t, b]) => <div key={t}><span className="k-adv-icon"><Icon name={i} /></span><b>{t}</b><small>{b}</small></div>)}</div>
+    </section>
 
-    <section className="section tight"><div className="container">
-      <div className="ritual">
-        <div className="ritual-img"><img src={asset('/images/hero-group.jpg')} alt="The Lumiva ritual set" loading="lazy" /></div>
-        <div className="ritual-copy">
-          <p className="eyebrow">The Ritual</p>
-          <h2>A routine designed to work together</h2>
-          <p className="muted">Simple steps. Powerful results. Better together.</p>
-          <div className="steps">{STEPS.map(s => <div key={s.key} className="step"><Icon name={s.icon} /><span className="num">{s.num}</span><b>{s.label}</b><small>{s.blurb}</small></div>)}</div>
-          <Link to="/ritual" className="btn btn-primary">Build My Routine</Link>
-        </div>
+    {/* 7. Membership preview */}
+    <section className="section tight container">
+      <h2 className="k-h2 text-center">Membership <em>preview</em></h2>
+      <div className="k-member">
+        <div className="k-member-phone"><div className="k-phone"><div className="k-phone-notch" /><div className="k-phone-body">
+          <small className="eyebrow">Your Glow Level</small><div className="serif" style={{ fontSize: 24, letterSpacing: '.06em' }}>{state.member ? d.tier.short.toUpperCase() : 'LUMINOUS'}</div>
+          <div className="serif tnum" style={{ fontSize: 34, lineHeight: 1 }}>{state.member ? n(d.balance) : '12,480'}</div><small className="muted">Glow Points</small>
+          <div className="progress" style={{ margin: '10px 0 6px' }}><span style={{ width: '64%' }} /></div><small className="tiny muted">550 points until your next reward</small>
+          <div className="k-phone-rows">{['AM routine · +25', 'Learn & Earn · +100', 'Weekly challenge · +500'].map(r => <div key={r}><Icon name="check-circle" className="icon-sm" />{r}</div>)}</div>
+          <div className="row" style={{ marginTop: 10 }}><TierBadge tier={d.tier} size={28} /><small className="tiny">8 of 10 referrals to Ambassador</small></div>
+        </div></div><Link to="/app" className="btn btn-primary btn-sm" style={{ marginTop: 12 }}>Open the member app</Link><small className="muted tiny" style={{ display: 'block', marginTop: 6 }}>Membership app</small></div>
+        <Link to="/glow-club" className="k-member-tile"><img src={L('satin-16')} alt="" /><small>Member workshops and skin diagnosis</small></Link>
+        <Link to="/rewards" className="k-member-tile"><img src={L('satin-18')} alt="" /><small>Gifts and rewards for members</small></Link>
       </div>
+    </section>
+
+    {/* 8. Before / After */}
+    <section className="section tight k-ba-wrap"><div className="container">
+      <h2 className="k-h2 text-center">Before <em>/ After</em></h2>
+      <div className="tabs k-ba-tabs">{['Barrier recovery', 'Firming', 'Brightening', 'Long-term care'].map((t, i) => <button key={t} className={ba === i ? 'active' : ''} onClick={() => setBa(i)}>{t}</button>)}</div>
+      <div className="k-ba"><figure><img src={asset('/images/kessora/before.jpg')} alt="Before" /><figcaption>Before</figcaption></figure><figure><img src={asset('/images/kessora/after.jpg')} alt="After" /><figcaption>After · 8 weeks</figcaption></figure></div>
+      <p className="k-ba-strip">New Season Essential · Rescue Your Skin · Made with love</p>
     </div></section>
 
-    <section className="section tight"><div className="container">
-      <SectionHead eyebrow="Day & Night" title="Two rituals. One routine." blurb="Lighter layers by day, deeper repair by night. Build either in a tap." action={<Link to="/ritual" className="link-arrow">Routine Builder <Icon name="chevron" className="icon-sm" /></Link>} />
-      <div className="daynight">{RITUALS.map(r => <div key={r.key} className={`dn-panel ${r.key}`}>
-        <div className="dn-head"><span className="dn-icon"><Icon name={r.icon} /></span><div><p className="eyebrow">{r.label} ritual</p><h3>{r.title}</h3></div></div>
-        <p className="dn-blurb">{r.blurb}</p>
-        <ul className="dn-list">{r.ids.map((id, i) => { const p = productById(id)!; const st = STEPS.find(x => x.key === p.step); return <li key={id}><Link to={`/product/${p.slug}`}><span className="dn-num">{String(i + 1).padStart(2, '0')}</span><img src={p.image} alt="" /><span className="dn-name"><b>{p.name}</b><small>{st ? st.label : 'Tool'} · {money(p.price)}</small></span><Icon name="chevron" className="icon-sm" /></Link></li> })}</ul>
-        <Link to={`/shop?time=${r.key}`} className={`btn btn-sm ${r.key === 'night' ? 'btn-light' : 'btn-primary'}`}>Shop the {r.label.toLowerCase()} ritual</Link>
-      </div>)}</div>
-    </div></section>
+    {/* 9. Start your cycle banner */}
+    <section className="k-banner"><img src={L('satin-07')} alt="" /><div className="k-banner-copy"><div className="k-banner-card"><small className="eyebrow">Carefully curated products from us</small><b>Start Your Cycle</b><em>Confident Skin</em><Link to={state.member ? '/ritual' : '/join'} className="btn btn-light btn-sm">{state.member ? 'Build my routine' : 'Join Glow Club'}</Link></div></div><div className="k-word light">Kessora</div></section>
 
-    <section className="section"><div className="container">
-      <div className="glow">
-        <div className="glow-panel">
-          <p className="eyebrow" style={{ color: '#fff', opacity: .85 }}>Glow Club</p>
-          <h2>{TAGLINES.club}</h2>
-          <p style={{ opacity: .9 }}>Not a loyalty programme. A club. Shop, glow, share and belong, and be rewarded for every part of it.</p>
-          <div className="glow-balance"><div><span className="lbl">{state.member ? 'Your balance' : 'Welcome balance'}</span><div className="num tnum">{n(state.member ? d.balance : 500)}</div><span style={{ fontSize: 13 }}>Glow Points</span></div><div style={{ textAlign: 'center' }}><TierBadge tier={d.tier} size={58} /><div style={{ fontSize: 12, marginTop: 6 }}>{d.tier.name}</div></div></div>
-          <div className="glow-steps" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>{PILLARS.map(p => <div key={p.key}><b><Icon name={p.icon} className="icon-sm" /> {p.label}</b><small>{p.objective}</small></div>)}</div>
-          <div className="row">{state.member ? <Link to="/glow-club" className="btn btn-light">View my Glow Club</Link> : <><Link to="/join" className="btn btn-light">Join Glow Club</Link><Link to="/sign-in" style={{ fontSize: 13 }}>Already a member? Sign in</Link></>}</div>
-        </div>
-        <div className="journey">
-          <h3>Your Glow Journey</h3>
-          <div className="journey-track">{MILESTONES.map(m => { const done = d.lifetime >= m.points; const cur = d.nextMilestone?.points === m.points; return <div key={m.points} className={`jnode ${done ? 'done' : cur ? 'current' : 'locked'}`}><img src={m.image} alt="" /><b>{m.name}</b><small>{n(m.points)} pts</small><span className="jstate">{done ? 'Achieved' : cur ? 'Next' : 'Locked'}</span></div> })}</div>
-          {state.member ? <div style={{ marginTop: 18 }}><Progress value={d.lifetime} max={d.nextMilestone?.points ?? 50000} /><div className="between" style={{ marginTop: 8 }}><span className="you-here"><i /> You are here · {n(d.lifetime)} lifetime pts</span><span className="tiny muted">{d.nextMilestone ? `${n(d.nextMilestone.points - d.lifetime)} to ${d.nextMilestone.name}` : 'Journey complete'}</span></div></div>
-            : <span className="you-here"><i /> Join to start your journey with 500 points</span>}
-        </div>
+    {/* 10. Locations */}
+    <section className="section tight container">
+      <h2 className="k-h2 text-center">Location <em>map</em></h2>
+      <div className="k-map">
+        {[['Singapore', 62, 58, 'Flagship · 12 Duxton Hill'], ['Kuala Lumpur', 60, 52, 'Partner clinic · Bangsar'], ['Bangkok', 61, 44, 'Partner clinic · Thonglor'], ['Hong Kong', 70, 36, 'Partner clinic · Central'], ['Tokyo', 82, 30, 'Partner clinic · Omotesando']].map(([c, x, y, a]) => <div key={c} className="k-pin" style={{ left: `${x}%`, top: `${y}%` }}><span /><b>{c}</b><small>{a}</small></div>)}
       </div>
+    </section>
+
+    {/* 11. Testimonials dark */}
+    <section className="k-dark"><div className="container">
+      <h2 className="k-h2 text-center" style={{ color: '#fff' }}>Trusted Customer <em>& Member Testimonials</em></h2>
+      <div className="k-testi">{TESTIMONIALS.map(t => <div key={t.name} className="k-testi-card"><div className="stars" style={{ color: 'var(--gold)' }}>{[1, 2, 3, 4, 5].map(i => <Icon key={i} name="star" />)}</div><p>“{t.text}”</p><b>{t.name}</b><small>{t.role}</small></div>)}</div>
     </div></section>
 
-    <section className="section tight"><div className="container">
-      <SectionHead title="Real rewards. Real life." action={<Link to="/rewards" className="link-arrow">Explore all rewards <Icon name="chevron" className="icon-sm" /></Link>} />
-      <div className="rgrid">{featured.map(r => <RewardCard key={r.id} reward={{ ...r, hero: false }} />)}</div>
-    </div></section>
+    {/* 12. Articles */}
+    <section className="section tight container">
+      <h2 className="k-h2 text-center">Beauty Tips <em>& Articles</em></h2>
+      <div className="k-articles">{LESSONS.slice(0, 3).map((l, i) => <Link key={l.id} to={`/learn/${l.id}`} className="k-article"><img src={L(['satin-09', 'satin-18', 'satin-13'][i])} alt="" /><small className="eyebrow">{l.tag} · {l.minutes} min</small><b>{l.title}</b><p>{l.summary}</p></Link>)}</div>
+    </section>
 
-    <section className="section"><div className="container two-col">
-      <LeaderboardPanel compact />
-      <div className="panel"><div className="panel-head"><h3>Member Activity</h3><Link to="/activity" className="link-arrow">View all activity <Icon name="chevron" className="icon-sm" /></Link></div><ActivityFeedList limit={6} /><p className="tiny muted" style={{ marginTop: 12 }}>Activity shown with member permission.</p></div>
-    </div></section>
-  </>
+    {/* 13. FAQ */}
+    <section className="section tight container k-faq">
+      <h2 className="k-h2 text-center">Got Questions? <em>We've Got Answers</em></h2>
+      <div className="k-faq-list">{FAQ.map(([q, a], i) => <div key={q} className={`k-faq-item ${faq === i ? 'open' : ''}`}><button onClick={() => setFaq(faq === i ? -1 : i)}>{q}<Icon name={faq === i ? 'minus' : 'plus'} className="icon-sm" /></button>{faq === i && <p>{a}</p>}</div>)}</div>
+      <p className="text-center small muted" style={{ marginTop: 18 }}>{TAGLINES.club} · {PILLARS.map(p => p.label).join(' · ')}</p>
+    </section>
+  </div>
 }

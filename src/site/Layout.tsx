@@ -8,7 +8,7 @@ import { MembershipPrompts, GiftDrawer, RewardReveal } from '@/components/Prompt
 import { useStore } from '@/store/store'
 import { PRODUCTS, money } from '@/data/products'
 
-const LINKS = [['/shop', 'Shop'], ['/skin-solutions', 'Skin Solutions'], ['/ritual', 'The Ritual'], ['/glow-club', 'Glow Club'], ['/our-story', 'Our Story']]
+const LINKS = [['/shop', 'Shop'], ['/skin-solutions', 'Skin Cycle'], ['/ritual', 'Routine Builder'], ['/glow-club', 'Glow Club'], ['/our-story', 'Our Story']]
 
 export function SiteLayout() {
   const { d, state } = useStore(); const nav = useNavigate()
@@ -21,7 +21,7 @@ export function SiteLayout() {
         <nav className="nav">
           <div className="container nav-inner">
             <button className="icon-btn mobile-only" aria-label="Menu" onClick={() => setMenu(true)}><Icon name="menu" /></button>
-            <Link to="/" className="logo">LUMIVA</Link>
+            <Link to="/" className="logo" aria-label="Kessora home"><img src={asset('/images/kessora/wordmark.png')} alt="Kessora" className="nav-logo-img" /></Link>
             <div className="nav-links">{LINKS.map(([to, l]) => <NavLink key={to} to={to} className={({ isActive }) => isActive ? 'active' : ''}>{l}</NavLink>)}</div>
             <div className="nav-actions">
               <button className="icon-btn" aria-label="Search" onClick={() => setSearch(s => !s)}><Icon name="search" /></button>
@@ -38,7 +38,7 @@ export function SiteLayout() {
         </nav>
       </header>
       {menu && <div className="mobile-menu">
-        <div className="between"><Link to="/" className="logo" onClick={() => setMenu(false)}>LUMIVA</Link><button className="icon-btn" onClick={() => setMenu(false)} aria-label="Close"><Icon name="x" /></button></div>
+        <div className="between"><Link to="/" className="logo" onClick={() => setMenu(false)}>KESSORA</Link><button className="icon-btn" onClick={() => setMenu(false)} aria-label="Close"><Icon name="x" /></button></div>
         {LINKS.map(([to, l]) => <Link key={to} to={to} onClick={() => setMenu(false)}>{l}</Link>)}
         <Link to={state.member ? '/account' : '/sign-in'} onClick={() => setMenu(false)}>{state.member ? 'My Account' : 'Sign in'}</Link>
         <Link to="/app" onClick={() => setMenu(false)}>Open the member app</Link>
@@ -55,19 +55,20 @@ function Footer() {
   const { toast } = useStore(); const [email, setEmail] = useState('')
   return <>
     <section className="newsletter"><div className="container newsletter-inner">
-      <div className="row" style={{ gap: 20 }}><img src={asset('/images/products/serum.jpg')} alt="" style={{ width: 90, height: 90, borderRadius: 14, objectFit: 'cover' }} /><div><h3>Glow starts in your inbox</h3><p className="muted small">Get ritual tips, new launches and exclusive rewards.</p></div></div>
+      <div className="row" style={{ gap: 20 }}><img src={asset('/images/products/sculpt-serum.jpg')} alt="" style={{ width: 90, height: 90, borderRadius: 14, objectFit: 'cover' }} /><div><h3>Your cycle starts in your inbox</h3><p className="muted small">Get ritual tips, new launches and exclusive rewards.</p></div></div>
       <form onSubmit={e => { e.preventDefault(); if (email) { toast('Welcome to the list', { icon: 'mail' }); setEmail('') } }}><input className="input" placeholder="Enter your email" value={email} onChange={e => setEmail(e.target.value)} type="email" /><button className="btn btn-primary">Subscribe</button></form>
     </div></section>
     <footer className="footer"><div className="container">
       <div className="footer-grid">
-        <div><Link to="/" className="logo">LUMIVA</Link><p className="small" style={{ marginTop: 12, maxWidth: 240 }}>Skincare that rewards your ritual. Made in Singapore.</p><div className="social"><span>IG</span><span>FB</span><span>TT</span><span>YT</span></div></div>
+        <div><img src={asset('/images/kessora/wordmark.png')} alt="Kessora" style={{ height: 22, filter: 'brightness(1.4)' }} /><p className="small" style={{ marginTop: 12, maxWidth: 240 }}>A complete skin cycle system: clinic, home care and long-term skin support. Singapore.</p><div className="social"><span>IG</span><span>FB</span><span>TT</span><span>YT</span></div></div>
         <div><h4>Shop</h4><Link to="/shop">All Products</Link><Link to="/shop?sort=best">Best Sellers</Link><Link to="/shop?cat=sets">Sets &amp; Gifts</Link><Link to="/shop?cat=minis">Minis</Link></div>
         <div><h4>Skin Solutions</h4><Link to="/skin-solutions">Find your routine</Link><Link to="/learn">Learn</Link><Link to="/skin-solutions#ingredients">Ingredients</Link></div>
-        <div><h4>The Ritual</h4><Link to="/ritual">Build Your Routine</Link><Link to="/product/the-lumiva-ritual-set">The Ritual Set</Link><Link to="/learn">Ritual Guide</Link></div>
+        <div><h4>The Cycle</h4><Link to="/ritual">Build Your Routine</Link><Link to="/product/the-complete-skin-cycle">The Complete Skin Cycle</Link><Link to="/learn">Ritual Guide</Link></div>
         <div><h4>Glow Club</h4><Link to="/glow-club">How it works</Link><Link to="/glow-club#refer">Refer & Glow</Link><Link to="/rewards">Rewards</Link><Link to="/leaderboard">Leaderboard</Link><Link to="/app">Member app</Link></div>
         <div><h4>Help</h4><Link to="/help">FAQ</Link><Link to="/help#shipping">Shipping</Link><Link to="/help#privacy">Privacy (PDPA)</Link><Link to="/help#terms">Terms</Link><Link to="/admin">Admin portal</Link></div>
       </div>
-      <div className="footer-bottom"><span>© 2026 Lumiva Pte. Ltd. All rights reserved.</span><span>Singapore (S$ SGD) · Concept build by BrillianceTech</span></div>
+      <div className="footer-bottom"><span>© 2026 Kessora Pte. Ltd. All rights reserved.</span><span>Singapore (S$ SGD) · Concept build by BrillianceTech</span></div>
+      <div className="footer-word">Kessora</div>
     </div></footer>
   </>
 }

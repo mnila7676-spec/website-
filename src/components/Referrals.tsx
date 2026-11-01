@@ -21,7 +21,7 @@ export function ReferAndGlow({ compact }: { compact?: boolean }) {
     </div>
     <div className={compact ? 'app-card' : 'panel'}>
       <div className="between"><h3 style={{ fontSize: compact ? 16 : 22 }}>Your Glow Circle</h3><span className="pill pill-burgundy tiny"><Icon name="crown" className="icon-sm" /> {count >= (state.admin.thresholds?.ambassador ?? 10) ? 'Glow Ambassador' : `${(state.admin.thresholds?.ambassador ?? 10) - count} more to Ambassador`}</span></div>
-      <p className="small muted" style={{ margin: '4px 0 10px' }}>{count} successful referral{count === 1 ? '' : 's'}. Ambassador status is earned by helping Lumiva grow, not by spend.</p>
+      <p className="small muted" style={{ margin: '4px 0 10px' }}>{count} successful referral{count === 1 ? '' : 's'}. Ambassador status is earned by helping Kessora grow, not by spend.</p>
       <ul className="ladder">{REFERRAL_MILESTONES.map(ms => { const done = count >= ms.count; const next = !done && count < ms.count && REFERRAL_MILESTONES.find(x => count < x.count) === ms; return <li key={ms.count} className={`${done ? 'done' : ''} ${next ? 'next' : ''}`}><span className="ladder-n">{done ? <Icon name="check" className="icon-sm" /> : ms.count}</span><div><b>{ms.label}</b><small>{ms.count} friend{ms.count > 1 ? 's' : ''} · {ms.reward}</small></div>{ms.tier && <Icon name="crown" className="icon-sm" style={{ color: 'var(--gold)' }} />}</li> })}</ul>
     </div>
     <div className={compact ? 'app-card' : 'panel'}>

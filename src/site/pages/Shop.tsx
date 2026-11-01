@@ -5,7 +5,7 @@ import { Icon } from '@/components/Icon'
 import { PRODUCTS, CONCERNS, STEPS, RITUALS, forTime } from '@/data/products'
 import type { Category } from '@/data/products'
 
-const CATS: { key: Category | 'all'; label: string }[] = [{ key: 'all', label: 'All' }, { key: 'cleansers', label: 'Cleansers' }, { key: 'essences', label: 'Essences' }, { key: 'serums', label: 'Serums' }, { key: 'moisturisers', label: 'Moisturisers' }, { key: 'spf', label: 'SPF' }, { key: 'tools', label: 'Tools' }, { key: 'sets', label: 'Sets' }, { key: 'minis', label: 'Minis' }]
+const CATS: { key: Category | 'all'; label: string }[] = [{ key: 'all', label: 'All' }, { key: 'cleansers', label: 'Cleansers' }, { key: 'essences', label: 'Essences' }, { key: 'serums', label: 'Serums' }, { key: 'moisturisers', label: 'Moisturisers' }, { key: 'sets', label: 'Sets' }, { key: 'minis', label: 'Minis' }]
 
 export function Shop() {
   const [sp, setSp] = useSearchParams()

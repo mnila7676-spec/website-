@@ -7,7 +7,7 @@ const NAV = [['/admin', 'Dashboard', 'grid', true], ['/admin/commerce', 'Commerc
 export function AdminShell() {
   const { state } = useStore()
   return <div className="admin">
-    <aside className="admin-side"><Link to="/" className="logo">LUMIVA<small>ADMIN PORTAL</small></Link>
+    <aside className="admin-side"><Link to="/" className="logo">KESSORA<small>ADMIN PORTAL</small></Link>
       <nav className="admin-nav">{NAV.map(([to, l, i, end]) => <NavLink key={to} to={to} end={end} className={({ isActive }) => isActive ? 'active' : ''}><Icon name={i} className="icon-sm" />{l}</NavLink>)}</nav>
       <div style={{ marginTop: 'auto', fontSize: 12 }}><p style={{ color: '#fff' }}>Eddie · Owner</p><p>Role: Administrator</p><p style={{ marginTop: 10 }}>{state.audit.length} audit events</p><div className="row" style={{ marginTop: 12 }}><Link to="/" className="btn btn-sm btn-light">Website</Link><Link to="/app" className="btn btn-sm btn-ghost" style={{ color: '#fff' }}>App</Link></div></div>
     </aside>
