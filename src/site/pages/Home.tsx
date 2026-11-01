@@ -3,13 +3,12 @@ import { Link } from 'react-router-dom'
 import { Icon } from '@/components/Icon'
 import { ProductCard } from '@/components/ui'
 import { useStore } from '@/store/store'
-import { PRODUCTS, productById, money, CONCERNS, RITUALS } from '@/data/products'
+import { PRODUCTS, productById, money, RITUALS } from '@/data/products'
 import { TAGLINES } from '@/data/club'
 import { REVIEWS } from '@/data/community'
 import { asset } from '@/lib/asset'
 
 const L = (f: string) => asset(`/images/lifestyle/${f}.jpg`)
-const CONCERN_IMG: Record<string, string> = { dullness: 'satin-19', dehydration: 'satin-13', barrier: 'satin-16', sensitivity: 'satin-17', 'uneven-tone': 'satin-10', 'fine-lines': 'satin-14', 'sun-damage': 'satin-09', firmness: 'satin-15' }
 
 export function Home() {
   const { state, d } = useStore()
@@ -58,13 +57,6 @@ export function Home() {
       <h2 className="t-title">New arrivals</h2>
       <div className="pgrid four" style={{ marginTop: 34 }}>{fresh.map(p => <ProductCard key={p.id} product={p} />)}</div>
       <div className="t-center"><Link to="/shop" className="t-link">View more</Link></div>
-    </div></section>
-
-    {/* Shop by concern */}
-    <section className="t-section tight alt"><div className="t-wide">
-      <h2 className="t-title">Shop by concern</h2>
-      <div className="t-tiles" style={{ marginTop: 34 }}>{CONCERNS.map(c => <Link key={c.key} to={`/shop?concern=${c.key}`} className="t-tile"><img src={L(CONCERN_IMG[c.key] ?? 'satin-15')} alt="" /><b>{c.label}</b></Link>)}</div>
-      <div className="t-center"><Link to="/skin-solutions" className="t-link">View all concerns</Link></div>
     </div></section>
 
     {/* Glow Club */}
