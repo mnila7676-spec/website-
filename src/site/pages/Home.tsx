@@ -9,6 +9,17 @@ import { REVIEWS } from '@/data/community'
 import { asset } from '@/lib/asset'
 
 const L = (f: string) => asset(`/images/lifestyle/${f}.jpg`)
+const TESTIMONIALS = [
+  { name: 'Chloe L.', role: 'Luminous member · Singapore', title: 'Sculpting Serum', text: 'The Dual-Action Sculpting Serum changed my jawline in a month. The app keeps me honest with the routine, and the points paid for my facial.' },
+  { name: 'Aisha R.', role: 'Radiant member · Kuala Lumpur', title: 'Barrier first', text: 'My skin stopped reacting to everything once I switched to the cleanser and the Firming Barrier Moisturizer. Calm within a week.' },
+  { name: 'Sofia T.', role: 'Glow Ambassador', title: 'Refer & Glow', text: 'I have brought eight friends in. Not because of the points, because the system works. The points are a lovely bonus.' },
+  { name: 'Mei Lin W.', role: 'Glow member · Singapore', title: 'Vitamin C Day Serum', text: 'A golden drop in the morning and my makeup sits better all day. No stinging, no pilling under sunscreen.' },
+  { name: 'Hannah K.', role: 'Radiant member · Hong Kong', title: 'Night Cycle Set', text: 'Sculpt & Renew at night, firmer by morning. I did not expect the gold flakes to feel this light.' },
+  { name: 'Priya N.', role: 'Luminous member · Bangkok', title: 'Fresh Shake Emulsion', text: 'Finally a daytime moisturiser that survives humidity. Shaking it is the best part of my morning.' },
+  { name: 'Grace T.', role: 'Glow member · Singapore', title: 'Routine Builder', text: 'Five steps, twice a day, and the app reminds me. My cycle has never been this consistent.' },
+  { name: 'Nadia S.', role: 'Radiant member · Tokyo', title: 'Niacinamide Essence', text: 'Pores look finer after a month. It made every serum after it work harder.' },
+  { name: 'Jasmine O.', role: 'Glow member · Singapore', title: 'Glow Race', text: 'I call the marble race with my coffee every morning. Free, fun, and I have earned a facial from it.' },
+]
 
 export function Home() {
   const { state, d } = useStore()
@@ -80,6 +91,16 @@ export function Home() {
       <p className="who">{review.name} — Verified purchase</p>
       <p className="about">About Vitamin C Day Serum</p>
       <Link to="/product/vitamin-c-day-serum" className="t-link">See all reviews</Link>
+    </div></section>
+
+    {/* Testimonials: three endless vertical columns */}
+    <section className="t-testi-band"><div className="t-wide">
+      <p className="eyebrow" style={{ color: '#9f9f9f', textAlign: 'center' }}>Trusted customer and member testimonials</p>
+      <h2 className="t-title" style={{ color: '#fff', marginTop: 10 }}>What members say</h2>
+      <div className="t-testi-cols" style={{ marginTop: 40 }}>
+        {[0, 1, 2].map(col => { const items = TESTIMONIALS.filter((_, i) => i % 3 === col); return <div key={col} className={`t-testi-col ${col === 1 ? 'down' : 'up'}`}><div className="t-testi-track">{[...items, ...items].map((t, i) => <div key={i} className="t-testi-card"><div className="stars">{[1, 2, 3, 4, 5].map(k => <Icon key={k} name="star" />)}</div><b>{t.title}</b><p>“{t.text}”</p><small>{t.name} — {t.role}</small></div>)}</div></div> })}
+      </div>
+      <div className="t-center"><Link to="/product/vitamin-c-day-serum" className="t-link" style={{ color: '#fff' }}>See all reviews</Link></div>
     </div></section>
 
     {/* Philosophy */}
