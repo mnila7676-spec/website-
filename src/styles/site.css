@@ -770,3 +770,10 @@
 .t-reviews.dark blockquote { color: #e6e6e3; }
 .t-reviews.dark .who { color: #fff; }
 .t-reviews.dark .about { margin-bottom: 0; }
+
+/* scroll reveal */
+.site-main [data-reveal] { opacity: 0; transform: translateY(22px); transition: opacity .8s cubic-bezier(.2,.6,.2,1), transform .8s cubic-bezier(.2,.6,.2,1); transition-delay: calc(min(var(--i, 0), 7) * 90ms); will-change: opacity, transform; }
+.site-main [data-reveal].in { opacity: 1; transform: none; }
+.site-main .t-hero-copy[data-reveal] { transform: translateY(14px); }
+.site-main .t-feature img[data-reveal] { transform: none; }
+@media (prefers-reduced-motion: reduce) { .site-main [data-reveal] { opacity: 1; transform: none; transition: none; } }

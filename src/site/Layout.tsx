@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { asset } from '@/lib/asset'
+import { useScrollReveal } from '@/components/Reveal'
 import { Outlet, Link, NavLink, useNavigate } from 'react-router-dom'
 import { Icon } from '@/components/Icon'
 import { PointsPill } from '@/components/ui'
@@ -11,6 +12,7 @@ import { PRODUCTS, money } from '@/data/products'
 const LINKS = [['/shop', 'Shop'], ['/shop?time=day', 'Day cycle'], ['/shop?time=night', 'Night cycle'], ['/skin-solutions', 'Skin diagnostic'], ['/ritual', 'Routine builder'], ['/glow-club', 'Glow Club'], ['/our-story', 'Our story']]
 
 export function SiteLayout() {
+  useScrollReveal()
   const { d, state } = useStore(); const nav = useNavigate()
   const [search, setSearch] = useState(false); const [q, setQ] = useState(''); const [menu, setMenu] = useState(false)
   const results = q.trim().length > 1 ? PRODUCTS.filter(p => (p.name + p.tagline + p.category).toLowerCase().includes(q.toLowerCase())) : []
