@@ -8,7 +8,7 @@ import { MembershipPrompts, GiftDrawer, RewardReveal } from '@/components/Prompt
 import { useStore } from '@/store/store'
 import { PRODUCTS, money } from '@/data/products'
 
-const LINKS = [['/shop', 'Shop'], ['/skin-solutions', 'Skin Cycle'], ['/ritual', 'Routine Builder'], ['/glow-club', 'Glow Club'], ['/our-story', 'Our Story']]
+const LINKS = [['/shop', 'Shop'], ['/shop?time=day', 'Day cycle'], ['/shop?time=night', 'Night cycle'], ['/skin-solutions', 'Skin diagnostic'], ['/ritual', 'Routine builder'], ['/glow-club', 'Glow Club'], ['/our-story', 'Our story']]
 
 export function SiteLayout() {
   const { d, state } = useStore(); const nav = useNavigate()
@@ -20,14 +20,11 @@ export function SiteLayout() {
         <Ticker />
         <nav className="nav">
           <div className="container nav-inner">
-            <button className="icon-btn mobile-only" aria-label="Menu" onClick={() => setMenu(true)}><Icon name="menu" /></button>
-            <Link to="/" className="logo" aria-label="Kessora home"><img src={asset('/images/kessora/wordmark.png')} alt="Kessora" className="nav-logo-img" /></Link>
-            <div className="nav-links">{LINKS.map(([to, l]) => <NavLink key={to} to={to} className={({ isActive }) => isActive ? 'active' : ''}>{l}</NavLink>)}</div>
+            <div className="nav-left"><button className="icon-btn" aria-label="Menu" onClick={() => setMenu(true)}><Icon name="menu" /></button><span className="menu-label desktop-only">Menu</span><button className="icon-btn" aria-label="Search" onClick={() => setSearch(s => !s)}><Icon name="search" /></button></div>
+            <Link to="/" className="logo" aria-label="Kessora home"><img src={asset('/images/kessora/wordmark.png')} alt="Kessora" className="wm" /><small>SINGAPORE</small></Link>
             <div className="nav-actions">
-              <button className="icon-btn" aria-label="Search" onClick={() => setSearch(s => !s)}><Icon name="search" /></button>
-              <Link to={state.member ? '/account' : '/sign-in'} className="icon-btn desktop-only" aria-label="Account"><Icon name="user" /></Link>
-              <span className="desktop-only"><PointsPill /></span>
-              <Link to="/app" className="btn btn-primary btn-sm nav-app"><Icon name="phone" className="icon-sm" /> <span>Member App</span></Link>
+              <Link to="/app" className="icon-btn" aria-label="Member app" title="Member app"><Icon name="phone" /></Link>
+              <Link to={state.member ? '/account' : '/sign-in'} className="icon-btn" aria-label="Account"><Icon name="user" /></Link>
               <Link to="/cart" className="icon-btn" aria-label="Bag"><Icon name="bag" />{d.cartCount > 0 && <span className="count">{d.cartCount}</span>}</Link>
             </div>
           </div>
@@ -37,13 +34,16 @@ export function SiteLayout() {
           </div></div>}
         </nav>
       </header>
-      {menu && <div className="mobile-menu">
-        <div className="between"><Link to="/" className="logo" onClick={() => setMenu(false)}>KESSORA</Link><button className="icon-btn" onClick={() => setMenu(false)} aria-label="Close"><Icon name="x" /></button></div>
+      {menu && <><div className="overlay" onClick={() => setMenu(false)} /><div className="mobile-menu">
+        <div className="between"><span className="menu-label" style={{ fontFamily: 'var(--font-mono)', fontSize: 11.5, letterSpacing: '.06em', textTransform: 'uppercase' }}>Menu</span><button className="icon-btn" onClick={() => setMenu(false)} aria-label="Close"><Icon name="x" /></button></div>
         {LINKS.map(([to, l]) => <Link key={to} to={to} onClick={() => setMenu(false)}>{l}</Link>)}
-        <Link to={state.member ? '/account' : '/sign-in'} onClick={() => setMenu(false)}>{state.member ? 'My Account' : 'Sign in'}</Link>
-        <Link to="/app" onClick={() => setMenu(false)}>Open the member app</Link>
+        <Link to="/rewards" className="menu-sub" onClick={() => setMenu(false)}>Rewards</Link>
+        <Link to="/learn" className="menu-sub" onClick={() => setMenu(false)}>Learn</Link>
+        <Link to="/help" className="menu-sub" onClick={() => setMenu(false)}>Help</Link>
+        <Link to={state.member ? '/account' : '/sign-in'} className="menu-sub" onClick={() => setMenu(false)}>{state.member ? 'My account' : 'Sign in'}</Link>
+        <Link to="/app" className="menu-sub" onClick={() => setMenu(false)}>Member app</Link>
         <div style={{ marginTop: 16 }}><PointsPill dark /></div>
-      </div>}
+      </div></>}
       <main className="site-main"><Outlet /></main>
       <Footer />
       <MembershipPrompts /><GiftDrawer /><RewardReveal />
@@ -60,15 +60,14 @@ function Footer() {
     </div></section>
     <footer className="footer"><div className="container">
       <div className="footer-grid">
-        <div><img src={asset('/images/kessora/wordmark.png')} alt="Kessora" style={{ height: 22, filter: 'brightness(1.4)' }} /><p className="small" style={{ marginTop: 12, maxWidth: 240 }}>A complete skin cycle system: clinic, home care and long-term skin support. Singapore.</p><div className="social"><span>IG</span><span>FB</span><span>TT</span><span>YT</span></div></div>
+        <div><img src={asset('/images/kessora/wordmark.png')} alt="Kessora" style={{ height: 20, filter: 'grayscale(1) brightness(.2)' }} /><p className="small" style={{ marginTop: 12, maxWidth: 240 }}>A complete skin cycle system: clinic, home care and long-term skin support. Singapore.</p><div className="social"><span>IG</span><span>FB</span><span>TT</span><span>YT</span></div></div>
         <div><h4>Shop</h4><Link to="/shop">All Products</Link><Link to="/shop?sort=best">Best Sellers</Link><Link to="/shop?cat=sets">Sets &amp; Gifts</Link><Link to="/shop?cat=minis">Minis</Link></div>
         <div><h4>Skin Solutions</h4><Link to="/skin-solutions">Find your routine</Link><Link to="/learn">Learn</Link><Link to="/skin-solutions#ingredients">Ingredients</Link></div>
         <div><h4>The Cycle</h4><Link to="/ritual">Build Your Routine</Link><Link to="/product/the-complete-skin-cycle">The Complete Skin Cycle</Link><Link to="/learn">Ritual Guide</Link></div>
         <div><h4>Glow Club</h4><Link to="/glow-club">How it works</Link><Link to="/glow-club#refer">Refer & Glow</Link><Link to="/rewards">Rewards</Link><Link to="/leaderboard">Leaderboard</Link><Link to="/app">Member app</Link></div>
         <div><h4>Help</h4><Link to="/help">FAQ</Link><Link to="/help#shipping">Shipping</Link><Link to="/help#privacy">Privacy (PDPA)</Link><Link to="/help#terms">Terms</Link><Link to="/admin">Admin portal</Link></div>
       </div>
-      <div className="footer-bottom"><span>© 2026 Kessora Pte. Ltd. All rights reserved.</span><span>Singapore (S$ SGD) · Concept build by BrillianceTech</span></div>
-      <div className="footer-word">Kessora</div>
+      <div className="footer-bottom"><span>© 2026 Kessora Pte. Ltd. All rights reserved.</span><span>Change delivery country: SINGAPORE (S$)</span><span>Follow us on Instagram and TikTok</span></div>
     </div></footer>
   </>
 }

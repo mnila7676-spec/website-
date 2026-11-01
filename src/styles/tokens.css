@@ -1,45 +1,41 @@
 :root {
-  /* Palette — warm premium, calm */
-  --cream: #f7f3ee;
-  --cream-2: #fbf9f6;
-  --ivory: #fffdfb;
-  --sand: #f0e8e1;
-  --sand-2: #e6d9cf;
-  --line: #eae1da;
-  --line-2: #d8cbc1;
-  --ink: #2b1f1b;
-  --ink-2: #3b2a24;
-  --ink-3: #55433c;
-  --taupe: #837169;
-  --taupe-2: #a8988f;
-  --copper: #c08777;
-  --copper-2: #a3665a;
-  --copper-3: #e0b2a3;
-  --copper-soft: #f6e6e0;
-  --copper-grad: linear-gradient(135deg, #e3b6a7 0%, #c08777 45%, #9a5e52 100%);
-  --burgundy: #4a2c25;
-  --burgundy-2: #3b2a24;
-  --burgundy-grad: linear-gradient(135deg, #5a392f 0%, #3b2a24 60%, #2b1f1b 100%);
-  --gold: #c9a86a;
-  --gold-soft: #f3eadb;
-  --silver: #b9b4ad;
-  --bronze: #b98a6a;
-  --success: #3f7d5a;
-  --danger: #b2413d;
+  /* Flat palette. No gradients anywhere. Typology colour system with one Kessora accent. */
   --white: #ffffff;
+  --cream: #ffffff;          /* page background */
+  --cream-2: #f7f7f5;        /* alternate section background */
+  --ivory: #ffffff;          /* card background */
+  --sand: #f4f4f2;           /* product tile grey */
+  --sand-2: #e9e9e6;
+  --line: #e6e6e3;
+  --line-2: #d4d4d4;
+  --ink: #141414;
+  --ink-2: #313131;
+  --ink-3: #525252;
+  --taupe: #6f6f6f;
+  --taupe-2: #9f9f9f;
+  --copper: #b08274;         /* Kessora rose, used sparingly */
+  --copper-2: #8f6559;
+  --copper-3: #c9a195;
+  --copper-soft: #f3ebe8;
+  --copper-grad: #b08274;    /* legacy names kept, now flat */
+  --burgundy: #141414;
+  --burgundy-2: #000000;
+  --burgundy-grad: #141414;
+  --gold: #b9a27a;
+  --gold-soft: #f1ede4;
+  --silver: #c7c7c4;
+  --bronze: #b08274;
+  --success: #2f6b4f;
+  --danger: #b03a2e;
 
-  --font-display: 'Cormorant Garamond', 'Times New Roman', serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Shangpree typography: Neue Haas Grotesk, Helvetica Neue on Apple devices, Inter Tight elsewhere. Mono for labels, prices and eyebrows. */
+  --font-display: "Neue Haas Grotesk Display Pro", "Helvetica Neue", Helvetica, "Inter Tight", Arial, sans-serif;
+  --font-body: "Neue Haas Grotesk Display Pro", "Helvetica Neue", Helvetica, "Inter Tight", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", "Lettera", Menlo, "Courier New", monospace;
 
-  --radius-xs: 6px;
-  --radius-sm: 10px;
-  --radius: 14px;
-  --radius-lg: 20px;
-  --radius-xl: 28px;
-  --shadow-sm: 0 1px 2px rgba(29,26,23,.05), 0 2px 8px rgba(29,26,23,.04);
-  --shadow: 0 6px 24px rgba(29,26,23,.08);
-  --shadow-lg: 0 20px 60px rgba(29,26,23,.16);
-  --max: 1240px;
-  --nav-h: 68px;
-  --ticker-h: 36px;
+  --radius-xs: 0; --radius-sm: 0; --radius: 0; --radius-lg: 0; --radius-xl: 0;
+  --shadow-sm: none; --shadow: none; --shadow-lg: 0 10px 40px rgba(0,0,0,.12);
+  --max: 1400px;
+  --nav-h: 64px;
+  --ticker-h: 34px;
 }

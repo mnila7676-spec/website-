@@ -28,7 +28,7 @@ export function Avatar({ initials, variant = '', size }: { initials: string; var
 }
 
 export function TierBadge({ tier, size = 56 }: { tier: Tier; size?: number }) {
-  const g = tier.key === 'radiant' ? 'linear-gradient(135deg,#e6c98a,#c9a55e 60%,#a07c34)' : tier.key === 'luminous' ? 'linear-gradient(135deg,#f2f0ec,#b9b4ad 55%,#6f6b66)' : tier.key === 'ambassador' ? 'linear-gradient(135deg,#9c3a63,#6b1f3f 60%,#3f1127)' : 'linear-gradient(135deg,#f3e7c9,#d9bd88 60%,#b58f45)'
+  const g = tier.key === 'radiant' ? '#b9a27a' : tier.key === 'luminous' ? '#8c8c89' : tier.key === 'ambassador' ? '#141414' : '#b08274'
   return <span className={`tier-badge ${tier.key}`} style={{ width: size, height: size, background: g, fontSize: size * 0.42 }}>{tier.key === 'ambassador' ? <Icon name="crown" style={{ width: size * 0.5, height: size * 0.5 }} /> : <span className="serif">L</span>}</span>
 }
 
@@ -50,18 +50,14 @@ export function ProductCard({ product, compact, className }: { product: Product;
   const { state, actions, d } = useStore(); const L = useLinks()
   const wished = state.wishlist.includes(product.id)
   const basePts = product.price * d.pointsPerDollar; const pts = state.member ? Math.round(basePts * d.tier.multiplier) : basePts
+  const tag = product.badge
   return (
     <article className={cx('pcard', compact && 'compact', className)}>
-      <Link to={L.product(product.slug)} className="pcard-img"><img src={product.image} alt={product.name} loading="lazy" />{product.badge && <span className="pcard-badge">{product.badge}</span>}</Link>
+      <Link to={L.product(product.slug)} className="pcard-img"><img src={product.image} alt={product.name} loading="lazy" />{tag && <span className="pcard-badge">{tag}</span>}</Link>
       <button className={cx('pcard-wish', wished && 'on')} aria-label="Save" onClick={() => actions.toggleWish(product.id)}><Icon name={wished ? 'heart-fill' : 'heart'} className="icon-sm" /></button>
       <div className="pcard-body">
-        <Link to={L.product(product.slug)}><h3>{product.name}</h3></Link>
-        <p className="muted small">{product.tagline}</p>
-        <div className="pcard-row">
-          <div><span className="pcard-price">{money(product.price)}</span>{product.compareAt && <span className="pcard-compare">{money(product.compareAt)}</span>}</div>
-          <button className="pcard-add" aria-label="Add to bag" onClick={() => actions.addToCart(product.id)}><Icon name="plus" className="icon-sm" /></button>
-        </div>
-        <div className="pcard-meta"><Stars rating={product.rating} count={compact ? undefined : product.reviews} /><span className="pill tiny">+{n(pts)} pts</span></div>
+        <Link to={L.product(product.slug)} className="pcard-line"><b>{product.name}</b> — {product.tagline} — {money(product.price)}</Link>
+        <div className="pcard-meta"><span className="pcard-pts">+{n(pts)} pts</span><button className="pcard-add" onClick={() => actions.addToCart(product.id)}>Add</button></div>
       </div>
     </article>
   )
