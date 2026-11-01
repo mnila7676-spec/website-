@@ -9,6 +9,7 @@ import { REVIEWS } from '@/data/community'
 import { asset } from '@/lib/asset'
 
 const L = (f: string) => asset(`/images/lifestyle/${f}.jpg`)
+const E = (f: string) => asset(`/images/editorial/${f}.jpg`)
 const TESTIMONIALS = [
   { name: 'Chloe L.', role: 'Luminous member · Singapore', title: 'Sculpting Serum', text: 'The Dual-Action Sculpting Serum changed my jawline in a month. The app keeps me honest with the routine, and the points paid for my facial.' },
   { name: 'Aisha R.', role: 'Radiant member · Kuala Lumpur', title: 'Barrier first', text: 'My skin stopped reacting to everything once I switched to the cleanser and the Firming Barrier Moisturizer. Calm within a week.' },
@@ -29,9 +30,9 @@ export function Home() {
   const review = REVIEWS.serum[0]
   return <div className="t-home">
     {/* Hero */}
-    <section className="t-hero dark">
-      <img src={L('satin-15')} alt="Kessora Dual-Action Sculpting Serum" fetchPriority="high" />
-      <div className="t-hero-copy"><p className="eyebrow">New: the Night Cycle</p><h1>Sculpt, firm and renew while you sleep.</h1><p>Sculpt & Renew Serum with gold-suspended actives and the Firming Barrier Moisturizer.</p><Link to="/product/the-night-cycle-set" className="t-link">Discover now</Link></div>
+    <section className="t-hero light">
+      <img src={E('lineup-stone')} alt="The Kessora skin cycle on travertine" fetchPriority="high" />
+      <div className="t-hero-copy"><p className="eyebrow">The Kessora skin cycle</p><h1>Cleanse, prep, treat, sculpt, hydrate.</h1><p>Seven barrier-first formulas. One day cycle, one night cycle. Made in Singapore.</p><Link to="/shop" className="t-link">Shop the cycle</Link></div>
     </section>
 
     {/* Statement */}
@@ -46,7 +47,7 @@ export function Home() {
 
     {/* Feature: night set */}
     <section className="t-feature">
-      <img src={L('satin-14')} alt="Sculpt & Renew Serum" />
+      <img className="portrait" src={E('portrait-cream')} alt="Firming Barrier Moisturizer" />
       <div className="copy"><p className="eyebrow">The Night Cycle Set</p><h2>Four steps. One night.</h2><p>Gentle Barrier Cleanser, Niacinamide Activating Essence, Sculpt & Renew Serum and Firming Barrier Moisturizer. Save 15% on the set.</p><Link to="/product/the-night-cycle-set" className="t-link">Discover now</Link></div>
     </section>
 
@@ -55,7 +56,7 @@ export function Home() {
       <h2 className="t-title">Skin cycle routines</h2>
       <div className="t-carousel" style={{ marginTop: 34 }}>
         {routines.map(p => <Link key={p.id} to={`/product/${p.slug}`} className="t-routine"><img src={p.image} alt={p.name} /><b>{p.name}</b><small>{p.includes?.length} products — {money(p.price)}</small></Link>)}
-        {RITUALS.map(r => <Link key={r.key} to={`/shop?time=${r.key}`} className="t-routine"><img src={L(r.key === 'day' ? 'satin-19' : 'satin-06')} alt={r.title} /><b>{r.title}</b><small>{r.ids.length} steps — build it in the app</small></Link>)}
+        {RITUALS.map(r => <Link key={r.key} to={`/shop?time=${r.key}`} className="t-routine"><img src={E(r.key === 'day' ? 'drop-hand' : 'cream-hands')} alt={r.title} /><b>{r.title}</b><small>{r.ids.length} steps — build it in the app</small></Link>)}
       </div>
       <div className="t-center"><Link to="/ritual" className="t-link">View all routines</Link></div>
     </div></section>
@@ -70,6 +71,12 @@ export function Home() {
       <div className="t-center"><Link to="/shop" className="t-link">View more</Link></div>
     </div></section>
 
+    {/* Feature: day cycle */}
+    <section className="t-feature rev">
+      <img src={E('serum-stone')} alt="Vitamin C Day Serum" />
+      <div className="copy"><p className="eyebrow">The Day Cycle</p><h2>A golden drop, every morning.</h2><p>Vitamin C Day Serum brightens and defends, the Fresh Shake Emulsion hydrates without weight. Five steps before sunscreen.</p><Link to="/shop?time=day" className="t-link">Shop the day cycle</Link></div>
+    </section>
+
     {/* Glow Club */}
     <section className="t-section"><div className="t-wide t-club">
       <div>
@@ -80,7 +87,7 @@ export function Home() {
         </ul>
         <div className="row" style={{ marginTop: 22 }}>{state.member ? <Link to="/glow-club" className="btn btn-primary">My Glow Club · {d.tier.short}</Link> : <Link to="/join" className="btn btn-primary">Join Glow Club</Link>}<Link to="/app" className="t-link">Open the member app</Link></div>
       </div>
-      <img src={L('satin-17')} alt="Kessora Glow Club" />
+      <img src={E('portrait-ritual')} alt="Kessora Glow Club" />
     </div></section>
 
     {/* Reviews + testimonials: one black section */}

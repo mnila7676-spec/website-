@@ -192,16 +192,16 @@ export const RITUALS: { key: 'day' | 'night'; label: string; title: string; blur
   { key: 'night', label: 'Night', title: 'The Night Cycle', blurb: 'Renew, sculpt and firm while you sleep. Gold-suspended actives and a barrier seal.', icon: 'moon', ids: ['cleanser', 'essence', 'renew-serum', 'sculpt-serum', 'cream'] },
 ]
 /* Lifestyle photography per product: light finish, dark finish */
-export const LIFESTYLE: Record<string, [string, string]> = {
-  cleanser: [asset('/images/lifestyle/satin-16.jpg'), asset('/images/lifestyle/satin-11.jpg')],
+export const LIFESTYLE: Record<string, string[]> = {
+  cleanser: [asset('/images/editorial/cleanser-stone.jpg'), asset('/images/lifestyle/satin-16.jpg'), asset('/images/lifestyle/satin-11.jpg')],
   essence: [asset('/images/lifestyle/satin-17.jpg'), asset('/images/lifestyle/satin-10.jpg')],
-  serum: [asset('/images/lifestyle/satin-19.jpg'), asset('/images/lifestyle/satin-09.jpg')],
+  serum: [asset('/images/editorial/serum-stone.jpg'), asset('/images/editorial/drop-hand.jpg'), asset('/images/lifestyle/satin-19.jpg'), asset('/images/lifestyle/satin-09.jpg')],
   'sculpt-serum': [asset('/images/lifestyle/satin-15.jpg'), asset('/images/lifestyle/satin-07.jpg')],
   'renew-serum': [asset('/images/lifestyle/satin-14.jpg'), asset('/images/lifestyle/satin-08.jpg')],
   emulsion: [asset('/images/lifestyle/satin-13.jpg'), asset('/images/lifestyle/satin-12.jpg')],
-  cream: [asset('/images/lifestyle/satin-18.jpg'), asset('/images/lifestyle/satin-06.jpg')],
+  cream: [asset('/images/editorial/cream-hands.jpg'), asset('/images/editorial/portrait-cream.jpg'), asset('/images/lifestyle/satin-18.jpg'), asset('/images/lifestyle/satin-06.jpg')],
 }
-export const galleryFor = (p: Product) => { const base = p.id.replace('mini-', ''); const l = LIFESTYLE[base]; return l ? [p.image, p.imageDark, l[0], l[1]] : [p.image, p.imageDark] }
+export const galleryFor = (p: Product) => { const base = p.id.replace('mini-', ''); const l = LIFESTYLE[base]; return l ? [p.image, p.imageDark, ...l] : [p.image, p.imageDark] }
 export const forTime = (p: Product, t: 'day' | 'night') => p.time === 'both' || p.time === t
 export const CONCERNS: { key: Concern; label: string; blurb: string }[] = [
   { key: 'dullness', label: 'Dullness', blurb: 'Skin that looks tired and lacks radiance.' },

@@ -8,7 +8,7 @@ export function OurStory() {
   return <div className="container">
     <section className="section story-hero">
       <div><p className="eyebrow">Our Story</p><h1>Thoughtfully made. Visibly radiant.</h1><p>Kessora began in Singapore with a simple frustration: skincare that promised everything and asked for a cabinet of products in return. We wanted fewer, better formulas that work together, and a way to make the daily ritual feel rewarding rather than routine.</p><p>Every product is formulated around the skin barrier first. Every reward in Glow Club is designed to be useful in real life. And every part of the experience, from the marquee to the leaderboard, is built to feel premium and calm.</p><div className="row" style={{ marginTop: 10 }}><Link to="/shop" className="btn btn-primary">Shop the ritual</Link><Link to="/glow-club" className="btn btn-secondary">About Glow Club</Link></div></div>
-      <img src={asset('/images/hero-group.jpg')} alt="Kessora products on stone" />
+      <img src={asset('/images/editorial/dropper-bowl.jpg')} alt="Vitamin C Day Serum on travertine" />
     </section>
     <section className="section tight"><SectionHead title="What we stand for" center /><div className="values">
       {[['leaf', 'Barrier first', 'Formulas that respect the skin’s own chemistry. No fragrance, no stripping, no noise.'], ['layers', 'Routine over products', 'Four steps that work together. We would rather you use less, consistently.'], ['users', 'Community, not casino', 'Recognition and rewards without pressure. Gamification with a conscience.']].map(([i, t, b]) => <div key={t}><Icon name={i} className="icon-lg copper" /><h3>{t}</h3><p className="small muted">{b}</p></div>)}

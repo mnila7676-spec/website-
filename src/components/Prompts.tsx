@@ -45,7 +45,7 @@ export function MembershipPrompts() {
           <button className="link-btn" onClick={later}>Continue browsing</button>
           <p className="tiny muted">Lowest-priced eligible item complimentary. One redemption per new member. Shown once per session. T&amp;Cs apply.</p>
         </div>
-        <div className="promo-img"><img src={asset('/images/lifestyle/satin-15.jpg')} alt="Kessora Dual-Action Sculpting Serum" /></div>
+        <div className="promo-img"><img src={asset('/images/editorial/dropper-bowl.jpg')} alt="Kessora Vitamin C Day Serum" /></div>
       </div>
     </Modal>}
     {bar && !modal && <div className="promo-bar">
