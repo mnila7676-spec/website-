@@ -122,7 +122,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 .toast.copper .icon { color: #fff; }
 
 /* Modal / drawer */
-.overlay { position: fixed; inset: 0; background: rgba(29,26,23,.45); z-index: 900; animation: fadeIn .25s ease; backdrop-filter: blur(2px); }
+.overlay { position: fixed; inset: 0; background: rgba(20,20,20,.4); z-index: 900; animation: fadeIn .25s ease; }
 .modal { position: fixed; z-index: 901; left: 50%; top: 50%; transform: translate(-50%,-50%); width: min(880px, calc(100% - 32px)); max-height: calc(100vh - 40px); overflow: auto; background: var(--ivory); border-radius: 0; box-shadow: var(--shadow-lg); animation: fadeUp .35s ease; }
 .modal-close { position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; border-radius: 0; border: 1px solid var(--line); background: var(--white); display: grid; place-items: center; z-index: 2; }
 .drawer { position: fixed; z-index: 901; top: 0; right: 0; bottom: 0; width: min(440px, 100%); background: var(--ivory); box-shadow: var(--shadow-lg); animation: slideIn .35s cubic-bezier(.2,.8,.2,1); display: flex; flex-direction: column; }

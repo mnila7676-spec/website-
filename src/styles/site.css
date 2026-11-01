@@ -734,7 +734,7 @@
 .qty { border-radius: 0; } .qty button { border-radius: 0; }
 .acc-btn { font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
 .k-hero-copy h1 em, .k-h2 em { color: var(--ink); }
-.mobile-menu { position: fixed; inset: 0 auto 0 0; z-index: 60; }
+.mobile-menu { position: fixed; inset: 0 auto 0 0; z-index: 902; overflow-y: auto; }
 /* Website product cards must win over the app stylesheet, which loads later */
 .site .pcard { border-radius: 0; border: 0; box-shadow: none; background: #fff; }
 .site .pcard-img { background: var(--sand); }
