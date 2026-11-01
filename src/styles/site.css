@@ -581,7 +581,7 @@
 .nav-left { display: flex; align-items: center; gap: 6px; }
 .nav-left .menu-label { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; margin-left: 2px; }
 .nav .logo { justify-self: center; display: flex; flex-direction: column; align-items: center; gap: 2px; }
-.nav .logo .wm { height: 20px; width: auto; filter: grayscale(1) brightness(.2); }
+.nav .logo .wm { height: 22px; width: auto; filter: grayscale(1) brightness(.2); }
 .nav .logo small { font-family: var(--font-mono); font-size: 8px; letter-spacing: .32em; color: var(--ink-3); }
 .nav-actions { justify-self: end; margin-left: 0; gap: 2px; }
 .icon-btn { border-radius: 0; width: 38px; height: 38px; }

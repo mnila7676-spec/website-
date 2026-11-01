@@ -21,7 +21,7 @@ export function SiteLayout() {
         <nav className="nav">
           <div className="container nav-inner">
             <div className="nav-left"><button className="icon-btn" aria-label="Menu" onClick={() => setMenu(true)}><Icon name="menu" /></button><span className="menu-label desktop-only">Menu</span><button className="icon-btn" aria-label="Search" onClick={() => setSearch(s => !s)}><Icon name="search" /></button></div>
-            <Link to="/" className="logo" aria-label="Kessora home"><img src={asset('/images/kessora/wordmark.png')} alt="Kessora" className="wm" /><small>SINGAPORE</small></Link>
+            <Link to="/" className="logo" aria-label="Kessora home"><img src={asset('/images/kessora/wordmark.png')} alt="Kessora" className="wm" /></Link>
             <div className="nav-actions">
               <Link to="/app" className="icon-btn" aria-label="Member app" title="Member app"><Icon name="phone" /></Link>
               <Link to={state.member ? '/account' : '/sign-in'} className="icon-btn" aria-label="Account"><Icon name="user" /></Link>
